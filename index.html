@@ -1,0 +1,2644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema Colaborativo Oficial — MONUPE II | Distrito 01-03</title>
+  <meta name="theme-color" content="#002247" />
+  <style>
+    :root {
+      --prussian: #002247;
+      --dusk: #005288;
+      --azure: #007FF1;
+      --aqua: #00CBFF;
+      --frosted: #A7EBFF;
+      --surface-bg: #eef7fc;
+      --card-bg: #ffffff;
+      --text-main: #002247;
+      --text-muted: #3b5978;
+      --border-soft: #cde6f5;
+      --present-voting: #00668c;
+      --absent-red: #c83e4d;
+      --sync-green: #16a34a;
+      --sync-red: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--surface-bg);
+      color: var(--text-main);
+      padding-bottom: 4.5rem;
+    }
+
+    /* ================= BARRA SUPERIOR Y BOTÓN ROJO/VERDE ================= */
+    .top-utility-bar {
+      background: #001833;
+      color: var(--frosted);
+      padding: 0.6rem 1.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      border-bottom: 1px solid rgba(167, 235, 255, 0.25);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+    }
+
+    .status-indicators {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .room-pill {
+      background: rgba(0, 127, 241, 0.28);
+      border: 1px solid var(--aqua);
+      color: white;
+      padding: 0.28rem 0.75rem;
+      border-radius: 6px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      cursor: pointer;
+    }
+
+    .sync-status-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.76rem;
+      border: none;
+      cursor: pointer;
+      color: white;
+      background: var(--sync-red);
+      transition: background 0.3s ease;
+    }
+
+    .sync-status-btn.synced { background: var(--sync-green); }
+
+    .sync-status-btn .led {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: inline-block;
+    }
+
+    .live-toast {
+      background: var(--aqua);
+      color: var(--prussian);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.76rem;
+      display: none;
+    }
+
+    .utility-actions {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    /* ================= RECUADRO DINÁMICO DE DIRECTORES (CRECE HASTA 6) ================= */
+    .mesa-presence-bar {
+      background: #002247;
+      border-bottom: 2px solid var(--azure);
+      padding: 0.65rem 1.4rem;
+      color: white;
+    }
+
+    .mesa-presence-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .presence-left {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .presence-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--frosted);
+    }
+
+    .directors-list-dynamic {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: stretch;
+    }
+
+    .director-chip {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 9px;
+      padding: 0.38rem 0.75rem;
+      border-left: 5px solid var(--aqua);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 140px;
+      position: relative;
+    }
+
+    .director-chip-name {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .director-chip-role {
+      font-size: 0.69rem;
+      font-weight: 600;
+      color: var(--frosted);
+      margin-top: 0.1rem;
+    }
+
+    .remove-manual-dir {
+      background: none;
+      border: none;
+      color: #ff8fa3;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-left: 0.35rem;
+    }
+
+    /* ================= CRONÓMETROS MAGEAC Y COLA DE ORADORES ================= */
+    .timers-wrapper {
+      background: linear-gradient(180deg, #001d3d 0%, #002b59 100%);
+      color: white;
+      padding: 0.95rem 1.4rem 1.25rem;
+      border-bottom: 3px solid var(--azure);
+    }
+
+    .timers-header {
+      max-width: 1440px;
+      margin: 0 auto 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .timers-header-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--frosted);
+    }
+
+    .timers-grid {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+      gap: 1rem;
+      align-items: start;
+    }
+
+    @media (max-width: 500px) { .timers-grid { grid-template-columns: 1fr; } }
+
+    .mageac-card {
+      background: #00152e;
+      border: 1.5px solid var(--dusk);
+      border-radius: 12px;
+      padding: 0.9rem 1.05rem;
+    }
+
+    .mageac-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.65rem;
+    }
+
+    .mageac-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--aqua);
+      text-transform: uppercase;
+    }
+
+    .preset-pills { display: flex; gap: 0.28rem; flex-wrap: wrap; }
+
+    .pill-btn {
+      background: rgba(0, 82, 136, 0.6);
+      color: var(--frosted);
+      border: 1px solid rgba(167, 235, 255, 0.3);
+      padding: 0.2rem 0.45rem;
+      border-radius: 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .pill-btn:hover { background: var(--azure); color: white; }
+
+    .mageac-middle {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0.6rem;
+      align-items: center;
+      margin-bottom: 0.7rem;
+    }
+
+    .mageac-select {
+      background: #001024;
+      color: white;
+      border: 1px solid var(--dusk);
+      padding: 0.45rem 0.6rem;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      width: 100%;
+    }
+
+    .custom-time-box {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #001024;
+      border: 1px solid var(--dusk);
+      padding: 0.28rem 0.45rem;
+      border-radius: 7px;
+      font-size: 0.72rem;
+      color: var(--frosted);
+    }
+
+    .custom-time-box input {
+      width: 40px;
+      background: var(--prussian);
+      border: 1px solid var(--azure);
+      color: white;
+      text-align: center;
+      border-radius: 4px;
+      padding: 0.18rem;
+      font-weight: 700;
+    }
+
+    .mageac-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .digital-clock {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--aqua);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .clock-actions { display: flex; align-items: center; gap: 0.4rem; }
+
+    /* ================= COLA INTERACTIVA DE ORADORES DEBAJO DEL CRONÓMETRO ================= */
+    .speakers-queue-panel {
+      margin-top: 0.85rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed rgba(167, 235, 255, 0.3);
+    }
+
+    .queue-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .queue-subtitle {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--frosted);
+      letter-spacing: 0.5px;
+    }
+
+    .speaker-queue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      max-height: 270px;
+      overflow-y: auto;
+      padding-right: 0.2rem;
+    }
+
+    .speaker-turn-card {
+      background: #002247;
+      border: 1px solid var(--dusk);
+      border-radius: 9px;
+      padding: 0.52rem 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .speaker-turn-card.active-turn {
+      background: linear-gradient(90deg, #00356b 0%, #002247 100%);
+      border: 1.5px solid var(--aqua);
+    }
+
+    .turn-info {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-width: 175px;
+      flex: 1;
+    }
+
+    .turn-badge {
+      background: var(--dusk);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+    }
+
+    .speaker-turn-card.active-turn .turn-badge {
+      background: var(--aqua);
+      color: var(--prussian);
+    }
+
+    .turn-score-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.38rem;
+      flex-wrap: wrap;
+    }
+
+    .speech-grade-input {
+      width: 54px;
+      background: #001024;
+      border: 1.5px solid var(--aqua);
+      color: white;
+      border-radius: 6px;
+      padding: 0.28rem 0.25rem;
+      text-align: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    .speech-session-ended-banner {
+      background: linear-gradient(90deg, #005288 0%, #007FF1 100%);
+      border: 1.5px solid var(--aqua);
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 0.55rem 0.85rem;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.6px;
+    }
+
+    /* ================= BOTONES GENERALES ================= */
+    .btn {
+      border: none;
+      border-radius: 7px;
+      padding: 0.46rem 0.82rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn-prussian { background: var(--prussian); color: white; }
+    .btn-prussian:hover { background: var(--dusk); }
+    .btn-dusk { background: var(--dusk); color: white; }
+    .btn-azure { background: var(--azure); color: white; }
+    .btn-azure:hover { background: #006ad1; }
+    .btn-aqua { background: var(--aqua); color: var(--prussian); }
+    .btn-frosted { background: var(--frosted); color: var(--prussian); }
+    .btn-outline-light { background: rgba(255,255,255,0.08); color: var(--frosted); border: 1px solid rgba(167,235,255,0.35); }
+    .btn-outline-light:hover { background: rgba(255,255,255,0.16); }
+    .btn-danger { background: var(--absent-red); color: white; }
+    .btn-round { width: 30px; height: 30px; padding: 0; border-radius: 50%; }
+
+    /* ================= CONTENEDOR PRINCIPAL Y PESTAÑAS ================= */
+    .main-container {
+      max-width: 1440px;
+      margin: 1.15rem auto;
+      padding: 0 1.25rem;
+    }
+
+    .tabs-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.6rem;
+      background: white;
+      padding: 0.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      margin-bottom: 1.15rem;
+    }
+
+    @media (max-width: 850px) { .tabs-bar { grid-template-columns: repeat(2, 1fr); } }
+
+    .tab-btn {
+      background: #f4faff;
+      color: var(--dusk);
+      border: 1px solid var(--border-soft);
+      padding: 0.68rem 0.85rem;
+      border-radius: 9px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .tab-btn:hover { background: var(--frosted); color: var(--prussian); }
+    .tab-btn.active { background: var(--prussian); color: white; border-color: var(--prussian); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ================= TARJETAS Y FORMULARIOS ================= */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 1.15rem;
+      margin-bottom: 1.15rem;
+    }
+
+    @media (max-width: 960px) { .two-col-grid { grid-template-columns: 1fr; } }
+
+    .panel-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.2rem 1.35rem;
+      border: 1px solid var(--border-soft);
+      border-top: 4px solid var(--azure);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--surface-bg);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--prussian);
+      text-transform: uppercase;
+    }
+
+    .district-tag {
+      background: var(--frosted);
+      color: var(--prussian);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    @media (max-width: 600px) { .form-grid-2 { grid-template-columns: 1fr; } }
+
+    .field-group { margin-bottom: 0.7rem; }
+    .field-group label {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--dusk);
+      text-transform: uppercase;
+      margin-bottom: 0.28rem;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 0.55rem 0.72rem;
+      border: 1.5px solid var(--border-soft);
+      border-radius: 8px;
+      font-size: 0.86rem;
+      color: var(--prussian);
+      background: #fafdff;
+    }
+
+    .field-input:focus { outline: none; border-color: var(--azure); background: white; }
+
+    /* ================= RELOJ GENERAL DE SESIÓN ================= */
+    .session-clock-box {
+      background: linear-gradient(135deg, var(--prussian) 0%, var(--dusk) 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 1.15rem;
+      text-align: center;
+      margin-bottom: 0.85rem;
+      border: 1px solid var(--azure);
+    }
+
+    .session-clock-sub { font-size: 0.74rem; letter-spacing: 1px; text-transform: uppercase; color: var(--frosted); }
+    .session-clock-digits { font-size: 2.4rem; font-weight: 800; margin: 0.2rem 0; font-variant-numeric: tabular-nums; }
+    .session-clock-note { font-size: 0.75rem; color: var(--aqua); }
+
+    /* ================= QUÓRUM ================= */
+    .quorum-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.7rem;
+      margin: 0.9rem 0;
+    }
+
+    @media (max-width: 960px) { .quorum-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 520px) { .quorum-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .stat-box {
+      border-radius: 10px;
+      padding: 0.75rem 0.55rem;
+      text-align: center;
+      border: 1.5px solid var(--border-soft);
+      background: #f7fbff;
+    }
+
+    .stat-box.present-v { background: #e6f7fc; border-color: var(--aqua); }
+    .stat-box.present-o { background: #eef6ff; border-color: var(--azure); }
+    .stat-box.absent-b { background: #fff1f3; border-color: #f4b8c0; }
+    .stat-box.dark-q { background: var(--prussian); color: white; border-color: var(--azure); }
+    .stat-box.dusk-q { background: var(--dusk); color: white; border-color: var(--aqua); }
+
+    .stat-label { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; opacity: 0.88; }
+    .stat-value { font-size: 1.5rem; font-weight: 800; margin-top: 0.18rem; }
+    .stat-box.dark-q .stat-value, .stat-box.dusk-q .stat-value { color: var(--aqua); }
+
+    /* ================= TABLA MATRIZ Y CASILLA LISTA ORADORES ================= */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      margin-top: 0.7rem;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+
+    thead th {
+      background: var(--prussian);
+      color: white;
+      padding: 0.58rem 0.42rem;
+      text-align: left;
+      font-weight: 700;
+      font-size: 0.73rem;
+      vertical-align: middle;
+      border-right: 1px solid rgba(167, 235, 255, 0.18);
+    }
+
+    .grp-conocimiento { background: #002247 !important; color: #A7EBFF !important; text-align: center !important; border-bottom: 2px solid #00CBFF; }
+    .grp-comunicacion { background: #00386e !important; color: #ffffff !important; text-align: center !important; border-bottom: 2px solid #007FF1; }
+    .grp-negociacion  { background: #005288 !important; color: #A7EBFF !important; text-align: center !important; border-bottom: 2px solid #00CBFF; }
+    .grp-analisis     { background: #003b66 !important; color: #ffffff !important; text-align: center !important; border-bottom: 2px solid #007FF1; }
+    .grp-interpers    { background: #002a54 !important; color: #A7EBFF !important; text-align: center !important; border-bottom: 2px solid #00CBFF; }
+
+    .sub-header {
+      background: #004375 !important;
+      color: #ffffff !important;
+      text-align: center !important;
+      font-size: 0.7rem !important;
+      line-height: 1.25;
+      padding: 0.48rem 0.32rem !important;
+    }
+
+    tbody td {
+      padding: 0.46rem 0.42rem;
+      border-bottom: 1px solid var(--surface-bg);
+      border-right: 1px solid #f0f6fb;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) { background: #fafdff; }
+    tbody tr:hover { background: #eef8ff; }
+
+    .sticky-col-1 { position: sticky; left: 0; background: inherit; z-index: 2; }
+    .sticky-col-2 { position: sticky; left: 36px; background: inherit; z-index: 2; box-shadow: 2px 0 5px rgba(0,34,71,0.06); }
+    thead .sticky-col-1, thead .sticky-col-2 { background: var(--prussian); z-index: 4; }
+
+    .table-input {
+      width: 100%;
+      padding: 0.4rem 0.58rem;
+      border: 1px solid var(--border-soft);
+      border-radius: 6px;
+      font-size: 0.84rem;
+      color: var(--prussian);
+    }
+
+    .speaker-check-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: #eef7fc;
+      border: 1.5px solid var(--azure);
+      padding: 0.3rem 0.55rem;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--prussian);
+      user-select: none;
+    }
+
+    .speaker-check-box.in-queue {
+      background: var(--prussian);
+      color: var(--aqua);
+      border-color: var(--aqua);
+    }
+
+    .speaker-check-box input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--azure);
+      cursor: pointer;
+    }
+
+    .score-cell-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .score-cell-input {
+      width: 52px;
+      padding: 0.38rem 0.2rem;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--prussian);
+      background: #f4faff;
+      border: 2px solid var(--border-soft);
+      border-radius: 6px;
+      font-variant-numeric: tabular-nums;
+      transition: border-color 0.2s;
+    }
+
+    .score-cell-input:focus {
+      outline: none;
+      border-color: var(--azure);
+      background: white;
+    }
+
+    .canva-cursor-tag {
+      position: absolute;
+      top: -17px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ffffff;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .attendance-group {
+      display: inline-flex;
+      border-radius: 7px;
+      overflow: hidden;
+      border: 1px solid var(--border-soft);
+    }
+
+    .att-btn {
+      padding: 0.34rem 0.58rem;
+      font-size: 0.74rem;
+      font-weight: 700;
+      border: none;
+      background: white;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .att-btn.active-pv { background: var(--present-voting); color: white; }
+    .att-btn.active-p { background: var(--azure); color: white; }
+    .att-btn.active-a { background: var(--absent-red); color: white; }
+
+    /* ================= CHAT FLOTANTE EN TIEMPO REAL ================= */
+    .chat-fab {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      background: var(--prussian);
+      color: white;
+      border: 2px solid var(--aqua);
+      border-radius: 999px;
+      padding: 0.7rem 1.15rem;
+      font-weight: 800;
+      font-size: 0.84rem;
+      cursor: pointer;
+      z-index: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .chat-badge-count {
+      background: var(--absent-red);
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      display: none;
+    }
+
+    .chat-drawer {
+      position: fixed;
+      bottom: 4.6rem;
+      right: 1.25rem;
+      width: 340px;
+      max-width: calc(100vw - 2.5rem);
+      background: white;
+      border-radius: 14px;
+      border: 2px solid var(--azure);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 850;
+    }
+
+    .chat-drawer.open { display: flex; }
+
+    .chat-header {
+      background: var(--prussian);
+      color: white;
+      padding: 0.75rem 1rem;
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-messages {
+      height: 250px;
+      overflow-y: auto;
+      padding: 0.8rem;
+      background: #f4faff;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .chat-bubble {
+      background: white;
+      border-radius: 9px;
+      padding: 0.5rem 0.7rem;
+      border-left: 4px solid var(--azure);
+      font-size: 0.8rem;
+    }
+
+    .chat-bubble-author {
+      font-weight: 800;
+      font-size: 0.72rem;
+      margin-bottom: 0.15rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 0.4rem;
+      padding: 0.6rem;
+      background: white;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    /* ================= MODALES ================= */
+    .modal-box {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 20, 45, 0.86);
+      z-index: 9000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-box.open { display: flex; }
+
+    .modal-content {
+      background: white;
+      border-radius: 14px;
+      max-width: 540px;
+      width: 100%;
+      padding: 1.6rem;
+      border-top: 5px solid var(--azure);
+    }
+
+    .room-code-big {
+      background: var(--prussian);
+      color: var(--aqua);
+      font-size: 1.65rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-align: center;
+      padding: 0.65rem;
+      border-radius: 10px;
+      margin: 0.55rem 0;
+      border: 2px solid var(--azure);
+      user-select: all;
+    }
+
+    .fullscreen-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--prussian);
+      color: white;
+      z-index: 9999;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .fullscreen-overlay.open { display: flex; }
+    .fs-title { font-size: 1.4rem; color: var(--frosted); text-transform: uppercase; letter-spacing: 2px; }
+    .fs-delegate { font-size: 2rem; font-weight: 800; color: white; margin-top: 0.4rem; }
+    .fs-time { font-size: 8.5rem; font-weight: 900; color: var(--aqua); font-variant-numeric: tabular-nums; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA SUPERIOR CON BOTÓN INDICADOR ROJO/VERDE -->
+  <div class="top-utility-bar">
+    <div class="status-indicators">
+      <span class="room-pill" id="roomCodeBadge" onclick="openRoomHub()">SALA: MON-0000</span>
+      <button class="sync-status-btn" id="syncStatusBtn" onclick="syncNowManual()" title="Rojo = Sincronizando / Verde = Todo sincronizado">
+        <span class="led"></span>
+        <span id="syncStatusLabel">Conectando...</span>
+      </button>
+      <span class="live-toast" id="liveUpdateToast">🔔 Nuevo integrante conectado</span>
+    </div>
+    <div class="utility-actions">
+      <button class="btn btn-outline-light" onclick="openLoginModal()">👤 Mi Perfil</button>
+      <button class="btn btn-aqua" onclick="openRoomHub()">🔗 Enlace y Código de Sala</button>
+      <button class="btn btn-outline-light" onclick="exportarJSON()">⬇ Respaldo JSON</button>
+      <label class="btn btn-outline-light" style="cursor:pointer;">
+        ⬆ JSON
+        <input type="file" accept=".json" style="display:none;" onchange="importarJSON(event)" />
+      </label>
+    </div>
+  </div>
+
+  <!-- RECUADRO DINÁMICO DE DIRECTORES (CRECE AUTOMÁTICAMENTE HASTA 6 + OPCIÓN SIN PC) -->
+  <section class="mesa-presence-bar">
+    <div class="mesa-presence-inner">
+      <div class="presence-left">
+        <div class="presence-label">
+          <span>👥 Mesa Directiva (<span id="connectedCount">0</span>/6):</span>
+        </div>
+        <div class="directors-list-dynamic" id="directorsPresenceList"></div>
+      </div>
+      <div>
+        <button class="btn btn-outline-light" style="padding:0.32rem 0.7rem; font-size:0.74rem;" onclick="openModal('manualDirectorModal')">
+          + Agregar integrante sin PC
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CRONÓMETROS PARLAMENTARIOS OFICIALES + LISTA DE ORADORES INTEGRADA -->
+  <section class="timers-wrapper">
+    <div class="timers-header">
+      <div class="timers-header-title">Cronómetros Parlamentarios Oficiales y Lista de Oradores en Vivo</div>
+      <button class="btn btn-outline-light" style="padding:0.28rem 0.65rem; font-size:0.74rem;" onclick="toggleTimersBody()">Ocultar / Mostrar Cronómetros</button>
+    </div>
+
+    <div class="timers-grid" id="timersBody">
+      <!-- TARJETA 1: CRONÓMETRO + LISTA DE ORADORES QUE SE REDUCE AL CALIFICAR -->
+      <div class="mageac-card">
+        <div class="mageac-top">
+          <span class="mageac-title">🎙 Discursos / Lista de Oradores</span>
+          <div class="preset-pills">
+            <button class="pill-btn" onclick="setClock(1, 45)">00:45</button>
+            <button class="pill-btn" onclick="setClock(1, 60)">01:00</button>
+            <button class="pill-btn" onclick="setClock(1, 90)">01:30</button>
+            <button class="pill-btn" onclick="setClock(1, 120)">02:00</button>
+            <button class="pill-btn" onclick="setClock(1, 180)">03:00</button>
+          </div>
+        </div>
+        <div class="mageac-middle">
+          <select id="speakerSelect" class="mageac-select">
+            <option value="">-- Seleccionar Delegado / País --</option>
+          </select>
+          <div class="custom-time-box">
+            <span>TIEMPO:</span>
+            <input type="number" id="c1Min" value="1" min="0" max="59" /> :
+            <input type="number" id="c1Sec" value="30" min="0" max="59" />
+            <button class="btn btn-azure" style="padding:0.22rem 0.45rem; font-size:0.7rem;" onclick="applyCustomClock(1)">Fijar</button>
+          </div>
+        </div>
+        <div class="mageac-bottom">
+          <div class="digital-clock" id="clock1Display">01:30</div>
+          <div class="clock-actions">
+            <button class="btn btn-aqua" onclick="startClock(1)">▶ Iniciar</button>
+            <button class="btn btn-frosted btn-round" onclick="pauseClock(1)">⏸</button>
+            <button class="btn btn-outline-light btn-round" onclick="resetClock(1)">↺</button>
+            <button class="btn btn-azure" onclick="openFullscreenClock(1)">⛶ Pantalla Completa</button>
+          </div>
+        </div>
+
+        <!-- LISTA DE ORADORES EN COLA (SE ARMA DESDE EL PASE DE LISTA Y SE VA REDUCIENDO AL CALIFICAR) -->
+        <div class="speakers-queue-panel">
+          <div class="queue-header-row">
+            <span class="queue-subtitle">📋 Orden de Oradores (<span id="speakerQueueCount">0</span> en cola)</span>
+            <button class="btn btn-outline-light" style="padding:0.2rem 0.5rem; font-size:0.68rem;" onclick="clearSpeakerQueue()">Vaciar Cola</button>
+          </div>
+
+          <div class="speaker-queue-list" id="speakerQueueList"></div>
+
+          <!-- RECTÁNGULO CORTO OFICIAL AL FINALIZAR TODOS LOS DISCURSOS -->
+          <div class="speech-session-ended-banner" id="speechEndedBanner" style="display:none;">
+            <span>🏁 SESIÓN DE DISCURSOS FINALIZADA</span>
+            <button class="btn btn-aqua" style="padding:0.22rem 0.55rem; font-size:0.7rem;" onclick="dismissSpeechEndedBanner()">Nueva Ronda</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARJETA 2: CONSULTAS OFICIOSAS / CAUCUS -->
+      <div class="mageac-card">
+        <div class="mageac-top">
+          <span class="mageac-title">⚖ Consultas Oficiosas / Caucus</span>
+          <div class="preset-pills">
+            <button class="pill-btn" onclick="setClock(2, 180)">03:00</button>
+            <button class="pill-btn" onclick="setClock(2, 300)">05:00</button>
+            <button class="pill-btn" onclick="setClock(2, 600)">10:00</button>
+            <button class="pill-btn" onclick="setClock(2, 900)">15:00</button>
+          </div>
+        </div>
+        <div class="mageac-middle">
+          <select id="caucusTypeSelect" class="mageac-select">
+            <option value="Consulta Oficiosa Moderada">Consulta Oficiosa Moderada</option>
+            <option value="Consulta Oficiosa Simple">Consulta Oficiosa Simple</option>
+            <option value="Tiempo de Redacción de Anteproyecto">Redacción de Anteproyecto</option>
+          </select>
+          <div class="custom-time-box">
+            <span>TIEMPO:</span>
+            <input type="number" id="c2Min" value="10" min="0" max="59" /> :
+            <input type="number" id="c2Sec" value="0" min="0" max="59" />
+            <button class="btn btn-azure" style="padding:0.22rem 0.45rem; font-size:0.7rem;" onclick="applyCustomClock(2)">Fijar</button>
+          </div>
+        </div>
+        <div class="mageac-bottom">
+          <div class="digital-clock" id="clock2Display">10:00</div>
+          <div class="clock-actions">
+            <button class="btn btn-aqua" onclick="startClock(2)">▶ Iniciar</button>
+            <button class="btn btn-frosted btn-round" onclick="pauseClock(2)">⏸</button>
+            <button class="btn btn-outline-light btn-round" onclick="resetClock(2)">↺</button>
+            <button class="btn btn-azure" onclick="openFullscreenClock(2)">⛶ Pantalla Completa</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-container">
+    <nav class="tabs-bar">
+      <button class="tab-btn active" onclick="switchTab(0)">📋 1. Mesa, Pase de Lista y Oradores</button>
+      <button class="tab-btn" onclick="switchTab(1)">⭐ 2. Evaluación Manual Oficial (100 pts)</button>
+      <button class="tab-btn" onclick="switchTab(2)">🏆 3. Ranking, Menciones y Pase MONUPE II</button>
+      <button class="tab-btn" onclick="switchTab(3)">📗 4. Google Sheets Oficial y WhatsApp</button>
+    </nav>
+
+    <!-- ================= PESTAÑA 1: MESA Y PASE DE LISTA ================= -->
+    <section class="tab-panel active" id="tab0">
+      <div class="two-col-grid">
+        <div class="panel-card">
+          <div class="panel-header">
+            <span class="panel-title">🏛 Configuración de Mesa Directiva, Comisión y Tópico</span>
+            <span class="district-tag">Distrito 01-03 • Barahona</span>
+          </div>
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label>Centro Educativo / Sede *</label>
+              <input type="text" id="cfgCentro" class="field-input" placeholder="Ej. Liceo Dr. Federico Henríquez y Carvajal" oninput="syncMeta()" />
+            </div>
+            <div class="field-group">
+              <label>Comisión / Comité Oficial *</label>
+              <select id="cfgComision" class="field-input" onchange="onCommissionChange()">
+                <option value="Asamblea General de las Naciones Unidas (AG)">1. Asamblea General de las Naciones Unidas (AG)</option>
+                <option value="Organización Mundial de la Salud (OMS)">2. Organización Mundial de la Salud (OMS)</option>
+                <option value="Programa de las Naciones Unidas para el Medio Ambiente (PNUMA)">3. Programa de las Naciones Unidas para el Medio Ambiente (PNUMA)</option>
+                <option value="Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura (UNESCO)">4. Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura (UNESCO)</option>
+                <option value="Consejo Económico y Social de las Naciones Unidas (ECOSOC)">5. Consejo Económico y Social de las Naciones Unidas (ECOSOC)</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Tópico Oficial de la Comisión *</label>
+            <textarea id="cfgTopico" rows="2" class="field-input" style="resize:vertical;" oninput="syncMeta()"></textarea>
+          </div>
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label>Presidencia de Mesa (Se autocompleta al ingresar) *</label>
+              <input type="text" id="cfgPres" class="field-input" placeholder="Nombre del Presidente/a" oninput="syncMeta()" />
+            </div>
+            <div class="field-group">
+              <label>Vicepresidencia (Se autocompleta al ingresar) *</label>
+              <input type="text" id="cfgVice" class="field-input" placeholder="Nombre del Vicepresidente/a" oninput="syncMeta()" />
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label>Secretaría / Relatoría (Se autocompleta al ingresar) *</label>
+              <input type="text" id="cfgRelator" class="field-input" placeholder="Nombre del Secretario/a" oninput="syncMeta()" />
+            </div>
+            <div class="field-group">
+              <label>Cantidad de Delegados</label>
+              <div style="display:flex; gap:0.45rem;">
+                <input type="number" id="cfgCantidad" class="field-input" value="15" min="1" max="60" />
+                <button class="btn btn-prussian" onclick="aplicarFilas()">Aplicar Filas</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-header">
+            <span class="panel-title">🕒 Reloj General de Sesión</span>
+            <span class="district-tag" id="sessionStatusTag">En espera</span>
+          </div>
+          <div class="session-clock-box">
+            <div class="session-clock-sub">Duración Total Transcurrida</div>
+            <div class="session-clock-digits" id="sessionDigits">00:00:00</div>
+            <div class="session-clock-note" id="sessionNote">Listo para iniciar sesión parlamentaria</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-bottom:0.8rem;">
+            <button class="btn btn-azure" onclick="iniciarSesionGeneral()">▶ Iniciar Sesión Ahora</button>
+            <button class="btn btn-danger" onclick="finalizarSesionGeneral()">⏹ Finalizar Sesión</button>
+          </div>
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label>Hora de Inicio</label>
+              <input type="time" id="horaInicio" class="field-input" value="08:00" onchange="syncMeta()" />
+            </div>
+            <div class="field-group">
+              <label>Hora de Fin</label>
+              <input type="time" id="horaFin" class="field-input" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">📋 Pase de Lista (Roll Call) y Selección de Lista de Oradores</div>
+            <p style="font-size:0.77rem; color:var(--text-muted); margin-top:0.15rem;">
+              Marca el cuadrito <strong>🎙 Orador</strong> cuando una delegación levante su placard para añadirla en orden al cronómetro de discursos.
+            </p>
+          </div>
+          <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+            <button class="btn btn-prussian" onclick="agregarFilaDelegado()">+ Agregar Delegado</button>
+            <button class="btn btn-frosted" onclick="openModal('pasteModal')">📋 Pegado Rápido</button>
+          </div>
+        </div>
+
+        <div class="quorum-grid">
+          <div class="stat-box"><div class="stat-label">Total Inscritos</div><div class="stat-value" id="qTotal">15</div></div>
+          <div class="stat-box present-v"><div class="stat-label">Presente y Votando</div><div class="stat-value" id="qPresVot">15</div></div>
+          <div class="stat-box present-o"><div class="stat-label">Total Presentes</div><div class="stat-value" id="qPresTot">15</div></div>
+          <div class="stat-box absent-b"><div class="stat-label">Ausentes</div><div class="stat-value" id="qAusentes">0</div></div>
+          <div class="stat-box dark-q"><div class="stat-label">Quórum / May. Simple</div><div class="stat-value" id="qSimple">8 / 8</div></div>
+          <div class="stat-box dusk-q"><div class="stat-label">Mayoría Calificada (2/3)</div><div class="stat-value" id="qCalificada">10</div></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#f4faff; padding:0.5rem 0.8rem; border-radius:8px; border:1px solid var(--border-soft); flex-wrap:wrap; gap:0.5rem;">
+          <span style="font-size:0.76rem; font-weight:700; color:var(--dusk);">Marcar asistencia rápida:</span>
+          <div style="display:flex; gap:0.4rem;">
+            <button class="btn btn-dusk" style="padding:0.3rem 0.6rem; font-size:0.74rem;" onclick="marcarTodos('PV')">Todos Presente y Votando</button>
+            <button class="btn btn-azure" style="padding:0.3rem 0.6rem; font-size:0.74rem;" onclick="marcarTodos('P')">Todos Presente</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:42px;">#</th>
+                <th>Nombre Completo del Delegado/a *</th>
+                <th>País / Representación *</th>
+                <th style="width:130px; text-align:center;">Lista Oradores</th>
+                <th style="width:265px;">Estado en Pase de Lista</th>
+                <th style="width:60px; text-align:center;">Quitar</th>
+              </tr>
+            </thead>
+            <tbody id="rollCallTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PESTAÑA 2: MATRIZ OFICIAL (CON COLORES ESTILO CANVA) ================= -->
+    <section class="tab-panel" id="tab1">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">⭐ Matriz Oficial de Evaluación en Tiempo Real (100 Puntos)</div>
+            <p style="font-size:0.77rem; color:var(--text-muted); margin-top:0.15rem;">
+              Las notas calificadas desde la Lista de Oradores se reflejan aquí automáticamente en la columna <strong>Discurso (6)</strong>.
+            </p>
+          </div>
+          <button class="btn btn-azure" onclick="syncNowManual()">🔄 Forzar Sincronización</button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th rowspan="2" class="sticky-col-1" style="width:36px; text-align:center;">#</th>
+                <th rowspan="2" class="sticky-col-2" style="min-width:180px;">Delegado/a y País</th>
+                <th colspan="3" class="grp-conocimiento">Habilidades de Conocimiento (28 pts)</th>
+                <th colspan="3" class="grp-comunicacion">Habilidades de Comunicación (22 pts)</th>
+                <th colspan="2" class="grp-negociacion">Habilidades de Negociación (16 pts)</th>
+                <th colspan="2" class="grp-analisis">Habilidades de Análisis (16 pts)</th>
+                <th colspan="2" class="grp-interpers">Habilidades Interpersonales (18 pts)</th>
+                <th rowspan="2" style="text-align:center; width:74px;">TOTAL<br><small style="color:var(--aqua);">(100)</small></th>
+              </tr>
+              <tr>
+                <th class="sub-header">Redacción<br><span style="color:var(--aqua);">(10)</span></th>
+                <th class="sub-header">Investigación<br><span style="color:var(--aqua);">(10)</span></th>
+                <th class="sub-header">Representación<br><span style="color:var(--aqua);">(8)</span></th>
+                <th class="sub-header">Oratoria<br><span style="color:var(--aqua);">(8)</span></th>
+                <th class="sub-header">Argumentación<br><span style="color:var(--aqua);">(8)</span></th>
+                <th class="sub-header">Discurso<br><span style="color:var(--aqua);">(6)</span></th>
+                <th class="sub-header">Const. Consenso<br><span style="color:var(--aqua);">(8)</span></th>
+                <th class="sub-header">Res. Conflictos<br><span style="color:var(--aqua);">(8)</span></th>
+                <th class="sub-header">Pens. Crítico<br><span style="color:var(--aqua);">(10)</span></th>
+                <th class="sub-header">Const. Soluciones<br><span style="color:var(--aqua);">(6)</span></th>
+                <th class="sub-header">Liderazgo<br><span style="color:var(--aqua);">(8)</span></th>
+                <th class="sub-header">Trab. Equipo<br><span style="color:var(--aqua);">(10)</span></th>
+              </tr>
+            </thead>
+            <tbody id="matrixEvalTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PESTAÑA 3: RANKING Y MENCIONES PERSONALIZABLES ================= -->
+    <section class="tab-panel" id="tab2">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-title">🏆 Ranking Oficial en Vivo, Menciones y Pase MONUPE II</span>
+          <span class="district-tag">Actualización instantánea</span>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Puesto</th>
+                <th>Nombre del Delegado/a</th>
+                <th>País / Representación</th>
+                <th>Pase de Lista</th>
+                <th style="text-align:center;">Conoc. (28)</th>
+                <th style="text-align:center;">Comun. (22)</th>
+                <th style="text-align:center;">Negoc. (16)</th>
+                <th style="text-align:center;">Anál. (16)</th>
+                <th style="text-align:center;">Interp. (18)</th>
+                <th style="text-align:center;">Total (100)</th>
+                <th style="min-width:250px;">Mención Otorgada (o Escribir Nueva)</th>
+                <th>Clasificación MONUPE II</th>
+              </tr>
+            </thead>
+            <tbody id="rankingTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PESTAÑA 4: GOOGLE SHEETS OFICIAL Y WHATSAPP ================= -->
+    <section class="tab-panel" id="tab3">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-title">📗 Generación de Acta Oficial en Google Sheets y Enlace Compartible</span>
+          <span class="district-tag">Formato Oficial Distrito 01-03</span>
+        </div>
+
+        <div class="form-grid-2" style="margin-top:0.5rem;">
+          <div style="background:#f4faff; border:1px solid var(--border-soft); border-left:4px solid #16a34a; border-radius:9px; padding:1.1rem;">
+            <strong style="font-size:0.95rem; color:var(--prussian);">📗 Guardar y Sincronizar Acta en Google Sheets</strong>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin:0.45rem 0 0.9rem;">
+              Crea automáticamente la hoja de cálculo en tu Google Drive con los colores oficiales, encabezados agrupados, puntajes ordenados y permisos de lectura para compartir el enlace. Si vuelves a pulsar el botón, actualiza esa misma hoja sin duplicarla.
+            </p>
+            <button class="btn btn-azure" id="btnExportSheets" onclick="exportarAGoogleSheets()">📗 Generar / Actualizar Google Sheet</button>
+
+            <div id="generatedSheetBox" style="display:none; margin-top:0.85rem; padding:0.75rem; background:white; border:1.5px solid #16a34a; border-radius:8px;">
+              <span style="font-size:0.72rem; font-weight:800; color:#16a34a; text-transform:uppercase;">✅ Hoja de Cálculo Lista:</span>
+              <input type="text" id="generatedSheetUrlInput" class="field-input" readonly style="margin:0.4rem 0; font-size:0.78rem;" />
+              <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+                <a id="openSheetAnchor" href="#" target="_blank" class="btn btn-prussian" style="text-decoration:none;">↗ Abrir Google Sheet</a>
+                <button class="btn btn-frosted" onclick="copyGeneratedSheetUrl()">📋 Copiar Link</button>
+                <button class="btn btn-aqua" onclick="shareGeneratedSheetWhatsApp()">📲 Enviar Link por WhatsApp</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#f4faff; border:1px solid var(--border-soft); border-left:4px solid var(--azure); border-radius:9px; padding:1.1rem;">
+            <strong style="font-size:0.95rem;">📱 Resumen Rápido por WhatsApp</strong>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin:0.45rem 0 0.9rem;">
+              Envía el resumen de resultados, menciones y clasificados de esta sala al grupo de Coordinación Distrital (incluye el link del Google Sheet si ya lo generaste).
+            </p>
+            <button class="btn btn-azure" onclick="enviarWhatsApp()">Compartir Resultados por WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BOTÓN FLOTANTE Y CHAT EN TIEMPO REAL ENTRE INTEGRANTES DE MESA -->
+  <button class="chat-fab" onclick="toggleChatDrawer()">
+    💬 Chat de Mesa Directiva
+    <span class="chat-badge-count" id="chatUnreadBadge">0</span>
+  </button>
+
+  <div class="chat-drawer" id="chatDrawer">
+    <div class="chat-header">
+      <span>💬 Chat Interno de Mesa Directiva</span>
+      <button style="background:none; border:none; color:white; font-weight:800; cursor:pointer;" onclick="toggleChatDrawer()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessagesBox"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInputField" class="field-input" placeholder="Escribe un mensaje a la mesa..." style="margin:0; padding:0.45rem 0.6rem;" onkeydown="if(event.key==='Enter') sendChatMessage()" />
+      <button class="btn btn-azure" onclick="sendChatMessage()">Enviar</button>
+    </div>
+  </div>
+
+  <!-- MODAL 1: INICIO DE SESIÓN DE INTEGRANTE CON PC -->
+  <div class="modal-box" id="loginModal">
+    <div class="modal-content">
+      <h3 style="color:var(--prussian); margin-bottom:0.35rem;">🪪 Registro de Integrante de Mesa Directiva</h3>
+      <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0.9rem;">
+        Ingresa tus datos para identificarte en la sala, autocompletar tu cargo en el acta y asignarte tu color de edición en vivo.
+      </p>
+
+      <div class="form-grid-2">
+        <div class="field-group">
+          <label>Nombres *</label>
+          <input type="text" id="volNombres" class="field-input" placeholder="Ej. Carlos Alberto" />
+        </div>
+        <div class="field-group">
+          <label>Apellidos *</label>
+          <input type="text" id="volApellidos" class="field-input" placeholder="Ej. Méndez Rosario" />
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="field-group">
+          <label>Calidad de Voluntario *</label>
+          <select id="volCalidad" class="field-input">
+            <option value="Voluntario Distrital">Voluntario Distrital</option>
+            <option value="Voluntario Regional">Voluntario Regional</option>
+            <option value="Voluntario Nacional">Voluntario Nacional</option>
+            <option value="Aprendiz">Aprendiz</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Rol en esta Mesa *</label>
+          <select id="volRolMesa" class="field-input">
+            <option value="Presidencia">Presidencia</option>
+            <option value="Vicepresidencia">Vicepresidencia</option>
+            <option value="Secretaría / Relatoría">Secretaría / Relatoría</option>
+            <option value="Director/a de Evaluación">Director/a de Evaluación</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.85rem;">
+        <button class="btn btn-azure" style="width:100%; padding:0.65rem;" onclick="saveVolunteerProfile()">Entrar a la Sala de Evaluación</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: AGREGAR INTEGRANTE DE MESA SIN PC -->
+  <div class="modal-box" id="manualDirectorModal">
+    <div class="modal-content">
+      <h3 style="color:var(--prussian); margin-bottom:0.35rem;">➕ Registrar Integrante de Mesa (Sin PC / Sin Conexión)</h3>
+      <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0.9rem;">
+        Añade manualmente a un director/a o secretario/a que esté evaluando presencialmente sin computadora para que aparezca en el recuadro y en el acta oficial.
+      </p>
+
+      <div class="form-grid-2">
+        <div class="field-group">
+          <label>Nombres *</label>
+          <input type="text" id="manNombres" class="field-input" placeholder="Ej. Laura Sofía" />
+        </div>
+        <div class="field-group">
+          <label>Apellidos *</label>
+          <input type="text" id="manApellidos" class="field-input" placeholder="Ej. Pérez Gómez" />
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="field-group">
+          <label>Calidad de Voluntario *</label>
+          <select id="manCalidad" class="field-input">
+            <option value="Voluntario Distrital">Voluntario Distrital</option>
+            <option value="Voluntario Regional">Voluntario Regional</option>
+            <option value="Voluntario Nacional">Voluntario Nacional</option>
+            <option value="Aprendiz">Aprendiz</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Rol en esta Mesa *</label>
+          <select id="manRolMesa" class="field-input">
+            <option value="Vicepresidencia">Vicepresidencia</option>
+            <option value="Secretaría / Relatoría">Secretaría / Relatoría</option>
+            <option value="Presidencia">Presidencia</option>
+            <option value="Director/a de Evaluación">Director/a de Evaluación</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.85rem;">
+        <button class="btn btn-frosted" onclick="closeModal('manualDirectorModal')">Cancelar</button>
+        <button class="btn btn-prussian" onclick="addManualDirector()">Guardar Integrante</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ENLACE DIRECTO Y CÓDIGO DE SALA -->
+  <div class="modal-box" id="roomHubModal">
+    <div class="modal-content">
+      <h3 style="color:var(--prussian); margin-bottom:0.35rem;">🔗 Enlace Directo y Código de Sala Colaborativa</h3>
+      <p style="font-size:0.82rem; color:var(--text-muted);">
+        Comparte el <strong>enlace directo</strong> o el <strong>código de sala</strong> con los demás directores (hasta 6 personas) para que entren sincronizados al instante.
+      </p>
+
+      <div style="margin-top:0.75rem; background:#f4faff; padding:0.85rem; border-radius:10px; border:1px solid var(--border-soft);">
+        <span style="font-size:0.72rem; font-weight:700; color:var(--dusk); text-transform:uppercase;">Código de Sala Actual:</span>
+        <div class="room-code-big" id="hubCurrentCode">MON-0000</div>
+        <div class="field-group" style="margin-top:0.5rem;">
+          <label>Enlace Directo de Conexión Automática:</label>
+          <input type="text" id="hubDirectLink" class="field-input" readonly style="font-size:0.78rem; background:white;" />
+        </div>
+        <div style="display:flex; gap:0.45rem; justify-content:center; flex-wrap:wrap; margin-top:0.5rem;">
+          <button class="btn btn-prussian" onclick="copyRoomLink()">🔗 Copiar Enlace</button>
+          <button class="btn btn-dusk" onclick="copyRoomCode()">📋 Copiar Código</button>
+          <button class="btn btn-aqua" onclick="shareRoomWhatsApp()">📲 Enviar por WhatsApp</button>
+          <button class="btn btn-frosted" onclick="generateNewRandomRoom()">🎲 Nueva Sala</button>
+        </div>
+      </div>
+
+      <div style="margin-top:0.9rem; padding-top:0.85rem; border-top:1px solid var(--border-soft);">
+        <label style="font-size:0.76rem; font-weight:800; color:var(--prussian); display:block; margin-bottom:0.35rem;">
+          Unirse a otra sala mediante código:
+        </label>
+        <div style="display:flex; gap:0.5rem;">
+          <input type="text" id="joinCodeInput" class="field-input" placeholder="Ej. MON-4821" style="margin:0; text-transform:uppercase; font-weight:700;" />
+          <button class="btn btn-azure" onclick="joinExistingRoom()">Conectar</button>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; margin-top:0.9rem;">
+        <button class="btn btn-frosted" onclick="closeModal('roomHubModal')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: PEGADO RÁPIDO -->
+  <div class="modal-box" id="pasteModal">
+    <div class="modal-content">
+      <h3 style="color:var(--prussian); margin-bottom:0.45rem;">📋 Pegado Rápido de Delegaciones</h3>
+      <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.7rem;">Formato: <strong>Nombre del Delegado - País</strong> (una línea por delegado).</p>
+      <textarea id="bulkPasteArea" rows="6" class="field-input" placeholder="Juan Pérez - República Dominicana&#10;María Gómez - Francia"></textarea>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.7rem;">
+        <button class="btn btn-frosted" onclick="closeModal('pasteModal')">Cancelar</button>
+        <button class="btn btn-prussian" onclick="procesarPegadoRapido()">Cargar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA COMPLETA CRONÓMETRO -->
+  <div class="fullscreen-overlay" id="fsOverlay">
+    <div class="fs-title" id="fsModeTitle">DISCURSO PARLAMENTARIO</div>
+    <div class="fs-delegate" id="fsDelegateName">Delegación en turno</div>
+    <div class="fs-time" id="fsClockDigits">01:30</div>
+    <div style="display:flex; gap:1rem;">
+      <button class="btn btn-aqua" style="padding:0.8rem 1.5rem; font-size:1rem;" onclick="startClock(activeFsClock)">▶ Iniciar</button>
+      <button class="btn btn-frosted" style="padding:0.8rem 1.5rem; font-size:1rem;" onclick="pauseClock(activeFsClock)">⏸ Pausar</button>
+      <button class="btn btn-danger" style="padding:0.8rem 1.5rem; font-size:1rem;" onclick="closeFullscreenClock()">✕ Salir</button>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================
+    // SONIDO DE CONEXIÓN Y FIN DE TIEMPO (WEB AUDIO API)
+    // =========================================================
+    function playTripleBeep() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const times = [0, 0.14, 0.28];
+        times.forEach((t, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(i === 2 ? 1046.5 : 880, ctx.currentTime + t);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime + t);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.1);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + t);
+          osc.stop(ctx.currentTime + t + 0.11);
+        });
+      } catch (e) {}
+    }
+
+    const DIRECTOR_COLORS = ['#007FF1', '#e11d48', '#16a34a', '#d97706', '#7c3aed', '#0891b2'];
+
+    const OFFICIAL_TOPICS = {
+      "Asamblea General de las Naciones Unidas (AG)": "Cooperación internacional para garantizar el acceso equitativo de los jóvenes a las oportunidades educativas, sociales y económicas generadas por la inteligencia artificial.",
+      "Organización Mundial de la Salud (OMS)": "Impacto del uso creciente de la inteligencia artificial y las plataformas digitales en la salud mental y el bienestar de los jóvenes.",
+      "Programa de las Naciones Unidas para el Medio Ambiente (PNUMA)": "Impacto ambiental del crecimiento de la inteligencia artificial: consumo energético y uso de recursos naturales para el desarrollo de nuevas tecnologías.",
+      "Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura (UNESCO)": "Uso de la inteligencia artificial generativa en la educación: desafíos para el aprendizaje, la creatividad y el pensamiento crítico de los jóvenes.",
+      "Consejo Económico y Social de las Naciones Unidas (ECOSOC)": "El futuro del empleo juvenil ante el avance de la inteligencia artificial: medidas para garantizar la capacitación, inclusión y protección laboral de las nuevas generaciones."
+    };
+
+    const CLOUD_RELAY = 'https://script.google.com/macros/s/AKfycbxZuaxegFrqsz6gjnjEgsksdcfu5CDD3N1kKY8CMcaQi5Vi1VG0Q6_BCyzf9-D-JsUHyA/exec';
+    const urlParams = new URLSearchParams(window.location.search);
+
+    function randomRoomCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = 'MON-';
+      for (let i = 0; i < 4; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+      return code;
+    }
+
+    let roomId = (urlParams.get('sala') || localStorage.getItem('monupe_last_room') || '').toUpperCase().trim();
+    if (!roomId) roomId = randomRoomCode();
+    localStorage.setItem('monupe_last_room', roomId);
+    window.history.replaceState({}, '', `${window.location.pathname}?sala=${encodeURIComponent(roomId)}`);
+
+    function getDirectRoomUrl() {
+      return `${window.location.origin}${window.location.pathname}?sala=${encodeURIComponent(roomId)}`;
+    }
+
+    function updateRoomBadges() {
+      document.getElementById('roomCodeBadge').textContent = `SALA: ${roomId}`;
+      document.getElementById('hubCurrentCode').textContent = roomId;
+      document.getElementById('hubDirectLink').value = getDirectRoomUrl();
+    }
+    updateRoomBadges();
+
+    // =========================================================
+    // ESTADO PERSISTENTE EN LOCALSTORAGE + NUBE EN TIEMPO REAL
+    // =========================================================
+    function getStorageKey() { return `monupe_v8_permanent_${roomId}`; }
+
+    function createEmptyDelegate(idx) {
+      return {
+        id: 'del_' + Date.now() + '_' + idx + '_' + Math.random().toString(36).slice(2, 6),
+        name: '',
+        country: '',
+        status: 'PV',
+        rubric: {
+          redaccion: 0, investigacion: 0, representacion: 0,
+          oratoria: 0, argumentacion: 0, discurso: 0,
+          consenso: 0, conflictos: 0,
+          critico: 0, soluciones: 0,
+          liderazgo: 0, equipo: 0
+        },
+        lastEditedBy: {},
+        mention: 'Ninguna',
+        customMention: '',
+        paseMonupe: 'No'
+      };
+    }
+
+    const defaultCommission = "Asamblea General de las Naciones Unidas (AG)";
+    let appData = JSON.parse(localStorage.getItem(getStorageKey())) || {
+      roomId: roomId,
+      updatedAt: 0,
+      meta: {
+        centro: '',
+        comision: defaultCommission,
+        topico: OFFICIAL_TOPICS[defaultCommission],
+        presidente: '',
+        vicepresidente: '',
+        relator: '',
+        horaInicio: '08:00',
+        horaFin: ''
+      },
+      manualDirectors: [],
+      speakerQueue: [],
+      speechSessionEnded: false,
+      delegates: Array.from({ length: 15 }, (_, i) => createEmptyDelegate(i))
+    };
+
+    if (!Array.isArray(appData.manualDirectors)) appData.manualDirectors = [];
+    if (!Array.isArray(appData.speakerQueue)) appData.speakerQueue = [];
+
+    // =========================================================
+    // AUTOCOMPLETADO DE MESA DIRECTIVA AL INGRESAR O AGREGAR
+    // =========================================================
+    function assignMemberToMesaMeta(memberObj) {
+      if (!memberObj || !memberObj.fullName) return;
+      const rol = memberObj.rolMesa;
+      if (rol === 'Presidencia') appData.meta.presidente = memberObj.fullName;
+      else if (rol === 'Vicepresidencia') appData.meta.vicepresidente = memberObj.fullName;
+      else if (rol === 'Secretaría / Relatoría') appData.meta.relator = memberObj.fullName;
+      loadMetaUI();
+    }
+
+    // =========================================================
+    // PERFIL DEL VOLUNTARIO CON PC
+    // =========================================================
+    let currentMember = JSON.parse(localStorage.getItem('monupe_volunteer_profile')) || null;
+
+    function openLoginModal() {
+      if (currentMember) {
+        document.getElementById('volNombres').value = currentMember.nombres || '';
+        document.getElementById('volApellidos').value = currentMember.apellidos || '';
+        document.getElementById('volCalidad').value = currentMember.calidad || 'Voluntario Distrital';
+        document.getElementById('volRolMesa').value = currentMember.rolMesa || 'Presidencia';
+      }
+      openModal('loginModal');
+    }
+
+    function saveVolunteerProfile() {
+      const nombres = document.getElementById('volNombres').value.trim();
+      const apellidos = document.getElementById('volApellidos').value.trim();
+      const calidad = document.getElementById('volCalidad').value;
+      const rolMesa = document.getElementById('volRolMesa').value;
+
+      if (!nombres || !apellidos) {
+        alert('Por favor ingresa tus nombres y apellidos.');
+        return;
+      }
+
+      const existingId = currentMember ? currentMember.id : ('dir_' + Math.random().toString(36).slice(2, 9));
+      const colorIdx = Math.abs(existingId.split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % DIRECTOR_COLORS.length;
+
+      currentMember = {
+        id: existingId,
+        nombres,
+        apellidos,
+        fullName: `${nombres} ${apellidos}`,
+        calidad,
+        rolMesa,
+        color: currentMember ? currentMember.color : DIRECTOR_COLORS[colorIdx]
+      };
+
+      localStorage.setItem('monupe_volunteer_profile', JSON.stringify(currentMember));
+      assignMemberToMesaMeta(currentMember);
+      saveState(true);
+      closeModal('loginModal');
+      playTripleBeep();
+      showLiveToast(`🔊 ${currentMember.fullName} se ha conectado`);
+      renderConnectedDirectors();
+      syncWithCloud({ includeData: true, includeMember: true });
+    }
+
+    // =========================================================
+    // AGREGAR / QUITAR INTEGRANTE DE MESA SIN PC
+    // =========================================================
+    function addManualDirector() {
+      const nombres = document.getElementById('manNombres').value.trim();
+      const apellidos = document.getElementById('manApellidos').value.trim();
+      const calidad = document.getElementById('manCalidad').value;
+      const rolMesa = document.getElementById('manRolMesa').value;
+
+      if (!nombres || !apellidos) {
+        alert('Por favor ingresa los nombres y apellidos del integrante.');
+        return;
+      }
+
+      const newManual = {
+        id: 'man_' + Date.now(),
+        nombres,
+        apellidos,
+        fullName: `${nombres} ${apellidos}`,
+        calidad,
+        rolMesa,
+        isManual: true,
+        color: DIRECTOR_COLORS[(appData.manualDirectors.length + 2) % DIRECTOR_COLORS.length]
+      };
+
+      appData.manualDirectors.push(newManual);
+      assignMemberToMesaMeta(newManual);
+      document.getElementById('manNombres').value = '';
+      document.getElementById('manApellidos').value = '';
+      closeModal('manualDirectorModal');
+      saveState(true);
+      renderConnectedDirectors();
+    }
+
+    function removeManualDirector(id) {
+      appData.manualDirectors = appData.manualDirectors.filter(m => m.id !== id);
+      saveState(true);
+      renderConnectedDirectors();
+    }
+
+    let knownMemberIds = new Set();
+    let knownChatIds = new Set();
+    let remoteMembers = {};
+    let remoteChat = [];
+    let isChatOpen = false;
+    let unreadChatCount = 0;
+
+    function setSyncIndicator(isSynced, customText) {
+      const btn = document.getElementById('syncStatusBtn');
+      const lbl = document.getElementById('syncStatusLabel');
+      if (isSynced) {
+        btn.classList.add('synced');
+        lbl.textContent = customText || 'Sincronizado en vivo';
+      } else {
+        btn.classList.remove('synced');
+        lbl.textContent = customText || 'Sincronizando...';
+      }
+    }
+
+    function showLiveToast(text) {
+      const toast = document.getElementById('liveUpdateToast');
+      toast.textContent = text;
+      toast.style.display = 'inline-block';
+      setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+
+    function getSubtotals(d) {
+      const r = d.rubric || {};
+      const conocimiento = (Number(r.redaccion)||0) + (Number(r.investigacion)||0) + (Number(r.representacion)||0);
+      const comunicacion = (Number(r.oratoria)||0) + (Number(r.argumentacion)||0) + (Number(r.discurso)||0);
+      const negociacion  = (Number(r.consenso)||0) + (Number(r.conflictos)||0);
+      const analisis     = (Number(r.critico)||0) + (Number(r.soluciones)||0);
+      const interpers    = (Number(r.liderazgo)||0) + (Number(r.equipo)||0);
+      const total = conocimiento + comunicacion + negociacion + analisis + interpers;
+      return { conocimiento, comunicacion, negociacion, analisis, interpers, total };
+    }
+
+    let syncDebounce = null;
+    function saveState(pushRemote = true) {
+      appData.roomId = roomId;
+      appData.updatedAt = Date.now();
+      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+
+      if (pushRemote) {
+        setSyncIndicator(false, 'Guardando en nube...');
+        clearTimeout(syncDebounce);
+        syncDebounce = setTimeout(() => syncWithCloud({ includeData: true, includeMember: true }), 450);
+      }
+    }
+
+    async function syncWithCloud({ includeData = false, includeMember = false, chatMsg = null } = {}) {
+      if (!navigator.onLine) {
+        setSyncIndicator(false, 'Sin internet (Guardado local)');
+        return;
+      }
+      try {
+        let url = `${CLOUD_RELAY}?sala=${encodeURIComponent(roomId)}&t=${Date.now()}`;
+        if (includeData || includeMember || chatMsg) {
+          const packet = { updatedAt: appData.updatedAt };
+          if (includeData) {
+            packet.meta = appData.meta;
+            packet.delegates = appData.delegates;
+            packet.manualDirectors = appData.manualDirectors;
+            packet.speakerQueue = appData.speakerQueue;
+            packet.speechSessionEnded = appData.speechSessionEnded;
+          }
+          if (includeMember && currentMember) {
+            packet.member = currentMember;
+          }
+          if (chatMsg) {
+            packet.chatMsg = chatMsg;
+          }
+          const encoded = encodeURIComponent(JSON.stringify(packet));
+          if (encoded.length < 1800) {
+            url += `&action=sync&payload=${encoded}`;
+          } else {
+            await fetch(CLOUD_RELAY, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({ roomId, ...packet })
+            });
+          }
+        }
+
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const remote = await res.json();
+
+        if (remote && remote.delegates && remote.updatedAt > (appData.updatedAt || 0)) {
+          appData.meta = remote.meta || appData.meta;
+          appData.delegates = remote.delegates;
+          appData.manualDirectors = remote.manualDirectors || appData.manualDirectors;
+          appData.speakerQueue = remote.speakerQueue || appData.speakerQueue;
+          appData.speechSessionEnded = Boolean(remote.speechSessionEnded);
+          appData.updatedAt = remote.updatedAt;
+          localStorage.setItem(getStorageKey(), JSON.stringify(appData));
+
+          if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA' && document.activeElement.tagName !== 'SELECT') {
+            loadMetaUI();
+            renderRollCall();
+            renderSpeakerQueueUI();
+            renderMatrixEval();
+            renderRanking();
+          }
+        }
+
+        if (remote && remote.members) {
+          remoteMembers = remote.members;
+        }
+        renderConnectedDirectors();
+
+        if (remote && Array.isArray(remote.chat)) {
+          remoteChat = remote.chat;
+          renderChatMessages();
+        }
+
+        setSyncIndicator(true, 'Sincronizado en vivo');
+      } catch (e) {
+        setSyncIndicator(false, 'Reintentando conexión...');
+      }
+    }
+
+    function syncNowManual() {
+      setSyncIndicator(false, 'Sincronizando...');
+      syncWithCloud({ includeData: true, includeMember: true });
+    }
+
+    setInterval(() => {
+      syncWithCloud({ includeMember: Boolean(currentMember) });
+    }, 2500);
+
+    // =========================================================
+    // LISTA DE ORADORES INTERACTIVA (CUADRITO EN PASE DE LISTA + COLA EN CRONÓMETRO)
+    // =========================================================
+    function toggleSpeakerInQueue(delegateId, isChecked) {
+      const idStr = String(delegateId);
+      if (isChecked) {
+        if (!appData.speakerQueue.includes(idStr)) {
+          appData.speakerQueue.push(idStr);
+          appData.speechSessionEnded = false;
+        }
+      } else {
+        appData.speakerQueue = appData.speakerQueue.filter(id => id !== idStr);
+      }
+      saveState(true);
+      renderRollCall();
+      renderSpeakerQueueUI();
+    }
+
+    function moveSpeakerOrder(queueIdx, delta) {
+      const targetIdx = queueIdx + delta;
+      if (targetIdx < 0 || targetIdx >= appData.speakerQueue.length) return;
+      const temp = appData.speakerQueue[queueIdx];
+      appData.speakerQueue[queueIdx] = appData.speakerQueue[targetIdx];
+      appData.speakerQueue[targetIdx] = temp;
+      saveState(true);
+      renderSpeakerQueueUI();
+    }
+
+    function loadSpeakerToTimer(delegateId) {
+      const d = appData.delegates.find(item => String(item.id) === String(delegateId));
+      if (!d) return;
+      const label = `${d.country || 'País'} (${d.name || 'Delegado'})`;
+      const sel = document.getElementById('speakerSelect');
+      sel.value = label;
+      resetClock(1);
+    }
+
+    function gradeAndAdvanceSpeaker(delegateId) {
+      const idStr = String(delegateId);
+      const delIndex = appData.delegates.findIndex(item => String(item.id) === idStr);
+      if (delIndex === -1) return;
+
+      const inputEl = document.getElementById(`quickSpeechGrade_${idStr}`);
+      let grade = Number(inputEl ? inputEl.value : 0);
+      if (isNaN(grade) || grade < 0) grade = 0;
+      if (grade > 6) grade = 6;
+
+      appData.delegates[delIndex].rubric.discurso = grade;
+      if (!appData.delegates[delIndex].lastEditedBy) appData.delegates[delIndex].lastEditedBy = {};
+      if (currentMember) {
+        appData.delegates[delIndex].lastEditedBy.discurso = {
+          name: currentMember.nombres.split(' ')[0],
+          color: currentMember.color
+        };
+      }
+
+      appData.speakerQueue = appData.speakerQueue.filter(id => id !== idStr);
+
+      if (appData.speakerQueue.length === 0) {
+        appData.speechSessionEnded = true;
+        pauseClock(1);
+      } else {
+        loadSpeakerToTimer(appData.speakerQueue[0]);
+      }
+
+      saveState(true);
+      renderRollCall();
+      renderSpeakerQueueUI();
+      renderMatrixEval();
+      renderRanking();
+      showLiveToast(`✅ Discurso calificado (${grade}/6 pts) y pasado a la matriz`);
+    }
+
+    function clearSpeakerQueue() {
+      appData.speakerQueue = [];
+      appData.speechSessionEnded = false;
+      saveState(true);
+      renderRollCall();
+      renderSpeakerQueueUI();
+    }
+
+    function dismissSpeechEndedBanner() {
+      appData.speechSessionEnded = false;
+      saveState(true);
+      renderSpeakerQueueUI();
+    }
+
+    function renderSpeakerQueueUI() {
+      appData.speakerQueue = appData.speakerQueue.filter(id =>
+        appData.delegates.some(d => String(d.id) === String(id))
+      );
+
+      document.getElementById('speakerQueueCount').textContent = appData.speakerQueue.length;
+      const listEl = document.getElementById('speakerQueueList');
+      const bannerEl = document.getElementById('speechEndedBanner');
+
+      if (appData.speakerQueue.length === 0) {
+        listEl.innerHTML = `<div style="font-size:0.75rem; color:rgba(167,235,255,0.75); padding:0.35rem 0;">
+          Marca la casilla <strong>🎙 Orador</strong> en el Pase de Lista cada vez que un delegado levante su placard.
+        </div>`;
+        bannerEl.style.display = appData.speechSessionEnded ? 'flex' : 'none';
+        return;
+      }
+
+      bannerEl.style.display = 'none';
+
+      const firstDel = appData.delegates.find(d => String(d.id) === String(appData.speakerQueue[0]));
+      if (firstDel) {
+        const firstLabel = `${firstDel.country || 'País'} (${firstDel.name || 'Delegado'})`;
+        const sel = document.getElementById('speakerSelect');
+        if (!sel.value) sel.value = firstLabel;
+      }
+
+      listEl.innerHTML = appData.speakerQueue.map((idStr, idx) => {
+        const d = appData.delegates.find(item => String(item.id) === String(idStr));
+        if (!d) return '';
+        const isFirst = idx === 0;
+        const currentGrade = d.rubric && d.rubric.discurso ? d.rubric.discurso : '';
+        return `
+          <div class="speaker-turn-card ${isFirst ? 'active-turn' : ''}">
+            <div class="turn-info">
+              <span class="turn-badge">${isFirst ? '🎙 EN TURNO #1' : `#${idx + 1}`}</span>
+              <div>
+                <div style="font-size:0.82rem; font-weight:800; color:#ffffff;">${d.country || 'País sin asignar'}</div>
+                <div style="font-size:0.71rem; color:var(--frosted);">${d.name || 'Delegado/a'}</div>
+              </div>
+            </div>
+
+            <div class="turn-score-actions">
+              <button class="btn btn-outline-light" style="padding:0.2rem 0.42rem; font-size:0.72rem;" title="Subir turno" onclick="moveSpeakerOrder(${idx}, -1)">▲</button>
+              <button class="btn btn-outline-light" style="padding:0.2rem 0.42rem; font-size:0.72rem;" title="Bajar turno" onclick="moveSpeakerOrder(${idx}, 1)">▼</button>
+              <button class="btn btn-dusk" style="padding:0.24rem 0.48rem; font-size:0.72rem;" title="Poner en cronómetro" onclick="loadSpeakerToTimer('${idStr}')">⏱</button>
+              <input type="number" id="quickSpeechGrade_${idStr}" class="speech-grade-input" min="0" max="6" step="0.5" placeholder="0-6" value="${currentGrade}" title="Nota de Discurso (0 a 6 pts)" />
+              <button class="btn btn-aqua" style="padding:0.28rem 0.58rem; font-size:0.73rem;" onclick="gradeAndAdvanceSpeaker('${idStr}')">✅ Calificar</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================
+    // RECUADRO DINÁMICO DE DIRECTORES (CONECTADOS + SIN PC, HASTA 6)
+    // =========================================================
+    function renderConnectedDirectors() {
+      const now = Date.now();
+      const onlineList = Object.values(remoteMembers)
+        .filter(m => (now - (m.lastSeen || 0)) < 45000);
+
+      if (currentMember && !onlineList.some(m => m.id === currentMember.id)) {
+        onlineList.unshift(currentMember);
+      }
+
+      onlineList.forEach(m => {
+        assignMemberToMesaMeta(m);
+        if (!knownMemberIds.has(m.id)) {
+          knownMemberIds.add(m.id);
+          if (currentMember && m.id !== currentMember.id) {
+            playTripleBeep();
+            showLiveToast(`🔔 ${m.fullName} (${m.calidad}) se ha conectado`);
+          }
+        }
+      });
+
+      const combined = [...onlineList, ...(appData.manualDirectors || [])].slice(0, 6);
+      document.getElementById('connectedCount').textContent = combined.length;
+
+      const container = document.getElementById('directorsPresenceList');
+      container.innerHTML = combined.map(m => `
+        <div class="director-chip" style="border-left-color: ${m.color || '#00CBFF'};">
+          <div class="director-chip-name">
+            <span style="width:8px; height:8px; border-radius:50%; background:${m.isManual ? '#94a3b8' : (m.color || '#00CBFF')}; display:inline-block;"></span>
+            ${m.fullName}
+            ${m.isManual ? `<button class="remove-manual-dir" title="Quitar" onclick="removeManualDirector('${m.id}')">✕</button>` : ''}
+          </div>
+          <div class="director-chip-role">${m.calidad} • ${m.rolMesa || 'Mesa'}${m.isManual ? ' (Presencial sin PC)' : ''}</div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================
+    // CHAT EN TIEMPO REAL ENTRE INTEGRANTES DE MESA
+    // =========================================================
+    function toggleChatDrawer() {
+      isChatOpen = !isChatOpen;
+      document.getElementById('chatDrawer').classList.toggle('open', isChatOpen);
+      if (isChatOpen) {
+        unreadChatCount = 0;
+        document.getElementById('chatUnreadBadge').style.display = 'none';
+        const box = document.getElementById('chatMessagesBox');
+        box.scrollTop = box.scrollHeight;
+      }
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInputField');
+      const text = input.value.trim();
+      if (!text) return;
+      if (!currentMember) {
+        openLoginModal();
+        return;
+      }
+
+      const msgObj = {
+        id: 'msg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        author: currentMember.fullName,
+        role: currentMember.calidad,
+        color: currentMember.color,
+        text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      input.value = '';
+      remoteChat.push(msgObj);
+      knownChatIds.add(msgObj.id);
+      renderChatMessages();
+      syncWithCloud({ chatMsg: msgObj });
+    }
+
+    function renderChatMessages() {
+      const box = document.getElementById('chatMessagesBox');
+      let hasNew = false;
+
+      remoteChat.forEach(m => {
+        if (!knownChatIds.has(m.id)) {
+          knownChatIds.add(m.id);
+          hasNew = true;
+        }
+      });
+
+      if (hasNew && !isChatOpen) {
+        unreadChatCount++;
+        const badge = document.getElementById('chatUnreadBadge');
+        badge.textContent = unreadChatCount;
+        badge.style.display = 'inline-block';
+      }
+
+      box.innerHTML = remoteChat.map(m => `
+        <div class="chat-bubble" style="border-left-color:${m.color || '#007FF1'};">
+          <div class="chat-bubble-author" style="color:${m.color || '#005288'};">
+            <span>${m.author} (${m.role})</span>
+            <span style="color:#64748b; font-weight:600;">${m.time || ''}</span>
+          </div>
+          <div style="color:#002247;">${m.text}</div>
+        </div>
+      `).join('');
+
+      if (isChatOpen) box.scrollTop = box.scrollHeight;
+    }
+
+    // =========================================================
+    // GESTIÓN DE SALA (ENLACE Y CÓDIGO)
+    // =========================================================
+    function openRoomHub() {
+      updateRoomBadges();
+      openModal('roomHubModal');
+    }
+
+    function copyRoomLink() {
+      navigator.clipboard.writeText(getDirectRoomUrl());
+      alert('Enlace directo copiado. Cualquier director que lo abra entrará automáticamente a esta sala.');
+    }
+
+    function copyRoomCode() {
+      navigator.clipboard.writeText(roomId);
+      alert(`Código ${roomId} copiado.`);
+    }
+
+    function shareRoomWhatsApp() {
+      const msg = `*SALA DE EVALUACIÓN EN VIVO — MONUPE II*\n*Comisión:* ${appData.meta.comision}\n*Código de Sala:* *${roomId}*\n\nÚnete directo con este enlace:\n${getDirectRoomUrl()}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function generateNewRandomRoom() {
+      roomId = randomRoomCode();
+      localStorage.setItem('monupe_last_room', roomId);
+      window.history.replaceState({}, '', `${window.location.pathname}?sala=${encodeURIComponent(roomId)}`);
+      appData = {
+        roomId,
+        updatedAt: Date.now(),
+        meta: {
+          centro: '',
+          comision: defaultCommission,
+          topico: OFFICIAL_TOPICS[defaultCommission],
+          presidente: '',
+          vicepresidente: '',
+          relator: '',
+          horaInicio: '08:00',
+          horaFin: ''
+        },
+        manualDirectors: [],
+        speakerQueue: [],
+        speechSessionEnded: false,
+        delegates: Array.from({ length: 15 }, (_, i) => createEmptyDelegate(i))
+      };
+      if (currentMember) assignMemberToMesaMeta(currentMember);
+      remoteMembers = {};
+      remoteChat = [];
+      lastGeneratedSheetUrl = '';
+      document.getElementById('generatedSheetBox').style.display = 'none';
+      updateRoomBadges();
+      saveState(true);
+      loadMetaUI();
+      renderRollCall();
+      renderSpeakerQueueUI();
+      renderMatrixEval();
+      renderRanking();
+      renderConnectedDirectors();
+      renderChatMessages();
+    }
+
+    async function joinExistingRoom() {
+      const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
+      if (!code) return;
+      roomId = code;
+      localStorage.setItem('monupe_last_room', roomId);
+      window.history.replaceState({}, '', `${window.location.pathname}?sala=${encodeURIComponent(roomId)}`);
+      updateRoomBadges();
+      appData.updatedAt = 0;
+      await syncWithCloud({ includeMember: true });
+      playTripleBeep();
+      closeModal('roomHubModal');
+    }
+
+    // =========================================================
+    // PESTAÑAS, CRONÓMETROS Y METADATOS
+    // =========================================================
+    function switchTab(idx) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+      document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+      if (idx === 1) renderMatrixEval();
+      if (idx === 2) renderRanking();
+    }
+
+    const clocks = {
+      1: { defaultSec: 90, remaining: 90, timer: null, displayId: 'clock1Display' },
+      2: { defaultSec: 600, remaining: 600, timer: null, displayId: 'clock2Display' }
+    };
+    let activeFsClock = 1;
+
+    function formatMMSS(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function updateClockUI(id) {
+      const str = formatMMSS(clocks[id].remaining);
+      document.getElementById(clocks[id].displayId).textContent = str;
+      if (activeFsClock === id) document.getElementById('fsClockDigits').textContent = str;
+    }
+
+    function setClock(id, seconds) { pauseClock(id); clocks[id].defaultSec = seconds; clocks[id].remaining = seconds; updateClockUI(id); }
+    function applyCustomClock(id) {
+      const mins = Number(document.getElementById(`c${id}Min`).value) || 0;
+      const secs = Number(document.getElementById(`c${id}Sec`).value) || 0;
+      setClock(id, mins * 60 + secs);
+    }
+    function startClock(id) {
+      if (clocks[id].timer || clocks[id].remaining <= 0) return;
+      clocks[id].timer = setInterval(() => {
+        if (clocks[id].remaining > 0) {
+          clocks[id].remaining--;
+          updateClockUI(id);
+          if (clocks[id].remaining === 0) playTripleBeep();
+        } else {
+          pauseClock(id);
+        }
+      }, 1000);
+    }
+    function pauseClock(id) { clearInterval(clocks[id].timer); clocks[id].timer = null; }
+    function resetClock(id) { pauseClock(id); clocks[id].remaining = clocks[id].defaultSec; updateClockUI(id); }
+    function toggleTimersBody() {
+      const body = document.getElementById('timersBody');
+      body.style.display = body.style.display === 'none' ? 'grid' : 'none';
+    }
+    function openFullscreenClock(id) {
+      activeFsClock = id;
+      document.getElementById('fsModeTitle').textContent = id === 1 ? 'DISCURSO / LISTA DE ORADORES' : document.getElementById('caucusTypeSelect').value;
+      const spk = document.getElementById('speakerSelect').value;
+      document.getElementById('fsDelegateName').textContent = id === 1 ? (spk || 'Delegación en turno') : appData.meta.comision;
+      document.getElementById('fsClockDigits').textContent = formatMMSS(clocks[id].remaining);
+      document.getElementById('fsOverlay').classList.add('open');
+    }
+    function closeFullscreenClock() { document.getElementById('fsOverlay').classList.remove('open'); }
+
+    let sessSec = 0, sessInterval = null;
+    function iniciarSesionGeneral() {
+      document.getElementById('sessionStatusTag').textContent = 'Sesión en curso';
+      document.getElementById('sessionNote').textContent = 'Sesión parlamentaria activa';
+      if (sessInterval) return;
+      sessInterval = setInterval(() => {
+        sessSec++;
+        const h = String(Math.floor(sessSec / 3600)).padStart(2, '0');
+        const m = String(Math.floor((sessSec % 3600) / 60)).padStart(2, '0');
+        const s = String(sessSec % 60).padStart(2, '0');
+        document.getElementById('sessionDigits').textContent = `${h}:${m}:${s}`;
+      }, 1000);
+    }
+    function finalizarSesionGeneral() {
+      clearInterval(sessInterval); sessInterval = null;
+      document.getElementById('sessionStatusTag').textContent = 'Finalizada';
+      const now = new Date();
+      document.getElementById('horaFin').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      syncMeta();
+    }
+
+    function onCommissionChange() {
+      const selectedCom = document.getElementById('cfgComision').value;
+      if (OFFICIAL_TOPICS[selectedCom]) document.getElementById('cfgTopico').value = OFFICIAL_TOPICS[selectedCom];
+      syncMeta();
+    }
+
+    function syncMeta() {
+      appData.meta.centro = document.getElementById('cfgCentro').value;
+      appData.meta.comision = document.getElementById('cfgComision').value;
+      appData.meta.topico = document.getElementById('cfgTopico').value;
+      appData.meta.presidente = document.getElementById('cfgPres').value;
+      appData.meta.vicepresidente = document.getElementById('cfgVice').value;
+      appData.meta.relator = document.getElementById('cfgRelator').value;
+      appData.meta.horaInicio = document.getElementById('horaInicio').value;
+      appData.meta.horaFin = document.getElementById('horaFin').value;
+      saveState(true);
+    }
+
+    function loadMetaUI() {
+      document.getElementById('cfgCentro').value = appData.meta.centro || '';
+      document.getElementById('cfgComision').value = appData.meta.comision || defaultCommission;
+      document.getElementById('cfgTopico').value = appData.meta.topico || OFFICIAL_TOPICS[defaultCommission];
+      document.getElementById('cfgPres').value = appData.meta.presidente || '';
+      document.getElementById('cfgVice').value = appData.meta.vicepresidente || '';
+      document.getElementById('cfgRelator').value = appData.meta.relator || '';
+      document.getElementById('horaInicio').value = appData.meta.horaInicio || '08:00';
+      document.getElementById('horaFin').value = appData.meta.horaFin || '';
+      document.getElementById('cfgCantidad').value = appData.delegates.length;
+    }
+
+    function aplicarFilas() {
+      const target = Math.min(60, Math.max(1, Number(document.getElementById('cfgCantidad').value) || 15));
+      while (appData.delegates.length < target) appData.delegates.push(createEmptyDelegate(appData.delegates.length));
+      if (appData.delegates.length > target) appData.delegates = appData.delegates.slice(0, target);
+      saveState(true);
+      renderRollCall();
+      renderSpeakerQueueUI();
+    }
+
+    function agregarFilaDelegado() {
+      appData.delegates.push(createEmptyDelegate(appData.delegates.length));
+      document.getElementById('cfgCantidad').value = appData.delegates.length;
+      saveState(true);
+      renderRollCall();
+    }
+
+    function eliminarDelegado(idx) {
+      const removedId = String(appData.delegates[idx].id);
+      appData.delegates.splice(idx, 1);
+      appData.speakerQueue = appData.speakerQueue.filter(id => id !== removedId);
+      document.getElementById('cfgCantidad').value = appData.delegates.length;
+      saveState(true);
+      renderRollCall();
+      renderSpeakerQueueUI();
+    }
+
+    function updateDelegateField(idx, field, val) {
+      appData.delegates[idx][field] = val;
+      saveState(true);
+      updateSpeakerDropdown();
+      renderSpeakerQueueUI();
+    }
+
+    function setAttendance(idx, status) {
+      appData.delegates[idx].status = status;
+      saveState(true);
+      renderRollCall();
+    }
+
+    function marcarTodos(status) {
+      appData.delegates.forEach(d => d.status = status);
+      saveState(true);
+      renderRollCall();
+    }
+
+    function updateQuorumStats() {
+      const total = appData.delegates.length;
+      const pv = appData.delegates.filter(d => d.status === 'PV').length;
+      const pOnly = appData.delegates.filter(d => d.status === 'P').length;
+      const presentTotal = pv + pOnly;
+      const absent = total - presentTotal;
+      const simpleMaj = Math.floor(presentTotal / 2) + 1;
+      const qualifiedMaj = Math.ceil((presentTotal * 2) / 3);
+
+      document.getElementById('qTotal').textContent = total;
+      document.getElementById('qPresVot').textContent = pv;
+      document.getElementById('qPresTot').textContent = presentTotal;
+      document.getElementById('qAusentes').textContent = absent;
+      document.getElementById('qSimple').textContent = `${simpleMaj} / ${simpleMaj}`;
+      document.getElementById('qCalificada').textContent = qualifiedMaj;
+    }
+
+    function updateSpeakerDropdown() {
+      const sel = document.getElementById('speakerSelect');
+      const current = sel.value;
+      sel.innerHTML = `<option value="">-- Seleccionar Delegado / País --</option>` +
+        appData.delegates
+          .filter(d => d.name || d.country)
+          .map(d => {
+            const label = `${d.country || 'País'} (${d.name || 'Delegado'})`;
+            return `<option value="${label}">${label}</option>`;
+          }).join('');
+      sel.value = current;
+    }
+
+    function renderRollCall() {
+      const tbody = document.getElementById('rollCallTbody');
+      tbody.innerHTML = appData.delegates.map((d, i) => {
+        const idStr = String(d.id);
+        const queuePos = appData.speakerQueue.indexOf(idStr);
+        const isInQueue = queuePos !== -1;
+        return `
+          <tr>
+            <td><strong>${i + 1}</strong></td>
+            <td><input type="text" class="table-input" placeholder="Nombre completo del delegado/a..." value="${d.name}" oninput="updateDelegateField(${i}, 'name', this.value)" /></td>
+            <td><input type="text" class="table-input" placeholder="Ej. República Dominicana..." value="${d.country}" oninput="updateDelegateField(${i}, 'country', this.value)" /></td>
+            <td style="text-align:center;">
+              <label class="speaker-check-box ${isInQueue ? 'in-queue' : ''}" title="Marcar al levantar el placard para añadir a la lista de oradores">
+                <input type="checkbox" ${isInQueue ? 'checked' : ''} onchange="toggleSpeakerInQueue('${idStr}', this.checked)" />
+                <span>${isInQueue ? `🎙 #${queuePos + 1}` : 'Orador'}</span>
+              </label>
+            </td>
+            <td>
+              <div class="attendance-group">
+                <button class="att-btn ${d.status === 'PV' ? 'active-pv' : ''}" onclick="setAttendance(${i}, 'PV')">Presente y Votando</button>
+                <button class="att-btn ${d.status === 'P' ? 'active-p' : ''}" onclick="setAttendance(${i}, 'P')">Presente</button>
+                <button class="att-btn ${d.status === 'A' ? 'active-a' : ''}" onclick="setAttendance(${i}, 'A')">Ausente</button>
+              </div>
+            </td>
+            <td style="text-align:center;">
+              <button class="btn btn-outline-light" style="color:var(--absent-red); border-color:#f4b8c0; padding:0.25rem 0.5rem;" onclick="eliminarDelegado(${i})">🗑</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      updateQuorumStats();
+      updateSpeakerDropdown();
+    }
+
+    function procesarPegadoRapido() {
+      const lines = document.getElementById('bulkPasteArea').value.split('\n').map(l => l.trim()).filter(Boolean);
+      if (!lines.length) return;
+      appData.delegates = lines.map((line, idx) => {
+        const parts = line.split('-');
+        const item = createEmptyDelegate(idx);
+        item.name = (parts[0] || '').trim();
+        item.country = (parts[1] || '').trim();
+        return item;
+      });
+      appData.speakerQueue = [];
+      appData.speechSessionEnded = false;
+      document.getElementById('cfgCantidad').value = appData.delegates.length;
+      saveState(true);
+      renderRollCall();
+      renderSpeakerQueueUI();
+      closeModal('pasteModal');
+    }
+
+    // =========================================================
+    // MATRIZ DE EVALUACIÓN CON COLOR DE EDITOR ESTILO CANVA
+    // =========================================================
+    function updateMatrixScore(idx, field, maxVal, inputEl) {
+      let val = Number(inputEl.value);
+      if (isNaN(val) || val < 0) { val = 0; inputEl.value = 0; }
+      if (val > maxVal) { val = maxVal; inputEl.value = maxVal; }
+
+      appData.delegates[idx].rubric[field] = val;
+      if (!appData.delegates[idx].lastEditedBy) appData.delegates[idx].lastEditedBy = {};
+      if (currentMember) {
+        appData.delegates[idx].lastEditedBy[field] = {
+          name: currentMember.nombres.split(' ')[0],
+          color: currentMember.color
+        };
+        inputEl.style.borderColor = currentMember.color;
+      }
+
+      const subs = getSubtotals(appData.delegates[idx]);
+      document.getElementById(`rowTotal_${idx}`).textContent = subs.total;
+      saveState(true);
+    }
+
+    function renderScoreInput(idx, field, maxVal, d) {
+      const val = d.rubric[field] || 0;
+      const editor = d.lastEditedBy && d.lastEditedBy[field];
+      const borderStyle = editor ? `border-color:${editor.color};` : '';
+      const badgeHtml = editor ? `<span class="canva-cursor-tag" style="background:${editor.color};">${editor.name}</span>` : '';
+      return `
+        <td style="text-align:center;">
+          <div class="score-cell-wrap">
+            ${badgeHtml}
+            <input type="number" class="score-cell-input" style="${borderStyle}" min="0" max="${maxVal}" step="0.5" value="${val}" oninput="updateMatrixScore(${idx}, '${field}', ${maxVal}, this)" />
+          </div>
+        </td>
+      `;
+    }
+
+    function renderMatrixEval() {
+      const tbody = document.getElementById('matrixEvalTbody');
+      tbody.innerHTML = appData.delegates.map((d, i) => {
+        const subs = getSubtotals(d);
+        return `
+          <tr>
+            <td class="sticky-col-1" style="text-align:center;"><strong>${i + 1}</strong></td>
+            <td class="sticky-col-2">
+              <strong style="color:var(--prussian); display:block; font-size:0.82rem;">${d.name || `Delegado/a #${i + 1}`}</strong>
+              <span style="font-size:0.72rem; color:var(--azure); font-weight:600;">${d.country || 'Sin país asignado'}</span>
+            </td>
+            ${renderScoreInput(i, 'redaccion', 10, d)}
+            ${renderScoreInput(i, 'investigacion', 10, d)}
+            ${renderScoreInput(i, 'representacion', 8, d)}
+            ${renderScoreInput(i, 'oratoria', 8, d)}
+            ${renderScoreInput(i, 'argumentacion', 8, d)}
+            ${renderScoreInput(i, 'discurso', 6, d)}
+            ${renderScoreInput(i, 'consenso', 8, d)}
+            ${renderScoreInput(i, 'conflictos', 8, d)}
+            ${renderScoreInput(i, 'critico', 10, d)}
+            ${renderScoreInput(i, 'soluciones', 6, d)}
+            ${renderScoreInput(i, 'liderazgo', 8, d)}
+            ${renderScoreInput(i, 'equipo', 10, d)}
+            <td style="text-align:center; background:#e6f5ff;">
+              <strong id="rowTotal_${i}" style="font-size:1.05rem; color:var(--prussian);">${subs.total}</strong>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // =========================================================
+    // RANKING CON MENCIONES ACTUALIZADAS Y CAMPO PERSONALIZABLE
+    // =========================================================
+    function updateDelegateMention(idx, val) {
+      appData.delegates[idx].mention = val;
+      saveState(true);
+      renderRanking();
+    }
+
+    function updateCustomMentionText(idx, val) {
+      appData.delegates[idx].customMention = val;
+      saveState(true);
+    }
+
+    function updateDelegatePase(idx, val) {
+      appData.delegates[idx].paseMonupe = val;
+      saveState(true);
+    }
+
+    function renderRanking() {
+      const ranked = appData.delegates
+        .map((d, origIdx) => ({ ...d, origIdx, subs: getSubtotals(d) }))
+        .sort((a, b) => b.subs.total - a.subs.total);
+
+      document.getElementById('rankingTbody').innerHTML = ranked.map((d, pos) => {
+        const statusLabel = d.status === 'PV' ? 'Presente y Votando' : (d.status === 'P' ? 'Presente' : 'Ausente');
+        const isCustom = d.mention === 'Otra (Personalizada)';
+        return `
+          <tr>
+            <td><strong>${pos + 1}</strong></td>
+            <td>${d.name || `Delegado/a #${d.origIdx + 1}`}</td>
+            <td><strong>${d.country || 'Sin país asignado'}</strong></td>
+            <td>${statusLabel}</td>
+            <td style="text-align:center;">${d.subs.conocimiento}</td>
+            <td style="text-align:center;">${d.subs.comunicacion}</td>
+            <td style="text-align:center;">${d.subs.negociacion}</td>
+            <td style="text-align:center;">${d.subs.analisis}</td>
+            <td style="text-align:center;">${d.subs.interpers}</td>
+            <td style="text-align:center;"><strong style="color:var(--azure); font-size:1rem;">${d.subs.total}</strong></td>
+            <td>
+              <select class="table-input" style="padding:0.3rem 0.45rem;" onchange="updateDelegateMention(${d.origIdx}, this.value)">
+                <option value="Ninguna" ${d.mention === 'Ninguna' ? 'selected' : ''}>Ninguna</option>
+                <option value="Discurso Destacado" ${d.mention === 'Discurso Destacado' ? 'selected' : ''}>Discurso Destacado</option>
+                <option value="Negociación Destacada" ${d.mention === 'Negociación Destacada' ? 'selected' : ''}>Negociación Destacada</option>
+                <option value="Dominio Ejemplar del Reglamento (MAGEAC)" ${d.mention === 'Dominio Ejemplar del Reglamento (MAGEAC)' ? 'selected' : ''}>Dominio Ejemplar del Reglamento (MAGEAC)</option>
+                <option value="Excelencia en Política Exterior e Investigación" ${d.mention === 'Excelencia en Política Exterior e Investigación' ? 'selected' : ''}>Excelencia en Política Exterior e Investigación</option>
+                <option value="Buen Léxico y Oratoria Destacada" ${d.mention === 'Buen Léxico y Oratoria Destacada' ? 'selected' : ''}>Buen Léxico y Oratoria Destacada</option>
+                <option value="Otra (Personalizada)" ${isCustom ? 'selected' : ''}>➕ Agregar otra mención personalizada...</option>
+              </select>
+              ${isCustom ? `<input type="text" class="table-input" style="margin-top:0.35rem; border-color:var(--azure);" placeholder="Escribe el nombre de la nueva mención..." value="${d.customMention || ''}" oninput="updateCustomMentionText(${d.origIdx}, this.value)" />` : ''}
+            </td>
+            <td>
+              <select class="table-input" style="padding:0.3rem 0.45rem; font-weight:700;" onchange="updateDelegatePase(${d.origIdx}, this.value)">
+                <option value="No" ${d.paseMonupe === 'No' ? 'selected' : ''}>No</option>
+                <option value="SÍ - PASE A MONUPE II" ${d.paseMonupe === 'SÍ - PASE A MONUPE II' ? 'selected' : ''}>SÍ - PASE A MONUPE II</option>
+              </select>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // =========================================================
+    // EXPORTACIÓN DIRECTA A GOOGLE SHEETS Y WHATSAPP
+    // =========================================================
+    function getFinalMentionLabel(d) {
+      if (d.mention === 'Otra (Personalizada)') return d.customMention || 'Mención Especial';
+      return d.mention || 'Ninguna';
+    }
+
+    let lastGeneratedSheetUrl = localStorage.getItem(`monupe_sheet_url_${roomId}`) || '';
+
+    function showGeneratedSheetResult(url) {
+      lastGeneratedSheetUrl = url;
+      localStorage.setItem(`monupe_sheet_url_${roomId}`, url);
+      document.getElementById('generatedSheetUrlInput').value = url;
+      document.getElementById('openSheetAnchor').href = url;
+      document.getElementById('generatedSheetBox').style.display = 'block';
+    }
+
+    if (lastGeneratedSheetUrl) {
+      showGeneratedSheetResult(lastGeneratedSheetUrl);
+    }
+
+    async function exportarAGoogleSheets() {
+      const btn = document.getElementById('btnExportSheets');
+      btn.disabled = true;
+      btn.textContent = '⏳ Generando Google Sheet oficial...';
+      setSyncIndicator(false, 'Exportando a Sheets...');
+
+      try {
+        const duracion = document.getElementById('sessionDigits').textContent || '00:00:00';
+        const res = await fetch(CLOUD_RELAY, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'export_sheets',
+            roomId: roomId,
+            meta: appData.meta,
+            delegates: appData.delegates,
+            duracion: duracion
+          })
+        });
+        const data = await res.json();
+        if (data && data.ok && data.url) {
+          showGeneratedSheetResult(data.url);
+          setSyncIndicator(true, 'Sincronizado en vivo');
+          window.open(data.url, '_blank');
+        } else {
+          alert('No se pudo obtener el enlace. Verifica que hayas publicado la Nueva Versión en Google Apps Script.');
+        }
+      } catch (err) {
+        alert('Error al conectar con Google Apps Script. Asegúrate de haber autorizado los permisos de Drive/Sheets al implementar la Nueva Versión.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '📗 Generar / Actualizar Google Sheet';
+      }
+    }
+
+    function copyGeneratedSheetUrl() {
+      if (!lastGeneratedSheetUrl) return;
+      navigator.clipboard.writeText(lastGeneratedSheetUrl);
+      alert('Enlace de Google Sheets copiado al portapapeles.');
+    }
+
+    function shareGeneratedSheetWhatsApp() {
+      if (!lastGeneratedSheetUrl) return;
+      const msg = `*ACTA OFICIAL EN GOOGLE SHEETS — MONUPE II*\n*Comisión:* ${appData.meta.comision}\n*Sala:* ${roomId}\n\nRevisa y descarga la hoja de cálculo oficial aquí:\n${lastGeneratedSheetUrl}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function enviarWhatsApp() {
+      const ranked = [...appData.delegates]
+        .map(d => ({ ...d, subs: getSubtotals(d) }))
+        .sort((a, b) => b.subs.total - a.subs.total)
+        .slice(0, 10);
+
+      let msg = `*ACTA OFICIAL — MONUPE II (Distrito 01-03)*\n*Sala:* ${roomId}\n*Comisión:* ${appData.meta.comision}\n\n*Resultados Top Delegaciones:*\n`;
+      ranked.forEach((d, i) => {
+        msg += `${i + 1}. *${d.country || d.name}*: ${d.subs.total} pts (${getFinalMentionLabel(d)}) — ${d.paseMonupe}\n`;
+      });
+      if (lastGeneratedSheetUrl) {
+        msg += `\n📗 *Hoja de Cálculo Oficial (Google Sheets):*\n${lastGeneratedSheetUrl}`;
+      }
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function exportarJSON() {
+      const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Respaldo_Permanente_${roomId}.json`;
+      a.click();
+    }
+
+    function importarJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        appData = JSON.parse(e.target.result);
+        saveState(true);
+        loadMetaUI();
+        renderRollCall();
+        renderSpeakerQueueUI();
+        renderMatrixEval();
+        renderRanking();
+      };
+      reader.readAsText(file);
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    // =========================================================
+    // INICIALIZACIÓN AL ABRIR LA PÁGINA
+    // =========================================================
+    loadMetaUI();
+    renderRollCall();
+    renderSpeakerQueueUI();
+    renderMatrixEval();
+    renderRanking();
+
+    if (!currentMember) {
+      openLoginModal();
+    } else {
+      assignMemberToMesaMeta(currentMember);
+      knownMemberIds.add(currentMember.id);
+      renderConnectedDirectors();
+      syncWithCloud({ includeMember: true });
+    }
+  </script>
+</body>
+</html>
