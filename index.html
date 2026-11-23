@@ -2533,7 +2533,7 @@
       showGeneratedSheetResult(lastGeneratedSheetUrl);
     }
 
-    async function exportarAGoogleSheets() {
+ async function exportarAGoogleSheets() {
       const btn = document.getElementById('btnExportSheets');
       btn.disabled = true;
       btn.textContent = '⏳ Generando Google Sheet oficial...';
@@ -2541,18 +2541,30 @@
 
       try {
         const duracion = document.getElementById('sessionDigits').textContent || '00:00:00';
-        const res = await fetch(CLOUD_RELAY, {
+
+        // 1. Subimos primero los últimos datos completos de la sala
+        await fetch(CLOUD_RELAY, {
           method: 'POST',
+          mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
-            action: 'export_sheets',
             roomId: roomId,
+            updatedAt: Date.now(),
             meta: appData.meta,
             delegates: appData.delegates,
-            duracion: duracion
+            manualDirectors: appData.manualDirectors,
+            speakerQueue: appData.speakerQueue,
+            speechSessionEnded: appData.speechSessionEnded
           })
         });
+
+        // Esperamos 800ms para asegurar que Google guardó los puntajes
+        await new Promise(r => setTimeout(r, 800));
+
+        // 2. Pedimos el enlace enviando solo el código de sala y duración (URL corta)
+        const res = await fetch(`${CLOUD_RELAY}?action=export_sheets&sala=${encodeURIComponent(roomId)}&duracion=${encodeURIComponent(duracion)}&t=${Date.now()}`);
         const data = await res.json();
+
         if (data && data.ok && data.url) {
           showGeneratedSheetResult(data.url);
           setSyncIndicator(true, 'Sincronizado en vivo');
@@ -2561,7 +2573,7 @@
           alert('No se pudo obtener el enlace. Verifica que hayas publicado la Nueva Versión en Google Apps Script.');
         }
       } catch (err) {
-        alert('Error al conectar con Google Apps Script. Asegúrate de haber autorizado los permisos de Drive/Sheets al implementar la Nueva Versión.');
+        alert('Error de conexión con Apps Script: ' + err.message);
       } finally {
         btn.disabled = false;
         btn.textContent = '📗 Generar / Actualizar Google Sheet';
