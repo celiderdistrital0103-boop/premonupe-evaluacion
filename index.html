@@ -37,7 +37,7 @@
       padding-bottom: 4.5rem;
     }
 
-    /* ================= BARRA SUPERIOR Y BOTÓN ROJO/VERDE ================= */
+    /* ================= BARRA SUPERIOR ================= */
     .top-utility-bar {
       background: #001833;
       color: var(--frosted);
@@ -57,7 +57,7 @@
     .status-indicators {
       display: flex;
       align-items: center;
-      gap: 0.7rem;
+      gap: 0.65rem;
       flex-wrap: wrap;
     }
 
@@ -109,11 +109,11 @@
 
     .utility-actions {
       display: flex;
-      gap: 0.45rem;
+      gap: 0.4rem;
       flex-wrap: wrap;
     }
 
-    /* ================= RECUADRO DINÁMICO DE DIRECTORES (CRECE HASTA 6) ================= */
+    /* ================= RECUADRO DINÁMICO DE DIRECTORES ================= */
     .mesa-presence-bar {
       background: #002247;
       border-bottom: 2px solid var(--azure);
@@ -322,7 +322,7 @@
 
     .clock-actions { display: flex; align-items: center; gap: 0.4rem; }
 
-    /* ================= COLA INTERACTIVA DE ORADORES DEBAJO DEL CRONÓMETRO ================= */
+    /* ================= COLA INTERACTIVA DE ORADORES ================= */
     .speakers-queue-panel {
       margin-top: 0.85rem;
       padding-top: 0.75rem;
@@ -433,8 +433,8 @@
     .btn {
       border: none;
       border-radius: 7px;
-      padding: 0.46rem 0.82rem;
-      font-size: 0.8rem;
+      padding: 0.44rem 0.78rem;
+      font-size: 0.79rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
@@ -633,7 +633,7 @@
     .stat-value { font-size: 1.5rem; font-weight: 800; margin-top: 0.18rem; }
     .stat-box.dark-q .stat-value, .stat-box.dusk-q .stat-value { color: var(--aqua); }
 
-    /* ================= TABLA MATRIZ, CONTADORES Y CASILLA LISTA ORADORES ================= */
+    /* ================= TABLAS Y CONTADORES ================= */
     .table-container {
       overflow-x: auto;
       border-radius: 10px;
@@ -832,7 +832,7 @@
     .att-btn.active-p { background: var(--azure); color: white; }
     .att-btn.active-a { background: var(--absent-red); color: white; }
 
-    /* ================= CHAT FLOTANTE EN TIEMPO REAL ================= */
+    /* ================= CHAT FLOTANTE CON CHIPS RÁPIDOS Y URGENTES ================= */
     .chat-fab {
       position: fixed;
       bottom: 1.25rem;
@@ -864,7 +864,7 @@
       position: fixed;
       bottom: 4.6rem;
       right: 1.25rem;
-      width: 340px;
+      width: 365px;
       max-width: calc(100vw - 2.5rem);
       background: white;
       border-radius: 14px;
@@ -889,7 +889,7 @@
     }
 
     .chat-messages {
-      height: 250px;
+      height: 240px;
       overflow-y: auto;
       padding: 0.8rem;
       background: #f4faff;
@@ -904,6 +904,15 @@
       padding: 0.5rem 0.7rem;
       border-left: 4px solid var(--azure);
       font-size: 0.8rem;
+      word-break: break-word;
+    }
+
+    .chat-bubble.urgent {
+      background: #fff1f2;
+      border-left: 5px solid #dc2626;
+      border-top: 1px solid #fecdd3;
+      border-right: 1px solid #fecdd3;
+      border-bottom: 1px solid #fecdd3;
     }
 
     .chat-bubble-author {
@@ -914,12 +923,78 @@
       justify-content: space-between;
     }
 
+    .chat-quick-chips {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      padding: 0.45rem 0.6rem 0.2rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .quick-chip-btn {
+      background: #e0f2fe;
+      color: var(--prussian);
+      border: 1px solid #bae6fd;
+      border-radius: 999px;
+      padding: 0.18rem 0.52rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .quick-chip-btn:hover {
+      background: var(--azure);
+      color: white;
+    }
+
     .chat-input-row {
       display: flex;
-      gap: 0.4rem;
-      padding: 0.6rem;
+      gap: 0.35rem;
+      padding: 0.5rem 0.6rem;
       background: white;
-      border-top: 1px solid var(--border-soft);
+      align-items: center;
+    }
+
+    /* ================= GESTOR DE VOTACIONES EN VIVO ================= */
+    .vote-counter-card {
+      background: #f4faff;
+      border: 1.5px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 0.85rem;
+      text-align: center;
+    }
+
+    .vote-counter-card.favor { border-color: #16a34a; background: #f0fdf4; }
+    .vote-counter-card.contra { border-color: #dc2626; background: #fef2f2; }
+    .vote-counter-card.abst { border-color: #007FF1; background: #eff6ff; }
+
+    .vote-big-num {
+      font-size: 2.1rem;
+      font-weight: 900;
+      margin: 0.25rem 0;
+    }
+
+    .vote-result-banner {
+      margin-top: 0.9rem;
+      padding: 0.85rem;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    .vote-result-banner.approved {
+      background: #dcfce7;
+      color: #166534;
+      border: 2px solid #16a34a;
+    }
+
+    .vote-result-banner.rejected {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 2px solid #dc2626;
     }
 
     /* ================= MODALES ================= */
@@ -947,9 +1022,7 @@
       overflow-y: auto;
     }
 
-    .modal-content.wide {
-      max-width: 820px;
-    }
+    .modal-content.wide { max-width: 840px; }
 
     .guide-section-title {
       font-size: 0.86rem;
@@ -1014,7 +1087,7 @@
 </head>
 <body>
 
-  <!-- BARRA SUPERIOR CON BOTÓN INDICADOR ROJO/VERDE Y GUÍA MAGEAC -->
+  <!-- BARRA SUPERIOR CON HERRAMIENTAS DE MESA -->
   <div class="top-utility-bar">
     <div class="status-indicators">
       <span class="room-pill" id="roomCodeBadge" onclick="openRoomHub()">SALA: MON-0000</span>
@@ -1025,18 +1098,16 @@
       <span class="live-toast" id="liveUpdateToast">🔔 Nuevo integrante conectado</span>
     </div>
     <div class="utility-actions">
-      <button class="btn btn-frosted" onclick="openModal('mageacGuideModal')">📖 Guía MAGEAC y Guiones</button>
+      <button class="btn btn-aqua" onclick="openVotingModal()">🗳 Votación</button>
+      <button class="btn btn-frosted" onclick="openModal('mageacGuideModal')">📖 Guía MAGEAC</button>
+      <button class="btn btn-outline-light" onclick="openLogModal()">📜 Bitácora</button>
       <button class="btn btn-outline-light" onclick="openLoginModal()">👤 Mi Perfil</button>
-      <button class="btn btn-aqua" onclick="openRoomHub()">🔗 Enlace y Código de Sala</button>
-      <button class="btn btn-outline-light" onclick="exportarJSON()">⬇ Respaldo JSON</button>
-      <label class="btn btn-outline-light" style="cursor:pointer;">
-        ⬆ JSON
-        <input type="file" accept=".json" style="display:none;" onchange="importarJSON(event)" />
-      </label>
+      <button class="btn btn-azure" onclick="openRoomHub()">🔗 Sala</button>
+      <button class="btn btn-outline-light" onclick="exportarJSON()">⬇ JSON</button>
     </div>
   </div>
 
-  <!-- RECUADRO DINÁMICO DE DIRECTORES (CRECE AUTOMÁTICAMENTE HASTA 6 + OPCIÓN SIN PC) -->
+  <!-- RECUADRO DINÁMICO DE DIRECTORES -->
   <section class="mesa-presence-bar">
     <div class="mesa-presence-inner">
       <div class="presence-left">
@@ -1061,7 +1132,7 @@
     </div>
 
     <div class="timers-grid" id="timersBody">
-      <!-- TARJETA 1: CRONÓMETRO + LISTA DE ORADORES QUE SE REDUCE AL CALIFICAR -->
+      <!-- TARJETA 1: CRONÓMETRO + LISTA DE ORADORES -->
       <div class="mageac-card">
         <div class="mageac-top">
           <span class="mageac-title">🎙 Discursos / Lista de Oradores</span>
@@ -1094,7 +1165,6 @@
           </div>
         </div>
 
-        <!-- LISTA DE ORADORES EN COLA -->
         <div class="speakers-queue-panel">
           <div class="queue-header-row">
             <span class="queue-subtitle">📋 Orden de Oradores (<span id="speakerQueueCount">0</span> en cola)</span>
@@ -1149,7 +1219,6 @@
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="main-container">
-    <!-- AVISO DE ACTA CERRADA -->
     <div class="locked-banner" id="lockedActaBanner">
       <span>🔒 ACTA DE EVALUACIÓN CERRADA OFICIALMENTE — Las notas y menciones están protegidas contra cambios accidentales.</span>
       <button class="btn btn-prussian" style="padding:0.3rem 0.7rem; font-size:0.75rem;" onclick="toggleLockActa(false)">🔓 Reabrir Edición</button>
@@ -1158,7 +1227,7 @@
     <nav class="tabs-bar">
       <button class="tab-btn active" onclick="switchTab(0)">📋 1. Mesa, Pase de Lista y Oradores</button>
       <button class="tab-btn" onclick="switchTab(1)">⭐ 2. Evaluación Manual Oficial (100 pts)</button>
-      <button class="tab-btn" onclick="switchTab(2)">🏆 3. Ranking, Menciones y Pase MONUPE II</button>
+      <button class="tab-btn" onclick="switchTab(2)">🏆 3. Ranking, Diplomas y Pase MONUPE II</button>
       <button class="tab-btn" onclick="switchTab(3)">📗 4. Google Sheets Oficial y WhatsApp</button>
     </nav>
 
@@ -1253,6 +1322,10 @@
           <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
             <button class="btn btn-prussian" onclick="agregarFilaDelegado()">+ Agregar Delegado</button>
             <button class="btn btn-frosted" onclick="openModal('pasteModal')">📋 Pegado Rápido</button>
+            <label class="btn btn-dusk" style="cursor:pointer;">
+              📥 Importar CSV
+              <input type="file" accept=".csv,.txt" style="display:none;" onchange="importarCSVDelegados(event)" />
+            </label>
           </div>
         </div>
 
@@ -1340,14 +1413,14 @@
       </div>
     </section>
 
-    <!-- ================= PESTAÑA 3: RANKING Y CIERRE OFICIAL ================= -->
+    <!-- ================= PESTAÑA 3: RANKING, DIPLOMAS Y CIERRE OFICIAL ================= -->
     <section class="tab-panel" id="tab2">
       <div class="panel-card">
         <div class="panel-header">
           <div>
-            <span class="panel-title">🏆 Ranking Oficial en Vivo, Menciones y Pase MONUPE II</span>
+            <span class="panel-title">🏆 Ranking Oficial en Vivo, Diplomas y Pase MONUPE II</span>
             <p style="font-size:0.76rem; color:var(--text-muted); margin-top:0.15rem;">
-              Las filas en verde indican puntajes destacados (≥ 80 pts). Si se asigna premio o pase a un delegado Ausente, se mostrará una alerta.
+              Filas en verde = puntajes destacados (≥ 80 pts). Pulsa <strong>🎓 Diploma</strong> para generar el certificado oficial en PDF/impresión.
             </p>
           </div>
           <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
@@ -1369,8 +1442,9 @@
                 <th style="text-align:center;">Anál. (16)</th>
                 <th style="text-align:center;">Interp. (18)</th>
                 <th style="text-align:center;">Total (100)</th>
-                <th style="min-width:250px;">Mención Otorgada (o Escribir Nueva)</th>
+                <th style="min-width:240px;">Mención Otorgada (o Escribir Nueva)</th>
                 <th>Clasificación MONUPE II</th>
+                <th style="text-align:center;">Certificado</th>
               </tr>
             </thead>
             <tbody id="rankingTbody"></tbody>
@@ -1418,7 +1492,7 @@
     </section>
   </main>
 
-  <!-- BOTÓN FLOTANTE Y CHAT EN TIEMPO REAL ENTRE INTEGRANTES DE MESA -->
+  <!-- BOTÓN FLOTANTE Y CHAT CON MENSAJES RÁPIDOS Y URGENTES -->
   <button class="chat-fab" onclick="toggleChatDrawer()">
     💬 Chat de Mesa Directiva
     <span class="chat-badge-count" id="chatUnreadBadge">0</span>
@@ -1430,9 +1504,112 @@
       <button style="background:none; border:none; color:white; font-weight:800; cursor:pointer;" onclick="toggleChatDrawer()">✕</button>
     </div>
     <div class="chat-messages" id="chatMessagesBox"></div>
+    <div class="chat-quick-chips">
+      <button class="quick-chip-btn" onclick="sendQuickChat('⚠️ Dar advertencia de orden')">⚠️ Advertencia</button>
+      <button class="quick-chip-btn" onclick="sendQuickChat('⏱ Cerrar lista de oradores')">⏱ Cerrar lista</button>
+      <button class="quick-chip-btn" onclick="sendQuickChat('📋 Revisar empate en ranking')">📋 Revisar empate</button>
+      <button class="quick-chip-btn" onclick="sendQuickChat('✅ Listo para votación')">✅ Votar</button>
+    </div>
     <div class="chat-input-row">
-      <input type="text" id="chatInputField" class="field-input" placeholder="Escribe un mensaje a la mesa..." style="margin:0; padding:0.45rem 0.6rem;" onkeydown="if(event.key==='Enter') sendChatMessage()" />
-      <button class="btn btn-azure" onclick="sendChatMessage()">Enviar</button>
+      <label style="display:inline-flex; align-items:center; gap:0.2rem; font-size:0.7rem; font-weight:800; color:#dc2626; cursor:pointer;" title="Marcar mensaje como urgente">
+        <input type="checkbox" id="chatUrgentCheck" /> 🚨
+      </label>
+      <input type="text" id="chatInputField" class="field-input" placeholder="Mensaje o enlace de Docs..." style="margin:0; padding:0.42rem 0.55rem;" onkeydown="if(event.key==='Enter') sendChatMessage()" />
+      <button class="btn btn-azure" style="padding:0.42rem 0.65rem;" onclick="sendChatMessage()">Enviar</button>
+    </div>
+  </div>
+
+  <!-- MODAL DE GESTOR DE VOTACIONES EN VIVO -->
+  <div class="modal-box" id="votingModal">
+    <div class="modal-content wide">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:0.65rem;">
+        <h3 style="color:var(--prussian);">🗳 Gestor de Votaciones Parlamentarias en Vivo</h3>
+        <button class="btn btn-frosted" onclick="closeModal('votingModal')">✕ Cerrar</button>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="field-group">
+          <label>Moción o Documento a Votar</label>
+          <input type="text" id="voteTopicInput" class="field-input" placeholder="Ej. Consulta Oficiosa Moderada (10 min / 1 min)" />
+        </div>
+        <div class="field-group">
+          <label>Tipo de Mayoría Requerida (Según MAGEAC)</label>
+          <select id="voteMajorityType" class="field-input" onchange="recalculateLiveVote()">
+            <option value="simple">Mayoría Simple (50% + 1 de presentes)</option>
+            <option value="qualified">Mayoría Calificada (2/3 de presentes)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="background:#eef7fc; padding:0.55rem 0.8rem; border-radius:8px; font-size:0.8rem; color:var(--prussian); margin-bottom:0.85rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+        <span>👥 Presentes en sala: <strong id="votePresentCount">15</strong> (<span id="votePvCount">15</span> Pres. y Votando / <span id="votePCount">0</span> Pres.)</span>
+        <span>🎯 Votos necesarios para aprobar: <strong id="voteThresholdNeeded" style="color:var(--azure); font-size:0.95rem;">8</strong></span>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.75rem;">
+        <div class="vote-counter-card favor">
+          <strong style="color:#166534; font-size:0.82rem;">✅ A FAVOR</strong>
+          <div class="vote-big-num" id="voteFavorVal" style="color:#16a34a;">0</div>
+          <div style="display:flex; justify-content:center; gap:0.4rem;">
+            <button class="btn btn-frosted" onclick="adjustVote('favor', -1)">−1</button>
+            <button class="btn btn-green" onclick="adjustVote('favor', 1)">+1</button>
+            <button class="btn btn-green" onclick="adjustVote('favor', 5)">+5</button>
+          </div>
+        </div>
+
+        <div class="vote-counter-card contra">
+          <strong style="color:#991b1b; font-size:0.82rem;">❌ EN CONTRA</strong>
+          <div class="vote-big-num" id="voteContraVal" style="color:#dc2626;">0</div>
+          <div style="display:flex; justify-content:center; gap:0.4rem;">
+            <button class="btn btn-frosted" onclick="adjustVote('contra', -1)">−1</button>
+            <button class="btn btn-danger" onclick="adjustVote('contra', 1)">+1</button>
+            <button class="btn btn-danger" onclick="adjustVote('contra', 5)">+5</button>
+          </div>
+        </div>
+
+        <div class="vote-counter-card abst">
+          <strong style="color:#1e40af; font-size:0.82rem;">⚪ ABSTENCIONES</strong>
+          <div class="vote-big-num" id="voteAbstVal" style="color:#007FF1;">0</div>
+          <div style="display:flex; justify-content:center; gap:0.4rem;">
+            <button class="btn btn-frosted" onclick="adjustVote('abst', -1)">−1</button>
+            <button class="btn btn-azure" onclick="adjustVote('abst', 1)">+1</button>
+          </div>
+          <div style="font-size:0.67rem; color:var(--text-muted); margin-top:0.35rem;">Máx. abstenciones permitidas (Presente): <strong id="maxAbstAllowed">0</strong></div>
+        </div>
+      </div>
+
+      <div id="voteResultBanner" class="vote-result-banner rejected">
+        EN VOTACIÓN — Faltan votos a favor para alcanzar el umbral
+      </div>
+
+      <div style="display:flex; justify-content:space-between; gap:0.5rem; margin-top:0.9rem; flex-wrap:wrap;">
+        <button class="btn btn-frosted" onclick="resetLiveVote()">↺ Reiniciar Conteo</button>
+        <button class="btn btn-prussian" onclick="recordVoteToLog()">📜 Registrar Resultado en Bitácora</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE BITÁCORA AUTOMÁTICA DE SESIÓN -->
+  <div class="modal-box" id="logModal">
+    <div class="modal-content wide">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
+        <h3 style="color:var(--prussian);">📜 Bitácora Cronológica de la Sesión</h3>
+        <button class="btn btn-frosted" onclick="closeModal('logModal')">✕ Cerrar</button>
+      </div>
+      <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.75rem;">
+        Registro automático de eventos parlamentarios de la sala para facilitar la redacción del acta narrativa de Secretaría.
+      </p>
+
+      <div style="display:flex; gap:0.45rem; margin-bottom:0.75rem;">
+        <input type="text" id="customLogInput" class="field-input" placeholder="Añadir nota manual de Secretaría (ej. Se aprueba anteproyecto A/1)..." style="margin:0;" onkeydown="if(event.key==='Enter') addManualLogEntry()" />
+        <button class="btn btn-azure" onclick="addManualLogEntry()">+ Anotar</button>
+      </div>
+
+      <div id="sessionLogList" style="max-height:290px; overflow-y:auto; background:#f4faff; border:1px solid var(--border-soft); border-radius:9px; padding:0.75rem; display:flex; flex-direction:column; gap:0.45rem;"></div>
+
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.85rem;">
+        <button class="btn btn-prussian" onclick="copySessionLogText()">📋 Copiar Bitácora Completa</button>
+      </div>
     </div>
   </div>
 
@@ -1679,1292 +1856,4 @@
       <h3 style="color:var(--prussian); margin-bottom:0.45rem;">📋 Pegado Rápido de Delegaciones</h3>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.7rem;">Formato: <strong>Nombre del Delegado - País</strong> (una línea por delegado).</p>
       <textarea id="bulkPasteArea" rows="6" class="field-input" placeholder="Juan Pérez - República Dominicana&#10;María Gómez - Francia"></textarea>
-      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.7rem;">
-        <button class="btn btn-frosted" onclick="closeModal('pasteModal')">Cancelar</button>
-        <button class="btn btn-prussian" onclick="procesarPegadoRapido()">Cargar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PANTALLA COMPLETA CRONÓMETRO -->
-  <div class="fullscreen-overlay" id="fsOverlay">
-    <div class="fs-title" id="fsModeTitle">DISCURSO PARLAMENTARIO</div>
-    <div class="fs-delegate" id="fsDelegateName">Delegación en turno</div>
-    <div class="fs-time" id="fsClockDigits">01:30</div>
-    <div style="display:flex; gap:1rem;">
-      <button class="btn btn-aqua" style="padding:0.8rem 1.5rem; font-size:1rem;" onclick="startClock(activeFsClock)">▶ Iniciar</button>
-      <button class="btn btn-frosted" style="padding:0.8rem 1.5rem; font-size:1rem;" onclick="pauseClock(activeFsClock)">⏸ Pausar</button>
-      <button class="btn btn-danger" style="padding:0.8rem 1.5rem; font-size:1rem;" onclick="closeFullscreenClock()">✕ Salir</button>
-    </div>
-  </div>
-
-  <script>
-    // =========================================================
-    // SONIDO DE CONEXIÓN Y FIN DE TIEMPO (WEB AUDIO API)
-    // =========================================================
-    function playTripleBeep() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioCtx();
-        const times = [0, 0.14, 0.28];
-        times.forEach((t, i) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(i === 2 ? 1046.5 : 880, ctx.currentTime + t);
-          gain.gain.setValueAtTime(0.12, ctx.currentTime + t);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.1);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(ctx.currentTime + t);
-          osc.stop(ctx.currentTime + t + 0.11);
-        });
-      } catch (e) {}
-    }
-
-    const DIRECTOR_COLORS = ['#007FF1', '#e11d48', '#16a34a', '#d97706', '#7c3aed', '#0891b2'];
-
-    const OFFICIAL_TOPICS = {
-      "Asamblea General de las Naciones Unidas (AG)": "Cooperación internacional para garantizar el acceso equitativo de los jóvenes a las oportunidades educativas, sociales y económicas generadas por la inteligencia artificial.",
-      "Organización Mundial de la Salud (OMS)": "Impacto del uso creciente de la inteligencia artificial y las plataformas digitales en la salud mental y el bienestar de los jóvenes.",
-      "Programa de las Naciones Unidas para el Medio Ambiente (PNUMA)": "Impacto ambiental del crecimiento de la inteligencia artificial: consumo energético y uso de recursos naturales para el desarrollo de nuevas tecnologías.",
-      "Organización de las Naciones Unidas para la Educación, la Ciencia y la Cultura (UNESCO)": "Uso de la inteligencia artificial generativa en la educación: desafíos para el aprendizaje, la creatividad y el pensamiento crítico de los jóvenes.",
-      "Consejo Económico y Social de las Naciones Unidas (ECOSOC)": "El futuro del empleo juvenil ante el avance de la inteligencia artificial: medidas para garantizar la capacitación, inclusión y protección laboral de las nuevas generaciones."
-    };
-
-    const CLOUD_RELAY = 'https://script.google.com/macros/s/AKfycbzOCz6070-k52Xfnp2rcTQSgOga5reefHZC_GLg3MYVaSbRsD4pepo2_nyylpyplHa30Q/exec';
-    const urlParams = new URLSearchParams(window.location.search);
-
-    function randomRoomCode() {
-      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let code = 'MON-';
-      for (let i = 0; i < 4; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-      return code;
-    }
-
-    let roomId = (urlParams.get('sala') || localStorage.getItem('monupe_last_room') || '').toUpperCase().trim();
-    if (!roomId) roomId = randomRoomCode();
-    localStorage.setItem('monupe_last_room', roomId);
-    window.history.replaceState({}, '', `${window.location.pathname}?sala=${encodeURIComponent(roomId)}`);
-
-    function getDirectRoomUrl() {
-      return `${window.location.origin}${window.location.pathname}?sala=${encodeURIComponent(roomId)}`;
-    }
-
-    function updateRoomBadges() {
-      document.getElementById('roomCodeBadge').textContent = `SALA: ${roomId}`;
-      document.getElementById('hubCurrentCode').textContent = roomId;
-      document.getElementById('hubDirectLink').value = getDirectRoomUrl();
-    }
-    updateRoomBadges();
-
-    // =========================================================
-    // ESTADO PERSISTENTE EN LOCALSTORAGE + NUBE EN TIEMPO REAL
-    // =========================================================
-    function getStorageKey() { return `monupe_v9_permanent_${roomId}`; }
-
-    function createEmptyDelegate(idx) {
-      return {
-        id: 'del_' + Date.now() + '_' + idx + '_' + Math.random().toString(36).slice(2, 6),
-        name: '',
-        country: '',
-        status: 'PV',
-        speechesCount: 0,
-        warningsCount: 0,
-        rubric: {
-          redaccion: 0, investigacion: 0, representacion: 0,
-          oratoria: 0, argumentacion: 0, discurso: 0,
-          consenso: 0, conflictos: 0,
-          critico: 0, soluciones: 0,
-          liderazgo: 0, equipo: 0
-        },
-        lastEditedBy: {},
-        mention: 'Ninguna',
-        customMention: '',
-        paseMonupe: 'No'
-      };
-    }
-
-    const defaultCommission = "Asamblea General de las Naciones Unidas (AG)";
-    let appData = JSON.parse(localStorage.getItem(getStorageKey())) || {
-      roomId: roomId,
-      updatedAt: 0,
-      isLocked: false,
-      meta: {
-        centro: '',
-        comision: defaultCommission,
-        topico: OFFICIAL_TOPICS[defaultCommission],
-        presidente: '',
-        vicepresidente: '',
-        relator: '',
-        horaInicio: '08:00',
-        horaFin: ''
-      },
-      manualDirectors: [],
-      speakerQueue: [],
-      speechSessionEnded: false,
-      delegates: Array.from({ length: 15 }, (_, i) => createEmptyDelegate(i))
-    };
-
-    if (!Array.isArray(appData.manualDirectors)) appData.manualDirectors = [];
-    if (!Array.isArray(appData.speakerQueue)) appData.speakerQueue = [];
-    appData.delegates.forEach(d => {
-      if (typeof d.speechesCount !== 'number') d.speechesCount = 0;
-      if (typeof d.warningsCount !== 'number') d.warningsCount = 0;
-    });
-
-    // =========================================================
-    // BLOQUEO / CIERRE OFICIAL DE ACTA
-    // =========================================================
-    function updateLockUI() {
-      const locked = Boolean(appData.isLocked);
-      document.getElementById('lockedActaBanner').style.display = locked ? 'flex' : 'none';
-      const btn = document.getElementById('btnToggleLockActa');
-      if (btn) {
-        btn.textContent = locked ? '🔓 Reabrir Evaluación' : '🔒 Cerrar Evaluación';
-        btn.className = locked ? 'btn btn-green' : 'btn btn-prussian';
-      }
-    }
-
-    function toggleLockActa(forceState) {
-      appData.isLocked = typeof forceState === 'boolean' ? forceState : !appData.isLocked;
-      saveState(true);
-      updateLockUI();
-      renderMatrixEval();
-      renderRanking();
-      showLiveToast(appData.isLocked ? '🔒 Acta cerrada oficialmente' : '🔓 Edición reabierta');
-    }
-
-    // =========================================================
-    // AUTOCOMPLETADO DE MESA DIRECTIVA AL INGRESAR O AGREGAR
-    // =========================================================
-    function assignMemberToMesaMeta(memberObj) {
-      if (!memberObj || !memberObj.fullName) return;
-      const rol = memberObj.rolMesa;
-      if (rol === 'Presidencia') appData.meta.presidente = memberObj.fullName;
-      else if (rol === 'Vicepresidencia') appData.meta.vicepresidente = memberObj.fullName;
-      else if (rol === 'Secretaría / Relatoría') appData.meta.relator = memberObj.fullName;
-      loadMetaUI();
-    }
-
-    // =========================================================
-    // PERFIL DEL VOLUNTARIO CON PC
-    // =========================================================
-    let currentMember = JSON.parse(localStorage.getItem('monupe_volunteer_profile')) || null;
-
-    function openLoginModal() {
-      if (currentMember) {
-        document.getElementById('volNombres').value = currentMember.nombres || '';
-        document.getElementById('volApellidos').value = currentMember.apellidos || '';
-        document.getElementById('volCalidad').value = currentMember.calidad || 'Voluntario Distrital';
-        document.getElementById('volRolMesa').value = currentMember.rolMesa || 'Presidencia';
-      }
-      openModal('loginModal');
-    }
-
-    function saveVolunteerProfile() {
-      const nombres = document.getElementById('volNombres').value.trim();
-      const apellidos = document.getElementById('volApellidos').value.trim();
-      const calidad = document.getElementById('volCalidad').value;
-      const rolMesa = document.getElementById('volRolMesa').value;
-
-      if (!nombres || !apellidos) {
-        alert('Por favor ingresa tus nombres y apellidos.');
-        return;
-      }
-
-      const existingId = currentMember ? currentMember.id : ('dir_' + Math.random().toString(36).slice(2, 9));
-      const colorIdx = Math.abs(existingId.split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % DIRECTOR_COLORS.length;
-
-      currentMember = {
-        id: existingId,
-        nombres,
-        apellidos,
-        fullName: `${nombres} ${apellidos}`,
-        calidad,
-        rolMesa,
-        color: currentMember ? currentMember.color : DIRECTOR_COLORS[colorIdx]
-      };
-
-      localStorage.setItem('monupe_volunteer_profile', JSON.stringify(currentMember));
-      assignMemberToMesaMeta(currentMember);
-      saveState(true);
-      closeModal('loginModal');
-      playTripleBeep();
-      showLiveToast(`🔊 ${currentMember.fullName} se ha conectado`);
-      renderConnectedDirectors();
-      syncWithCloud({ includeData: true, includeMember: true });
-    }
-
-    // =========================================================
-    // AGREGAR / QUITAR INTEGRANTE DE MESA SIN PC
-    // =========================================================
-    function addManualDirector() {
-      const nombres = document.getElementById('manNombres').value.trim();
-      const apellidos = document.getElementById('manApellidos').value.trim();
-      const calidad = document.getElementById('manCalidad').value;
-      const rolMesa = document.getElementById('manRolMesa').value;
-
-      if (!nombres || !apellidos) {
-        alert('Por favor ingresa los nombres y apellidos del integrante.');
-        return;
-      }
-
-      const newManual = {
-        id: 'man_' + Date.now(),
-        nombres,
-        apellidos,
-        fullName: `${nombres} ${apellidos}`,
-        calidad,
-        rolMesa,
-        isManual: true,
-        color: DIRECTOR_COLORS[(appData.manualDirectors.length + 2) % DIRECTOR_COLORS.length]
-      };
-
-      appData.manualDirectors.push(newManual);
-      assignMemberToMesaMeta(newManual);
-      document.getElementById('manNombres').value = '';
-      document.getElementById('manApellidos').value = '';
-      closeModal('manualDirectorModal');
-      saveState(true);
-      renderConnectedDirectors();
-    }
-
-    function removeManualDirector(id) {
-      appData.manualDirectors = appData.manualDirectors.filter(m => m.id !== id);
-      saveState(true);
-      renderConnectedDirectors();
-    }
-
-    let knownMemberIds = new Set();
-    let knownChatIds = new Set();
-    let remoteMembers = {};
-    let remoteChat = [];
-    let isChatOpen = false;
-    let unreadChatCount = 0;
-
-    function setSyncIndicator(isSynced, customText) {
-      const btn = document.getElementById('syncStatusBtn');
-      const lbl = document.getElementById('syncStatusLabel');
-      if (isSynced) {
-        btn.classList.add('synced');
-        lbl.textContent = customText || 'Sincronizado en vivo';
-      } else {
-        btn.classList.remove('synced');
-        lbl.textContent = customText || 'Sincronizando...';
-      }
-    }
-
-    function showLiveToast(text) {
-      const toast = document.getElementById('liveUpdateToast');
-      toast.textContent = text;
-      toast.style.display = 'inline-block';
-      setTimeout(() => { toast.style.display = 'none'; }, 4000);
-    }
-
-    function getSubtotals(d) {
-      const r = d.rubric || {};
-      const conocimiento = (Number(r.redaccion)||0) + (Number(r.investigacion)||0) + (Number(r.representacion)||0);
-      const comunicacion = (Number(r.oratoria)||0) + (Number(r.argumentacion)||0) + (Number(r.discurso)||0);
-      const negociacion  = (Number(r.consenso)||0) + (Number(r.conflictos)||0);
-      const analisis     = (Number(r.critico)||0) + (Number(r.soluciones)||0);
-      const interpers    = (Number(r.liderazgo)||0) + (Number(r.equipo)||0);
-      const total = conocimiento + comunicacion + negociacion + analisis + interpers;
-      return { conocimiento, comunicacion, negociacion, analisis, interpers, total };
-    }
-
-    let syncDebounce = null;
-    function saveState(pushRemote = true) {
-      appData.roomId = roomId;
-      appData.updatedAt = Date.now();
-      localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-
-      if (pushRemote) {
-        setSyncIndicator(false, 'Guardando en nube...');
-        clearTimeout(syncDebounce);
-        syncDebounce = setTimeout(() => syncWithCloud({ includeData: true, includeMember: true }), 450);
-      }
-    }
-
-    async function syncWithCloud({ includeData = false, includeMember = false, chatMsg = null } = {}) {
-      if (!navigator.onLine) {
-        setSyncIndicator(false, 'Sin internet (Guardado local)');
-        return;
-      }
-      try {
-        let url = `${CLOUD_RELAY}?sala=${encodeURIComponent(roomId)}&t=${Date.now()}`;
-        if (includeData || includeMember || chatMsg) {
-          const packet = { updatedAt: appData.updatedAt };
-          if (includeData) {
-            packet.meta = appData.meta;
-            packet.delegates = appData.delegates;
-            packet.manualDirectors = appData.manualDirectors;
-            packet.speakerQueue = appData.speakerQueue;
-            packet.speechSessionEnded = appData.speechSessionEnded;
-            packet.isLocked = Boolean(appData.isLocked);
-          }
-          if (includeMember && currentMember) {
-            packet.member = currentMember;
-          }
-          if (chatMsg) {
-            packet.chatMsg = chatMsg;
-          }
-          const encoded = encodeURIComponent(JSON.stringify(packet));
-          if (encoded.length < 1800) {
-            url += `&action=sync&payload=${encoded}`;
-          } else {
-            await fetch(CLOUD_RELAY, {
-              method: 'POST',
-              mode: 'no-cors',
-              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify({ roomId, ...packet })
-            });
-          }
-        }
-
-        const res = await fetch(url);
-        if (!res.ok) return;
-        const remote = await res.json();
-
-        if (remote && remote.delegates && remote.updatedAt > (appData.updatedAt || 0)) {
-          appData.meta = remote.meta || appData.meta;
-          appData.delegates = remote.delegates;
-          appData.manualDirectors = remote.manualDirectors || appData.manualDirectors;
-          appData.speakerQueue = remote.speakerQueue || appData.speakerQueue;
-          appData.speechSessionEnded = Boolean(remote.speechSessionEnded);
-          appData.isLocked = Boolean(remote.isLocked);
-          appData.updatedAt = remote.updatedAt;
-          localStorage.setItem(getStorageKey(), JSON.stringify(appData));
-
-          if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA' && document.activeElement.tagName !== 'SELECT') {
-            loadMetaUI();
-            updateLockUI();
-            renderRollCall();
-            renderSpeakerQueueUI();
-            renderMatrixEval();
-            renderRanking();
-          }
-        }
-
-        if (remote && remote.members) {
-          remoteMembers = remote.members;
-        }
-        renderConnectedDirectors();
-
-        if (remote && Array.isArray(remote.chat)) {
-          remoteChat = remote.chat;
-          renderChatMessages();
-        }
-
-        setSyncIndicator(true, 'Sincronizado en vivo');
-      } catch (e) {
-        setSyncIndicator(false, 'Reintentando conexión...');
-      }
-    }
-
-    function syncNowManual() {
-      setSyncIndicator(false, 'Sincronizando...');
-      syncWithCloud({ includeData: true, includeMember: true });
-    }
-
-    setInterval(() => {
-      syncWithCloud({ includeMember: Boolean(currentMember) });
-    }, 2500);
-
-    // =========================================================
-    // CONTADORES DE INTERVENCIONES Y ADVERTENCIAS
-    // =========================================================
-    function adjustDelegateCounter(idx, field, delta) {
-      const currentVal = Number(appData.delegates[idx][field]) || 0;
-      const nextVal = Math.max(0, currentVal + delta);
-      appData.delegates[idx][field] = nextVal;
-      saveState(true);
-      renderRollCall();
-      if (field === 'warningsCount' && nextVal === 3) {
-        showLiveToast(`⚠️ ${appData.delegates[idx].country || 'Delegado'} alcanzó 3 advertencias`);
-      }
-    }
-
-    // =========================================================
-    // LISTA DE ORADORES INTERACTIVA
-    // =========================================================
-    function toggleSpeakerInQueue(delegateId, isChecked) {
-      const idStr = String(delegateId);
-      if (isChecked) {
-        if (!appData.speakerQueue.includes(idStr)) {
-          appData.speakerQueue.push(idStr);
-          appData.speechSessionEnded = false;
-        }
-      } else {
-        appData.speakerQueue = appData.speakerQueue.filter(id => id !== idStr);
-      }
-      saveState(true);
-      renderRollCall();
-      renderSpeakerQueueUI();
-    }
-
-    function moveSpeakerOrder(queueIdx, delta) {
-      const targetIdx = queueIdx + delta;
-      if (targetIdx < 0 || targetIdx >= appData.speakerQueue.length) return;
-      const temp = appData.speakerQueue[queueIdx];
-      appData.speakerQueue[queueIdx] = appData.speakerQueue[targetIdx];
-      appData.speakerQueue[targetIdx] = temp;
-      saveState(true);
-      renderSpeakerQueueUI();
-    }
-
-    function loadSpeakerToTimer(delegateId) {
-      const d = appData.delegates.find(item => String(item.id) === String(delegateId));
-      if (!d) return;
-      const label = `${d.country || 'País'} (${d.name || 'Delegado'})`;
-      const sel = document.getElementById('speakerSelect');
-      sel.value = label;
-      resetClock(1);
-    }
-
-    function gradeAndAdvanceSpeaker(delegateId) {
-      const idStr = String(delegateId);
-      const delIndex = appData.delegates.findIndex(item => String(item.id) === idStr);
-      if (delIndex === -1) return;
-
-      const inputEl = document.getElementById(`quickSpeechGrade_${idStr}`);
-      let grade = Number(inputEl ? inputEl.value : 0);
-      if (isNaN(grade) || grade < 0) grade = 0;
-      if (grade > 6) grade = 6;
-
-      appData.delegates[delIndex].rubric.discurso = grade;
-      appData.delegates[delIndex].speechesCount = (Number(appData.delegates[delIndex].speechesCount) || 0) + 1;
-
-      if (!appData.delegates[delIndex].lastEditedBy) appData.delegates[delIndex].lastEditedBy = {};
-      if (currentMember) {
-        appData.delegates[delIndex].lastEditedBy.discurso = {
-          name: currentMember.nombres.split(' ')[0],
-          color: currentMember.color
-        };
-      }
-
-      appData.speakerQueue = appData.speakerQueue.filter(id => id !== idStr);
-
-      if (appData.speakerQueue.length === 0) {
-        appData.speechSessionEnded = true;
-        pauseClock(1);
-      } else {
-        loadSpeakerToTimer(appData.speakerQueue[0]);
-      }
-
-      saveState(true);
-      renderRollCall();
-      renderSpeakerQueueUI();
-      renderMatrixEval();
-      renderRanking();
-      showLiveToast(`✅ Discurso calificado (${grade}/6 pts) • +1 intervención`);
-    }
-
-    function clearSpeakerQueue() {
-      appData.speakerQueue = [];
-      appData.speechSessionEnded = false;
-      saveState(true);
-      renderRollCall();
-      renderSpeakerQueueUI();
-    }
-
-    function dismissSpeechEndedBanner() {
-      appData.speechSessionEnded = false;
-      saveState(true);
-      renderSpeakerQueueUI();
-    }
-
-    function renderSpeakerQueueUI() {
-      appData.speakerQueue = appData.speakerQueue.filter(id =>
-        appData.delegates.some(d => String(d.id) === String(id))
-      );
-
-      document.getElementById('speakerQueueCount').textContent = appData.speakerQueue.length;
-      const listEl = document.getElementById('speakerQueueList');
-      const bannerEl = document.getElementById('speechEndedBanner');
-
-      if (appData.speakerQueue.length === 0) {
-        listEl.innerHTML = `<div style="font-size:0.75rem; color:rgba(167,235,255,0.75); padding:0.35rem 0;">
-          Marca la casilla <strong>🎙 Orador</strong> en el Pase de Lista cada vez que un delegado levante su placard.
-        </div>`;
-        bannerEl.style.display = appData.speechSessionEnded ? 'flex' : 'none';
-        return;
-      }
-
-      bannerEl.style.display = 'none';
-
-      const firstDel = appData.delegates.find(d => String(d.id) === String(appData.speakerQueue[0]));
-      if (firstDel) {
-        const firstLabel = `${firstDel.country || 'País'} (${firstDel.name || 'Delegado'})`;
-        const sel = document.getElementById('speakerSelect');
-        if (!sel.value) sel.value = firstLabel;
-      }
-
-      listEl.innerHTML = appData.speakerQueue.map((idStr, idx) => {
-        const d = appData.delegates.find(item => String(item.id) === String(idStr));
-        if (!d) return '';
-        const isFirst = idx === 0;
-        const currentGrade = d.rubric && d.rubric.discurso ? d.rubric.discurso : '';
-        return `
-          <div class="speaker-turn-card ${isFirst ? 'active-turn' : ''}">
-            <div class="turn-info">
-              <span class="turn-badge">${isFirst ? '🎙 EN TURNO #1' : `#${idx + 1}`}</span>
-              <div>
-                <div style="font-size:0.82rem; font-weight:800; color:#ffffff;">${d.country || 'País sin asignar'}</div>
-                <div style="font-size:0.71rem; color:var(--frosted);">${d.name || 'Delegado/a'} • ${d.speechesCount || 0} interv.</div>
-              </div>
-            </div>
-
-            <div class="turn-score-actions">
-              <button class="btn btn-outline-light" style="padding:0.2rem 0.42rem; font-size:0.72rem;" title="Subir turno" onclick="moveSpeakerOrder(${idx}, -1)">▲</button>
-              <button class="btn btn-outline-light" style="padding:0.2rem 0.42rem; font-size:0.72rem;" title="Bajar turno" onclick="moveSpeakerOrder(${idx}, 1)">▼</button>
-              <button class="btn btn-dusk" style="padding:0.24rem 0.48rem; font-size:0.72rem;" title="Poner en cronómetro" onclick="loadSpeakerToTimer('${idStr}')">⏱</button>
-              <input type="number" id="quickSpeechGrade_${idStr}" class="speech-grade-input" min="0" max="6" step="0.5" placeholder="0-6" value="${currentGrade}" title="Nota de Discurso (0 a 6 pts)" />
-              <button class="btn btn-aqua" style="padding:0.28rem 0.58rem; font-size:0.73rem;" onclick="gradeAndAdvanceSpeaker('${idStr}')">✅ Calificar</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // =========================================================
-    // RECUADRO DINÁMICO DE DIRECTORES (CONECTADOS + SIN PC, HASTA 6)
-    // =========================================================
-    function renderConnectedDirectors() {
-      const now = Date.now();
-      const onlineList = Object.values(remoteMembers)
-        .filter(m => (now - (m.lastSeen || 0)) < 45000);
-
-      if (currentMember && !onlineList.some(m => m.id === currentMember.id)) {
-        onlineList.unshift(currentMember);
-      }
-
-      onlineList.forEach(m => {
-        assignMemberToMesaMeta(m);
-        if (!knownMemberIds.has(m.id)) {
-          knownMemberIds.add(m.id);
-          if (currentMember && m.id !== currentMember.id) {
-            playTripleBeep();
-            showLiveToast(`🔔 ${m.fullName} (${m.calidad}) se ha conectado`);
-          }
-        }
-      });
-
-      const combined = [...onlineList, ...(appData.manualDirectors || [])].slice(0, 6);
-      document.getElementById('connectedCount').textContent = combined.length;
-
-      const container = document.getElementById('directorsPresenceList');
-      container.innerHTML = combined.map(m => `
-        <div class="director-chip" style="border-left-color: ${m.color || '#00CBFF'};">
-          <div class="director-chip-name">
-            <span style="width:8px; height:8px; border-radius:50%; background:${m.isManual ? '#94a3b8' : (m.color || '#00CBFF')}; display:inline-block;"></span>
-            ${m.fullName}
-            ${m.isManual ? `<button class="remove-manual-dir" title="Quitar" onclick="removeManualDirector('${m.id}')">✕</button>` : ''}
-          </div>
-          <div class="director-chip-role">${m.calidad} • ${m.rolMesa || 'Mesa'}${m.isManual ? ' (Presencial sin PC)' : ''}</div>
-        </div>
-      `).join('');
-    }
-
-    // =========================================================
-    // CHAT EN TIEMPO REAL ENTRE INTEGRANTES DE MESA
-    // =========================================================
-    function toggleChatDrawer() {
-      isChatOpen = !isChatOpen;
-      document.getElementById('chatDrawer').classList.toggle('open', isChatOpen);
-      if (isChatOpen) {
-        unreadChatCount = 0;
-        document.getElementById('chatUnreadBadge').style.display = 'none';
-        const box = document.getElementById('chatMessagesBox');
-        box.scrollTop = box.scrollHeight;
-      }
-    }
-
-    function sendChatMessage() {
-      const input = document.getElementById('chatInputField');
-      const text = input.value.trim();
-      if (!text) return;
-      if (!currentMember) {
-        openLoginModal();
-        return;
-      }
-
-      const msgObj = {
-        id: 'msg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-        author: currentMember.fullName,
-        role: currentMember.calidad,
-        color: currentMember.color,
-        text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-
-      input.value = '';
-      remoteChat.push(msgObj);
-      knownChatIds.add(msgObj.id);
-      renderChatMessages();
-      syncWithCloud({ chatMsg: msgObj });
-    }
-
-    function renderChatMessages() {
-      const box = document.getElementById('chatMessagesBox');
-      let hasNew = false;
-
-      remoteChat.forEach(m => {
-        if (!knownChatIds.has(m.id)) {
-          knownChatIds.add(m.id);
-          hasNew = true;
-        }
-      });
-
-      if (hasNew && !isChatOpen) {
-        unreadChatCount++;
-        const badge = document.getElementById('chatUnreadBadge');
-        badge.textContent = unreadChatCount;
-        badge.style.display = 'inline-block';
-      }
-
-      box.innerHTML = remoteChat.map(m => `
-        <div class="chat-bubble" style="border-left-color:${m.color || '#007FF1'};">
-          <div class="chat-bubble-author" style="color:${m.color || '#005288'};">
-            <span>${m.author} (${m.role})</span>
-            <span style="color:#64748b; font-weight:600;">${m.time || ''}</span>
-          </div>
-          <div style="color:#002247;">${m.text}</div>
-        </div>
-      `).join('');
-
-      if (isChatOpen) box.scrollTop = box.scrollHeight;
-    }
-
-    // =========================================================
-    // GESTIÓN DE SALA (ENLACE Y CÓDIGO)
-    // =========================================================
-    function openRoomHub() {
-      updateRoomBadges();
-      openModal('roomHubModal');
-    }
-
-    function copyRoomLink() {
-      navigator.clipboard.writeText(getDirectRoomUrl());
-      alert('Enlace directo copiado. Cualquier director que lo abra entrará automáticamente a esta sala.');
-    }
-
-    function copyRoomCode() {
-      navigator.clipboard.writeText(roomId);
-      alert(`Código ${roomId} copiado.`);
-    }
-
-    function shareRoomWhatsApp() {
-      const msg = `*SALA DE EVALUACIÓN EN VIVO — MONUPE II*\n*Comisión:* ${appData.meta.comision}\n*Código de Sala:* *${roomId}*\n\nÚnete directo con este enlace:\n${getDirectRoomUrl()}`;
-      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    function generateNewRandomRoom() {
-      roomId = randomRoomCode();
-      localStorage.setItem('monupe_last_room', roomId);
-      window.history.replaceState({}, '', `${window.location.pathname}?sala=${encodeURIComponent(roomId)}`);
-      appData = {
-        roomId,
-        updatedAt: Date.now(),
-        isLocked: false,
-        meta: {
-          centro: '',
-          comision: defaultCommission,
-          topico: OFFICIAL_TOPICS[defaultCommission],
-          presidente: '',
-          vicepresidente: '',
-          relator: '',
-          horaInicio: '08:00',
-          horaFin: ''
-        },
-        manualDirectors: [],
-        speakerQueue: [],
-        speechSessionEnded: false,
-        delegates: Array.from({ length: 15 }, (_, i) => createEmptyDelegate(i))
-      };
-      if (currentMember) assignMemberToMesaMeta(currentMember);
-      remoteMembers = {};
-      remoteChat = [];
-      lastGeneratedSheetUrl = '';
-      document.getElementById('generatedSheetBox').style.display = 'none';
-      updateRoomBadges();
-      updateLockUI();
-      saveState(true);
-      loadMetaUI();
-      renderRollCall();
-      renderSpeakerQueueUI();
-      renderMatrixEval();
-      renderRanking();
-      renderConnectedDirectors();
-      renderChatMessages();
-    }
-
-    async function joinExistingRoom() {
-      const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
-      if (!code) return;
-      roomId = code;
-      localStorage.setItem('monupe_last_room', roomId);
-      window.history.replaceState({}, '', `${window.location.pathname}?sala=${encodeURIComponent(roomId)}`);
-      updateRoomBadges();
-      appData.updatedAt = 0;
-      await syncWithCloud({ includeMember: true });
-      playTripleBeep();
-      closeModal('roomHubModal');
-    }
-
-    // =========================================================
-    // PESTAÑAS, CRONÓMETROS Y METADATOS
-    // =========================================================
-    function switchTab(idx) {
-      document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
-      document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
-      if (idx === 1) renderMatrixEval();
-      if (idx === 2) renderRanking();
-    }
-
-    const clocks = {
-      1: { defaultSec: 90, remaining: 90, timer: null, displayId: 'clock1Display' },
-      2: { defaultSec: 600, remaining: 600, timer: null, displayId: 'clock2Display' }
-    };
-    let activeFsClock = 1;
-
-    function formatMMSS(sec) {
-      const m = String(Math.floor(sec / 60)).padStart(2, '0');
-      const s = String(sec % 60).padStart(2, '0');
-      return `${m}:${s}`;
-    }
-
-    function updateClockUI(id) {
-      const str = formatMMSS(clocks[id].remaining);
-      document.getElementById(clocks[id].displayId).textContent = str;
-      if (activeFsClock === id) document.getElementById('fsClockDigits').textContent = str;
-    }
-
-    function setClock(id, seconds) { pauseClock(id); clocks[id].defaultSec = seconds; clocks[id].remaining = seconds; updateClockUI(id); }
-    function applyCustomClock(id) {
-      const mins = Number(document.getElementById(`c${id}Min`).value) || 0;
-      const secs = Number(document.getElementById(`c${id}Sec`).value) || 0;
-      setClock(id, mins * 60 + secs);
-    }
-    function startClock(id) {
-      if (clocks[id].timer || clocks[id].remaining <= 0) return;
-      clocks[id].timer = setInterval(() => {
-        if (clocks[id].remaining > 0) {
-          clocks[id].remaining--;
-          updateClockUI(id);
-          if (clocks[id].remaining === 0) playTripleBeep();
-        } else {
-          pauseClock(id);
-        }
-      }, 1000);
-    }
-    function pauseClock(id) { clearInterval(clocks[id].timer); clocks[id].timer = null; }
-    function resetClock(id) { pauseClock(id); clocks[id].remaining = clocks[id].defaultSec; updateClockUI(id); }
-    function toggleTimersBody() {
-      const body = document.getElementById('timersBody');
-      body.style.display = body.style.display === 'none' ? 'grid' : 'none';
-    }
-    function openFullscreenClock(id) {
-      activeFsClock = id;
-      document.getElementById('fsModeTitle').textContent = id === 1 ? 'DISCURSO / LISTA DE ORADORES' : document.getElementById('caucusTypeSelect').value;
-      const spk = document.getElementById('speakerSelect').value;
-      document.getElementById('fsDelegateName').textContent = id === 1 ? (spk || 'Delegación en turno') : appData.meta.comision;
-      document.getElementById('fsClockDigits').textContent = formatMMSS(clocks[id].remaining);
-      document.getElementById('fsOverlay').classList.add('open');
-    }
-    function closeFullscreenClock() { document.getElementById('fsOverlay').classList.remove('open'); }
-
-    let sessSec = 0, sessInterval = null;
-    function iniciarSesionGeneral() {
-      document.getElementById('sessionStatusTag').textContent = 'Sesión en curso';
-      document.getElementById('sessionNote').textContent = 'Sesión parlamentaria activa';
-      if (sessInterval) return;
-      sessInterval = setInterval(() => {
-        sessSec++;
-        const h = String(Math.floor(sessSec / 3600)).padStart(2, '0');
-        const m = String(Math.floor((sessSec % 3600) / 60)).padStart(2, '0');
-        const s = String(sessSec % 60).padStart(2, '0');
-        document.getElementById('sessionDigits').textContent = `${h}:${m}:${s}`;
-      }, 1000);
-    }
-    function finalizarSesionGeneral() {
-      clearInterval(sessInterval); sessInterval = null;
-      document.getElementById('sessionStatusTag').textContent = 'Finalizada';
-      const now = new Date();
-      document.getElementById('horaFin').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-      syncMeta();
-    }
-
-    function onCommissionChange() {
-      const selectedCom = document.getElementById('cfgComision').value;
-      if (OFFICIAL_TOPICS[selectedCom]) document.getElementById('cfgTopico').value = OFFICIAL_TOPICS[selectedCom];
-      syncMeta();
-    }
-
-    function syncMeta() {
-      appData.meta.centro = document.getElementById('cfgCentro').value;
-      appData.meta.comision = document.getElementById('cfgComision').value;
-      appData.meta.topico = document.getElementById('cfgTopico').value;
-      appData.meta.presidente = document.getElementById('cfgPres').value;
-      appData.meta.vicepresidente = document.getElementById('cfgVice').value;
-      appData.meta.relator = document.getElementById('cfgRelator').value;
-      appData.meta.horaInicio = document.getElementById('horaInicio').value;
-      appData.meta.horaFin = document.getElementById('horaFin').value;
-      saveState(true);
-    }
-
-    function loadMetaUI() {
-      document.getElementById('cfgCentro').value = appData.meta.centro || '';
-      document.getElementById('cfgComision').value = appData.meta.comision || defaultCommission;
-      document.getElementById('cfgTopico').value = appData.meta.topico || OFFICIAL_TOPICS[defaultCommission];
-      document.getElementById('cfgPres').value = appData.meta.presidente || '';
-      document.getElementById('cfgVice').value = appData.meta.vicepresidente || '';
-      document.getElementById('cfgRelator').value = appData.meta.relator || '';
-      document.getElementById('horaInicio').value = appData.meta.horaInicio || '08:00';
-      document.getElementById('horaFin').value = appData.meta.horaFin || '';
-      document.getElementById('cfgCantidad').value = appData.delegates.length;
-    }
-
-    function aplicarFilas() {
-      const target = Math.min(60, Math.max(1, Number(document.getElementById('cfgCantidad').value) || 15));
-      while (appData.delegates.length < target) appData.delegates.push(createEmptyDelegate(appData.delegates.length));
-      if (appData.delegates.length > target) appData.delegates = appData.delegates.slice(0, target);
-      saveState(true);
-      renderRollCall();
-      renderSpeakerQueueUI();
-    }
-
-    function agregarFilaDelegado() {
-      appData.delegates.push(createEmptyDelegate(appData.delegates.length));
-      document.getElementById('cfgCantidad').value = appData.delegates.length;
-      saveState(true);
-      renderRollCall();
-    }
-
-    function eliminarDelegado(idx) {
-      const removedId = String(appData.delegates[idx].id);
-      appData.delegates.splice(idx, 1);
-      appData.speakerQueue = appData.speakerQueue.filter(id => id !== removedId);
-      document.getElementById('cfgCantidad').value = appData.delegates.length;
-      saveState(true);
-      renderRollCall();
-      renderSpeakerQueueUI();
-    }
-
-    function updateDelegateField(idx, field, val) {
-      appData.delegates[idx][field] = val;
-      saveState(true);
-      updateSpeakerDropdown();
-      renderSpeakerQueueUI();
-    }
-
-    function setAttendance(idx, status) {
-      appData.delegates[idx].status = status;
-      saveState(true);
-      renderRollCall();
-    }
-
-    function marcarTodos(status) {
-      appData.delegates.forEach(d => d.status = status);
-      saveState(true);
-      renderRollCall();
-    }
-
-    function updateQuorumStats() {
-      const total = appData.delegates.length;
-      const pv = appData.delegates.filter(d => d.status === 'PV').length;
-      const pOnly = appData.delegates.filter(d => d.status === 'P').length;
-      const presentTotal = pv + pOnly;
-      const absent = total - presentTotal;
-      const simpleMaj = Math.floor(presentTotal / 2) + 1;
-      const qualifiedMaj = Math.ceil((presentTotal * 2) / 3);
-
-      document.getElementById('qTotal').textContent = total;
-      document.getElementById('qPresVot').textContent = pv;
-      document.getElementById('qPresTot').textContent = presentTotal;
-      document.getElementById('qAusentes').textContent = absent;
-      document.getElementById('qSimple').textContent = `${simpleMaj} / ${simpleMaj}`;
-      document.getElementById('qCalificada').textContent = qualifiedMaj;
-    }
-
-    function updateSpeakerDropdown() {
-      const sel = document.getElementById('speakerSelect');
-      const current = sel.value;
-      sel.innerHTML = `<option value="">-- Seleccionar Delegado / País --</option>` +
-        appData.delegates
-          .filter(d => d.name || d.country)
-          .map(d => {
-            const label = `${d.country || 'País'} (${d.name || 'Delegado'})`;
-            return `<option value="${label}">${label}</option>`;
-          }).join('');
-      sel.value = current;
-    }
-
-    function renderRollCall() {
-      const tbody = document.getElementById('rollCallTbody');
-      tbody.innerHTML = appData.delegates.map((d, i) => {
-        const idStr = String(d.id);
-        const queuePos = appData.speakerQueue.indexOf(idStr);
-        const isInQueue = queuePos !== -1;
-        const speeches = Number(d.speechesCount) || 0;
-        const warns = Number(d.warningsCount) || 0;
-        const warnClass = warns >= 3 ? 'warn-danger' : (warns > 0 ? 'warn-active' : '');
-
-        return `
-          <tr class="${warns >= 3 ? 'row-warn-high' : ''}">
-            <td><strong>${i + 1}</strong></td>
-            <td><input type="text" class="table-input" placeholder="Nombre completo del delegado/a..." value="${d.name}" oninput="updateDelegateField(${i}, 'name', this.value)" /></td>
-            <td><input type="text" class="table-input" placeholder="Ej. República Dominicana..." value="${d.country}" oninput="updateDelegateField(${i}, 'country', this.value)" /></td>
-            <td style="text-align:center;">
-              <label class="speaker-check-box ${isInQueue ? 'in-queue' : ''}" title="Marcar al levantar el placard para añadir a la lista de oradores">
-                <input type="checkbox" ${isInQueue ? 'checked' : ''} onchange="toggleSpeakerInQueue('${idStr}', this.checked)" />
-                <span>${isInQueue ? `🎙 #${queuePos + 1}` : 'Orador'}</span>
-              </label>
-            </td>
-            <td style="text-align:center;">
-              <div class="mini-counter-box" title="Intervenciones realizadas">
-                <button class="mini-step-btn minus" onclick="adjustDelegateCounter(${i}, 'speechesCount', -1)">−</button>
-                <span class="mini-step-val">${speeches}</span>
-                <button class="mini-step-btn" onclick="adjustDelegateCounter(${i}, 'speechesCount', 1)">+</button>
-              </div>
-            </td>
-            <td style="text-align:center;">
-              <div class="mini-counter-box ${warnClass}" title="Llamados de atención / advertencias">
-                <button class="mini-step-btn minus" onclick="adjustDelegateCounter(${i}, 'warningsCount', -1)">−</button>
-                <span class="mini-step-val">${warns}</span>
-                <button class="mini-step-btn" style="background:${warns >= 3 ? '#dc2626' : '#d97706'};" onclick="adjustDelegateCounter(${i}, 'warningsCount', 1)">+</button>
-              </div>
-            </td>
-            <td>
-              <div class="attendance-group">
-                <button class="att-btn ${d.status === 'PV' ? 'active-pv' : ''}" onclick="setAttendance(${i}, 'PV')">Presente y Votando</button>
-                <button class="att-btn ${d.status === 'P' ? 'active-p' : ''}" onclick="setAttendance(${i}, 'P')">Presente</button>
-                <button class="att-btn ${d.status === 'A' ? 'active-a' : ''}" onclick="setAttendance(${i}, 'A')">Ausente</button>
-              </div>
-            </td>
-            <td style="text-align:center;">
-              <button class="btn btn-outline-light" style="color:var(--absent-red); border-color:#f4b8c0; padding:0.25rem 0.5rem;" onclick="eliminarDelegado(${i})">🗑</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-      updateQuorumStats();
-      updateSpeakerDropdown();
-    }
-
-    function procesarPegadoRapido() {
-      const lines = document.getElementById('bulkPasteArea').value.split('\n').map(l => l.trim()).filter(Boolean);
-      if (!lines.length) return;
-      appData.delegates = lines.map((line, idx) => {
-        const parts = line.split('-');
-        const item = createEmptyDelegate(idx);
-        item.name = (parts[0] || '').trim();
-        item.country = (parts[1] || '').trim();
-        return item;
-      });
-      appData.speakerQueue = [];
-      appData.speechSessionEnded = false;
-      document.getElementById('cfgCantidad').value = appData.delegates.length;
-      saveState(true);
-      renderRollCall();
-      renderSpeakerQueueUI();
-      closeModal('pasteModal');
-    }
-
-    // =========================================================
-    // MATRIZ DE EVALUACIÓN CON COLOR DE EDITOR ESTILO CANVA
-    // =========================================================
-    function updateMatrixScore(idx, field, maxVal, inputEl) {
-      if (appData.isLocked) return;
-      let val = Number(inputEl.value);
-      if (isNaN(val) || val < 0) { val = 0; inputEl.value = 0; }
-      if (val > maxVal) { val = maxVal; inputEl.value = maxVal; }
-
-      appData.delegates[idx].rubric[field] = val;
-      if (!appData.delegates[idx].lastEditedBy) appData.delegates[idx].lastEditedBy = {};
-      if (currentMember) {
-        appData.delegates[idx].lastEditedBy[field] = {
-          name: currentMember.nombres.split(' ')[0],
-          color: currentMember.color
-        };
-        inputEl.style.borderColor = currentMember.color;
-      }
-
-      const subs = getSubtotals(appData.delegates[idx]);
-      document.getElementById(`rowTotal_${idx}`).textContent = subs.total;
-      saveState(true);
-    }
-
-    function renderScoreInput(idx, field, maxVal, d) {
-      const val = d.rubric[field] || 0;
-      const editor = d.lastEditedBy && d.lastEditedBy[field];
-      const borderStyle = editor ? `border-color:${editor.color};` : '';
-      const badgeHtml = editor ? `<span class="canva-cursor-tag" style="background:${editor.color};">${editor.name}</span>` : '';
-      const disabledAttr = appData.isLocked ? 'disabled' : '';
-      return `
-        <td style="text-align:center;">
-          <div class="score-cell-wrap">
-            ${badgeHtml}
-            <input type="number" class="score-cell-input" style="${borderStyle}" min="0" max="${maxVal}" step="0.5" value="${val}" ${disabledAttr} oninput="updateMatrixScore(${idx}, '${field}', ${maxVal}, this)" />
-          </div>
-        </td>
-      `;
-    }
-
-    function renderMatrixEval() {
-      const tbody = document.getElementById('matrixEvalTbody');
-      tbody.innerHTML = appData.delegates.map((d, i) => {
-        const subs = getSubtotals(d);
-        const speeches = Number(d.speechesCount) || 0;
-        const warns = Number(d.warningsCount) || 0;
-        return `
-          <tr>
-            <td class="sticky-col-1" style="text-align:center;"><strong>${i + 1}</strong></td>
-            <td class="sticky-col-2">
-              <strong style="color:var(--prussian); display:block; font-size:0.82rem;">${d.name || `Delegado/a #${i + 1}`}</strong>
-              <span style="font-size:0.72rem; color:var(--azure); font-weight:600; display:block;">${d.country || 'Sin país asignado'}</span>
-              <span style="font-size:0.66rem; color:var(--text-muted); font-weight:700;">🗣️ ${speeches} int. ${warns > 0 ? `• <span style="color:#dc2626;">⚠️ ${warns} adv.</span>` : ''}</span>
-            </td>
-            ${renderScoreInput(i, 'redaccion', 10, d)}
-            ${renderScoreInput(i, 'investigacion', 10, d)}
-            ${renderScoreInput(i, 'representacion', 8, d)}
-            ${renderScoreInput(i, 'oratoria', 8, d)}
-            ${renderScoreInput(i, 'argumentacion', 8, d)}
-            ${renderScoreInput(i, 'discurso', 6, d)}
-            ${renderScoreInput(i, 'consenso', 8, d)}
-            ${renderScoreInput(i, 'conflictos', 8, d)}
-            ${renderScoreInput(i, 'critico', 10, d)}
-            ${renderScoreInput(i, 'soluciones', 6, d)}
-            ${renderScoreInput(i, 'liderazgo', 8, d)}
-            ${renderScoreInput(i, 'equipo', 10, d)}
-            <td style="text-align:center; background:#e6f5ff;">
-              <strong id="rowTotal_${i}" style="font-size:1.05rem; color:var(--prussian);">${subs.total}</strong>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // =========================================================
-    // RANKING CON VALIDACIÓN INTELIGENTE Y CIERRE DE ACTA
-    // =========================================================
-    function updateDelegateMention(idx, val) {
-      if (appData.isLocked) return;
-      appData.delegates[idx].mention = val;
-      saveState(true);
-      renderRanking();
-    }
-
-    function updateCustomMentionText(idx, val) {
-      if (appData.isLocked) return;
-      appData.delegates[idx].customMention = val;
-      saveState(true);
-    }
-
-    function updateDelegatePase(idx, val) {
-      if (appData.isLocked) return;
-      appData.delegates[idx].paseMonupe = val;
-      saveState(true);
-      renderRanking();
-    }
-
-    function renderRanking() {
-      const ranked = appData.delegates
-        .map((d, origIdx) => ({ ...d, origIdx, subs: getSubtotals(d) }))
-        .sort((a, b) => b.subs.total - a.subs.total);
-
-      const disabledAttr = appData.isLocked ? 'disabled' : '';
-
-      document.getElementById('rankingTbody').innerHTML = ranked.map((d, pos) => {
-        const isAbsent = d.status === 'A';
-        const statusLabel = d.status === 'PV' ? 'Presente y Votando' : (d.status === 'P' ? 'Presente' : 'Ausente');
-        const isCustom = d.mention === 'Otra (Personalizada)';
-        const hasAwardOrPass = (d.mention && d.mention !== 'Ninguna') || d.paseMonupe === 'SÍ - PASE A MONUPE II';
-        const absentAlert = isAbsent && hasAwardOrPass
-          ? `<div style="color:#dc2626; font-size:0.7rem; font-weight:800; margin-top:0.25rem;">⚠️ Delegado marcado como Ausente</div>`
-          : '';
-        const rowClass = (isAbsent && hasAwardOrPass) ? 'row-warn-high' : (d.subs.total >= 80 && !isAbsent ? 'row-qualified' : '');
-
-        return `
-          <tr class="${rowClass}">
-            <td><strong>${pos + 1}</strong></td>
-            <td>${d.name || `Delegado/a #${d.origIdx + 1}`}</td>
-            <td><strong>${d.country || 'Sin país asignado'}</strong></td>
-            <td>
-              <span style="font-weight:700; color:${isAbsent ? '#dc2626' : 'var(--prussian)'};">${statusLabel}</span>
-              <div style="font-size:0.7rem; color:var(--text-muted);">🗣️ ${d.speechesCount || 0} int. • ⚠️ ${d.warningsCount || 0} adv.</div>
-            </td>
-            <td style="text-align:center;">${d.subs.conocimiento}</td>
-            <td style="text-align:center;">${d.subs.comunicacion}</td>
-            <td style="text-align:center;">${d.subs.negociacion}</td>
-            <td style="text-align:center;">${d.subs.analisis}</td>
-            <td style="text-align:center;">${d.subs.interpers}</td>
-            <td style="text-align:center;"><strong style="color:var(--azure); font-size:1rem;">${d.subs.total}</strong></td>
-            <td>
-              <select class="table-input" style="padding:0.3rem 0.45rem;" ${disabledAttr} onchange="updateDelegateMention(${d.origIdx}, this.value)">
-                <option value="Ninguna" ${d.mention === 'Ninguna' ? 'selected' : ''}>Ninguna</option>
-                <option value="Discurso Destacado" ${d.mention === 'Discurso Destacado' ? 'selected' : ''}>Discurso Destacado</option>
-                <option value="Negociación Destacada" ${d.mention === 'Negociación Destacada' ? 'selected' : ''}>Negociación Destacada</option>
-                <option value="Dominio Ejemplar del Reglamento (MAGEAC)" ${d.mention === 'Dominio Ejemplar del Reglamento (MAGEAC)' ? 'selected' : ''}>Dominio Ejemplar del Reglamento (MAGEAC)</option>
-                <option value="Excelencia en Política Exterior e Investigación" ${d.mention === 'Excelencia en Política Exterior e Investigación' ? 'selected' : ''}>Excelencia en Política Exterior e Investigación</option>
-                <option value="Buen Léxico y Oratoria Destacada" ${d.mention === 'Buen Léxico y Oratoria Destacada' ? 'selected' : ''}>Buen Léxico y Oratoria Destacada</option>
-                <option value="Otra (Personalizada)" ${isCustom ? 'selected' : ''}>➕ Agregar otra mención personalizada...</option>
-              </select>
-              ${isCustom ? `<input type="text" class="table-input" style="margin-top:0.35rem; border-color:var(--azure);" ${disabledAttr} placeholder="Escribe el nombre de la nueva mención..." value="${d.customMention || ''}" oninput="updateCustomMentionText(${d.origIdx}, this.value)" />` : ''}
-              ${absentAlert}
-            </td>
-            <td>
-              <select class="table-input" style="padding:0.3rem 0.45rem; font-weight:700;" ${disabledAttr} onchange="updateDelegatePase(${d.origIdx}, this.value)">
-                <option value="No" ${d.paseMonupe === 'No' ? 'selected' : ''}>No</option>
-                <option value="SÍ - PASE A MONUPE II" ${d.paseMonupe === 'SÍ - PASE A MONUPE II' ? 'selected' : ''}>SÍ - PASE A MONUPE II</option>
-              </select>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // =========================================================
-    // EXPORTACIÓN DIRECTA A GOOGLE SHEETS Y WHATSAPP
-    // =========================================================
-    function getFinalMentionLabel(d) {
-      if (d.mention === 'Otra (Personalizada)') return d.customMention || 'Mención Especial';
-      return d.mention || 'Ninguna';
-    }
-
-    let lastGeneratedSheetUrl = localStorage.getItem(`monupe_sheet_url_${roomId}`) || '';
-
-    function showGeneratedSheetResult(url) {
-      lastGeneratedSheetUrl = url;
-      localStorage.setItem(`monupe_sheet_url_${roomId}`, url);
-      document.getElementById('generatedSheetUrlInput').value = url;
-      document.getElementById('openSheetAnchor').href = url;
-      document.getElementById('generatedSheetBox').style.display = 'block';
-    }
-
-    if (lastGeneratedSheetUrl) {
-      showGeneratedSheetResult(lastGeneratedSheetUrl);
-    }
-
-    async function exportarAGoogleSheets() {
-      const btn = document.getElementById('btnExportSheets');
-      btn.disabled = true;
-      btn.textContent = '⏳ Generando Google Sheet oficial...';
-      setSyncIndicator(false, 'Exportando a Sheets...');
-
-      try {
-        const duracion = document.getElementById('sessionDigits').textContent || '00:00:00';
-
-        await fetch(CLOUD_RELAY, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            roomId: roomId,
-            updatedAt: Date.now(),
-            meta: appData.meta,
-            delegates: appData.delegates,
-            manualDirectors: appData.manualDirectors,
-            speakerQueue: appData.speakerQueue,
-            speechSessionEnded: appData.speechSessionEnded,
-            isLocked: Boolean(appData.isLocked)
-          })
-        });
-
-        await new Promise(r => setTimeout(r, 800));
-
-        const res = await fetch(`${CLOUD_RELAY}?action=export_sheets&sala=${encodeURIComponent(roomId)}&duracion=${encodeURIComponent(duracion)}&t=${Date.now()}`);
-        const data = await res.json();
-
-        if (data && data.ok && data.url) {
-          showGeneratedSheetResult(data.url);
-          setSyncIndicator(true, 'Sincronizado en vivo');
-          window.open(data.url, '_blank');
-        } else {
-          alert('No se pudo obtener el enlace. Verifica que hayas publicado la Nueva Versión en Google Apps Script.');
-        }
-      } catch (err) {
-        alert('Error de conexión con Apps Script: ' + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = '📗 Generar / Actualizar Google Sheet';
-      }
-    }
-
-    function copyGeneratedSheetUrl() {
-      if (!lastGeneratedSheetUrl) return;
-      navigator.clipboard.writeText(lastGeneratedSheetUrl);
-      alert('Enlace de Google Sheets copiado al portapapeles.');
-    }
-
-    function shareGeneratedSheetWhatsApp() {
-      if (!lastGeneratedSheetUrl) return;
-      const msg = `*ACTA OFICIAL EN GOOGLE SHEETS — MONUPE II*\n*Comisión:* ${appData.meta.comision}\n*Sala:* ${roomId}\n\nRevisa y descarga la hoja de cálculo oficial aquí:\n${lastGeneratedSheetUrl}`;
-      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    function enviarWhatsApp() {
-      const ranked = [...appData.delegates]
-        .map(d => ({ ...d, subs: getSubtotals(d) }))
-        .sort((a, b) => b.subs.total - a.subs.total)
-        .slice(0, 10);
-
-      let msg = `*ACTA OFICIAL — MONUPE II (Distrito 01-03)*\n*Sala:* ${roomId}\n*Comisión:* ${appData.meta.comision}\n\n*Resultados Top Delegaciones:*\n`;
-      ranked.forEach((d, i) => {
-        msg += `${i + 1}. *${d.country || d.name}*: ${d.subs.total} pts (${getFinalMentionLabel(d)}) — ${d.paseMonupe}\n`;
-      });
-      if (lastGeneratedSheetUrl) {
-        msg += `\n📗 *Hoja de Cálculo Oficial (Google Sheets):*\n${lastGeneratedSheetUrl}`;
-      }
-      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    function exportarJSON() {
-      const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `Respaldo_Permanente_${roomId}.json`;
-      a.click();
-    }
-
-    function importarJSON(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        appData = JSON.parse(e.target.result);
-        saveState(true);
-        loadMetaUI();
-        updateLockUI();
-        renderRollCall();
-        renderSpeakerQueueUI();
-        renderMatrixEval();
-        renderRanking();
-      };
-      reader.readAsText(file);
-    }
-
-    function openModal(id) { document.getElementById(id).classList.add('open'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-    // =========================================================
-    // INICIALIZACIÓN AL ABRIR LA PÁGINA
-    // =========================================================
-    loadMetaUI();
-    updateLockUI();
-    renderRollCall();
-    renderSpeakerQueueUI();
-    renderMatrixEval();
-    renderRanking();
-
-    if (!currentMember) {
-      openLoginModal();
-    } else {
-      assignMemberToMesaMeta(currentMember);
-      knownMemberIds.add(currentMember.id);
-      renderConnectedDirectors();
-      syncWithCloud({ includeMember: true });
-    }
-  </script>
-</body>
-</html>
+      <div style="display:flex; justify-
