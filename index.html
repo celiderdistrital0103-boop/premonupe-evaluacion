@@ -205,6 +205,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .timers-header-title {
@@ -659,6 +661,7 @@
     .grp-negociacion  { background: #005288 !important; color: #A7EBFF !important; text-align: center !important; border-bottom: 2px solid #00CBFF; }
     .grp-analisis     { background: #003b66 !important; color: #ffffff !important; text-align: center !important; border-bottom: 2px solid #007FF1; }
     .grp-interpers    { background: #002a54 !important; color: #A7EBFF !important; text-align: center !important; border-bottom: 2px solid #00CBFF; }
+    .grp-ref-part     { background: #0f3d5e !important; color: #fde68a !important; text-align: center !important; border-bottom: 2px dashed #fbbf24; }
 
     .sub-header {
       background: #004375 !important;
@@ -693,6 +696,19 @@
       font-size: 0.84rem;
       color: var(--prussian);
     }
+
+    .part-badge {
+      display: inline-block;
+      padding: 0.16rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .part-badge.alta { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .part-badge.media { background: #e0f2fe; color: #075985; border: 1px solid #7dd3fc; }
+    .part-badge.baja { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
 
     .mini-counter-box {
       display: inline-flex;
@@ -1127,7 +1143,7 @@
   <!-- CRONÓMETROS PARLAMENTARIOS OFICIALES + LISTA DE ORADORES INTEGRADA -->
   <section class="timers-wrapper">
     <div class="timers-header">
-      <div class="timers-header-title">Cronómetros Parlamentarios Oficiales y Lista de Oradores en Vivo</div>
+      <div class="timers-header-title">Cronómetros Parlamentarios Oficiales y Lista de Oradores en Vivo <span style="font-size:0.7rem; opacity:0.8;">(Atajo: Barra Espaciadora inicia/pausa discurso)</span></div>
       <button class="btn btn-outline-light" style="padding:0.28rem 0.65rem; font-size:0.74rem;" onclick="toggleTimersBody()">Ocultar / Mostrar Cronómetros</button>
     </div>
 
@@ -1366,14 +1382,14 @@
       </div>
     </section>
 
-    <!-- ================= PESTAÑA 2: MATRIZ OFICIAL ================= -->
+    <!-- ================= PESTAÑA 2: MATRIZ OFICIAL + REFERENCIA DE PARTICIPACIÓN ================= -->
     <section class="tab-panel" id="tab1">
       <div class="panel-card">
         <div class="panel-header">
           <div>
             <div class="panel-title">⭐ Matriz Oficial de Evaluación en Tiempo Real (100 Puntos)</div>
             <p style="font-size:0.77rem; color:var(--text-muted); margin-top:0.15rem;">
-              Incluye el resumen de intervenciones y advertencias junto al país para apoyar la calificación de Oratoria, Liderazgo y Discurso.
+              La columna amarilla <strong>Ref. Participación (No suma)</strong> sirve de guía visual para los evaluadores sin alterar el total oficial de 100 pts.
             </p>
           </div>
           <button class="btn btn-azure" onclick="syncNowManual()">🔄 Forzar Sincronización</button>
@@ -1390,6 +1406,7 @@
                 <th colspan="2" class="grp-negociacion">Habilidades de Negociación (16 pts)</th>
                 <th colspan="2" class="grp-analisis">Habilidades de Análisis (16 pts)</th>
                 <th colspan="2" class="grp-interpers">Habilidades Interpersonales (18 pts)</th>
+                <th rowspan="2" class="grp-ref-part" style="min-width:165px;">Ref. Participación<br><small style="color:#fde68a;">(No suma al total)</small></th>
                 <th rowspan="2" style="text-align:center; width:74px;">TOTAL<br><small style="color:var(--aqua);">(100)</small></th>
               </tr>
               <tr>
@@ -1418,12 +1435,13 @@
       <div class="panel-card">
         <div class="panel-header">
           <div>
-            <span class="panel-title">🏆 Ranking Oficial en Vivo, Diplomas y Pase MONUPE II</span>
+            <span class="panel-title">🏆 Ranking Oficial en Vivo (Con Desempate), Diplomas y Pase MONUPE II</span>
             <p style="font-size:0.76rem; color:var(--text-muted); margin-top:0.15rem;">
-              Filas en verde = puntajes destacados (≥ 80 pts). Pulsa <strong>🎓 Diploma</strong> para generar el certificado oficial en PDF/impresión.
+              En caso de empate en puntos totales, desempata por mayor puntaje en <strong>Conocimiento (28)</strong> y mayor participación.
             </p>
           </div>
           <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+            <button class="btn btn-aqua" onclick="openBatchDiplomasWindow()">🎓 Imprimir Todos los Premiados</button>
             <button class="btn btn-prussian" id="btnToggleLockActa" onclick="toggleLockActa()">🔒 Cerrar Evaluación</button>
           </div>
         </div>
@@ -1465,7 +1483,7 @@
           <div style="background:#f4faff; border:1px solid var(--border-soft); border-left:4px solid #16a34a; border-radius:9px; padding:1.1rem;">
             <strong style="font-size:0.95rem; color:var(--prussian);">📗 Guardar y Sincronizar Acta en Google Sheets</strong>
             <p style="font-size:0.8rem; color:var(--text-muted); margin:0.45rem 0 0.9rem;">
-              Crea automáticamente la hoja de cálculo en tu Google Drive con los colores oficiales, encabezados agrupados, puntajes ordenados y permisos de lectura para compartir el enlace. Si vuelves a pulsar el botón, actualiza esa misma hoja sin duplicarla.
+              Crea automáticamente la hoja de cálculo en tu Google Drive con los colores oficiales, encabezados agrupados, puntajes ordenados, una pestaña con la <strong>Bitácora de Sesión</strong> y permisos de lectura para compartir el enlace.
             </p>
             <button class="btn btn-azure" id="btnExportSheets" onclick="exportarAGoogleSheets()">📗 Generar / Actualizar Google Sheet</button>
 
@@ -1597,7 +1615,7 @@
         <button class="btn btn-frosted" onclick="closeModal('logModal')">✕ Cerrar</button>
       </div>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.75rem;">
-        Registro automático de eventos parlamentarios de la sala para facilitar la redacción del acta narrativa de Secretaría.
+        Registro automático de eventos parlamentarios de la sala (también se exporta como segunda pestaña en Google Sheets).
       </p>
 
       <div style="display:flex; gap:0.45rem; margin-bottom:0.75rem;">
@@ -1938,7 +1956,7 @@
     // =========================================================
     // ESTADO PERSISTENTE EN LOCALSTORAGE + NUBE EN TIEMPO REAL
     // =========================================================
-    function getStorageKey() { return `monupe_v10_permanent_${roomId}`; }
+    function getStorageKey() { return `monupe_v11_permanent_${roomId}`; }
 
     function createEmptyDelegate(idx) {
       return {
@@ -1948,6 +1966,7 @@
         status: 'PV',
         speechesCount: 0,
         warningsCount: 0,
+        participationNote: '',
         rubric: {
           redaccion: 0, investigacion: 0, representacion: 0,
           oratoria: 0, argumentacion: 0, discurso: 0,
@@ -1990,6 +2009,20 @@
     appData.delegates.forEach(d => {
       if (typeof d.speechesCount !== 'number') d.speechesCount = 0;
       if (typeof d.warningsCount !== 'number') d.warningsCount = 0;
+      if (typeof d.participationNote !== 'string') d.participationNote = '';
+    });
+
+    // =========================================================
+    // ATAJO DE TECLADO: BARRA ESPACIADORA PARA CRONÓMETRO DE DISCURSO
+    // =========================================================
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        const tag = document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        if (clocks[1].timer) pauseClock(1);
+        else startClock(1);
+      }
     });
 
     // =========================================================
@@ -2112,117 +2145,20 @@
     }
 
     // =========================================================
-    // CERTIFICADO / DIPLOMA OFICIAL IMPRIMIBLE
+    // CERTIFICADO / DIPLOMA OFICIAL INDIVIDUAL Y MASIVO
     // =========================================================
-    function openDiplomaWindow(origIdx) {
-      const d = appData.delegates[origIdx];
-      if (!d) return;
+    function buildDiplomaCardHTML(d) {
       const delegateName = d.name || 'Delegado/a Participante';
       const countryName = d.country || 'Representación Oficial';
       const mention = getFinalMentionLabel(d);
-      const awardTitle = mention !== 'Ninguna' ? mention : 'Participación Destacada';
+      const awardTitle = mention !== 'Ninguna' ? mention : 'Clasificado Oficial a MONUPE II';
       const comision = appData.meta.comision || 'Comisión Oficial';
       const centro = appData.meta.centro || 'Distrito Educativo 01-03';
       const pres = appData.meta.presidente || 'Presidencia de Mesa';
       const vice = appData.meta.vicepresidente || 'Vicepresidencia de Mesa';
 
-      const win = window.open('', '_blank');
-      win.document.write(`
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-          <meta charset="UTF-8" />
-          <title>Certificado Oficial — ${delegateName}</title>
-          <style>
-            @page { size: landscape; margin: 0; }
-            body {
-              margin: 0;
-              padding: 28px;
-              background: #eef7fc;
-              font-family: 'Segoe UI', system-ui, sans-serif;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              min-height: 100vh;
-            }
-            .cert-frame {
-              width: 1020px;
-              background: #ffffff;
-              border: 12px solid #002247;
-              outline: 4px solid #00CBFF;
-              outline-offset: -20px;
-              padding: 46px 64px;
-              text-align: center;
-              color: #002247;
-              position: relative;
-            }
-            .header-inst {
-              font-size: 13px;
-              font-weight: 800;
-              letter-spacing: 2px;
-              text-transform: uppercase;
-              color: #005288;
-            }
-            .main-title {
-              font-size: 38px;
-              font-weight: 900;
-              letter-spacing: 3px;
-              color: #002247;
-              margin: 10px 0 6px;
-              text-transform: uppercase;
-            }
-            .sub-badge {
-              display: inline-block;
-              background: #007FF1;
-              color: #ffffff;
-              font-weight: 800;
-              font-size: 14px;
-              padding: 5px 18px;
-              border-radius: 999px;
-              letter-spacing: 1px;
-              margin-bottom: 22px;
-            }
-            .grant-text {
-              font-size: 16px;
-              color: #3b5978;
-              margin-bottom: 10px;
-            }
-            .recipient-name {
-              font-size: 34px;
-              font-weight: 900;
-              color: #002247;
-              border-bottom: 3px solid #00CBFF;
-              display: inline-block;
-              padding: 0 28px 6px;
-              margin-bottom: 14px;
-            }
-            .body-copy {
-              font-size: 16px;
-              line-height: 1.6;
-              color: #002247;
-              max-width: 820px;
-              margin: 0 auto 28px;
-            }
-            .signatures {
-              display: grid;
-              grid-template-columns: repeat(3, 1fr);
-              gap: 32px;
-              margin-top: 38px;
-            }
-            .sig-box {
-              border-top: 2px solid #002247;
-              padding-top: 8px;
-              font-size: 13px;
-            }
-            .sig-box strong { display: block; font-size: 14px; color: #002247; }
-            .sig-box span { color: #005288; font-weight: 600; }
-            @media print {
-              body { background: white; padding: 0; }
-              .no-print { display: none; }
-            }
-          </style>
-        </head>
-        <body>
+      return `
+        <div class="cert-page">
           <div class="cert-frame">
             <div class="header-inst">Ministerio de Educación de la República Dominicana • Regional 01 • Distrito Educativo 01-03 • CELIDER Distrital</div>
             <div class="main-title">Certificado de Reconocimiento</div>
@@ -2237,14 +2173,91 @@
               <div class="sig-box"><strong>CELIDER Distrital 01-03</strong><span>Coordinación General PLE-RD</span></div>
               <div class="sig-box"><strong>${vice}</strong><span>Vicepresidencia de Mesa</span></div>
             </div>
-            <div class="no-print" style="margin-top:26px;">
-              <button onclick="window.print()" style="background:#002247; color:white; border:none; padding:10px 22px; border-radius:8px; font-weight:800; cursor:pointer;">🖨 Imprimir / Guardar como PDF</button>
-            </div>
           </div>
+        </div>
+      `;
+    }
+
+    function renderDiplomasPrintWindow(delegatesList, title) {
+      const win = window.open('', '_blank');
+      const cardsHtml = delegatesList.map(d => buildDiplomaCardHTML(d)).join('');
+      win.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8" />
+          <title>${title}</title>
+          <style>
+            @page { size: landscape; margin: 0; }
+            body {
+              margin: 0;
+              background: #eef7fc;
+              font-family: 'Segoe UI', system-ui, sans-serif;
+            }
+            .cert-page {
+              width: 100%;
+              min-height: 100vh;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding: 24px;
+              page-break-after: always;
+            }
+            .cert-page:last-child { page-break-after: auto; }
+            .cert-frame {
+              width: 1020px;
+              background: #ffffff;
+              border: 12px solid #002247;
+              outline: 4px solid #00CBFF;
+              outline-offset: -20px;
+              padding: 46px 64px;
+              text-align: center;
+              color: #002247;
+            }
+            .header-inst { font-size: 13px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #005288; }
+            .main-title { font-size: 38px; font-weight: 900; letter-spacing: 3px; color: #002247; margin: 10px 0 6px; text-transform: uppercase; }
+            .sub-badge { display: inline-block; background: #007FF1; color: #ffffff; font-weight: 800; font-size: 14px; padding: 5px 18px; border-radius: 999px; letter-spacing: 1px; margin-bottom: 22px; }
+            .grant-text { font-size: 16px; color: #3b5978; margin-bottom: 10px; }
+            .recipient-name { font-size: 34px; font-weight: 900; color: #002247; border-bottom: 3px solid #00CBFF; display: inline-block; padding: 0 28px 6px; margin-bottom: 14px; }
+            .body-copy { font-size: 16px; line-height: 1.6; color: #002247; max-width: 820px; margin: 0 auto 28px; }
+            .signatures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 38px; }
+            .sig-box { border-top: 2px solid #002247; padding-top: 8px; font-size: 13px; }
+            .sig-box strong { display: block; font-size: 14px; color: #002247; }
+            .sig-box span { color: #005288; font-weight: 600; }
+            .print-bar { position: fixed; top: 14px; right: 14px; z-index: 100; }
+            @media print {
+              body { background: white; }
+              .cert-page { padding: 0; }
+              .print-bar { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-bar">
+            <button onclick="window.print()" style="background:#002247; color:white; border:2px solid #00CBFF; padding:10px 20px; border-radius:8px; font-weight:800; cursor:pointer;">🖨 Imprimir / Guardar Todos en PDF (${delegatesList.length})</button>
+          </div>
+          ${cardsHtml}
         </body>
         </html>
       `);
       win.document.close();
+    }
+
+    function openDiplomaWindow(origIdx) {
+      const d = appData.delegates[origIdx];
+      if (!d) return;
+      renderDiplomasPrintWindow([d], `Certificado Oficial — ${d.name || d.country}`);
+    }
+
+    function openBatchDiplomasWindow() {
+      const awarded = getSortedRankedDelegates().filter(d =>
+        (d.mention && d.mention !== 'Ninguna') || d.paseMonupe === 'SÍ - PASE A MONUPE II'
+      );
+      if (awarded.length === 0) {
+        alert('Aún no hay delegados con mención asignada o pase a MONUPE II en el Ranking.');
+        return;
+      }
+      renderDiplomasPrintWindow(awarded, `Certificados Oficiales — ${appData.meta.comision}`);
     }
 
     // =========================================================
@@ -2407,6 +2420,17 @@
       const interpers    = (Number(r.liderazgo)||0) + (Number(r.equipo)||0);
       const total = conocimiento + comunicacion + negociacion + analisis + interpers;
       return { conocimiento, comunicacion, negociacion, analisis, interpers, total };
+    }
+
+    function getSortedRankedDelegates() {
+      return appData.delegates
+        .map((d, origIdx) => ({ ...d, origIdx, subs: getSubtotals(d) }))
+        .sort((a, b) => {
+          if (b.subs.total !== a.subs.total) return b.subs.total - a.subs.total;
+          if (b.subs.conocimiento !== a.subs.conocimiento) return b.subs.conocimiento - a.subs.conocimiento;
+          if ((b.speechesCount || 0) !== (a.speechesCount || 0)) return (b.speechesCount || 0) - (a.speechesCount || 0);
+          return (a.warningsCount || 0) - (b.warningsCount || 0);
+        });
     }
 
     let syncDebounce = null;
@@ -3164,7 +3188,7 @@
     }
 
     // =========================================================
-    // MATRIZ DE EVALUACIÓN CON COLOR DE EDITOR ESTILO CANVA
+    // MATRIZ DE EVALUACIÓN + REFERENCIA DE PARTICIPACIÓN (NO COMPUTABLE)
     // =========================================================
     function updateMatrixScore(idx, field, maxVal, inputEl) {
       if (appData.isLocked) return;
@@ -3187,6 +3211,19 @@
       saveState(true);
     }
 
+    function updateParticipationNote(idx, val) {
+      if (appData.isLocked) return;
+      appData.delegates[idx].participationNote = val;
+      saveState(true);
+    }
+
+    function getParticipationLevelBadge(speeches, warns) {
+      const effective = speeches - warns;
+      if (effective >= 4) return `<span class="part-badge alta">🔥 Alta (${speeches} int.)</span>`;
+      if (effective >= 2) return `<span class="part-badge media">🔹 Media (${speeches} int.)</span>`;
+      return `<span class="part-badge baja">⚪ Baja (${speeches} int.)</span>`;
+    }
+
     function renderScoreInput(idx, field, maxVal, d) {
       const val = d.rubric[field] || 0;
       const editor = d.lastEditedBy && d.lastEditedBy[field];
@@ -3205,17 +3242,19 @@
 
     function renderMatrixEval() {
       const tbody = document.getElementById('matrixEvalTbody');
+      const disabledAttr = appData.isLocked ? 'disabled' : '';
       tbody.innerHTML = appData.delegates.map((d, i) => {
         const subs = getSubtotals(d);
         const speeches = Number(d.speechesCount) || 0;
         const warns = Number(d.warningsCount) || 0;
+        const levelBadge = getParticipationLevelBadge(speeches, warns);
         return `
           <tr>
             <td class="sticky-col-1" style="text-align:center;"><strong>${i + 1}</strong></td>
             <td class="sticky-col-2">
               <strong style="color:var(--prussian); display:block; font-size:0.82rem;">${d.name || `Delegado/a #${i + 1}`}</strong>
               <span style="font-size:0.72rem; color:var(--azure); font-weight:600; display:block;">${d.country || 'Sin país asignado'}</span>
-              <span style="font-size:0.66rem; color:var(--text-muted); font-weight:700;">🗣️ ${speeches} int. ${warns > 0 ? `• <span style="color:#dc2626;">⚠️ ${warns} adv.</span>` : ''}</span>
+              ${warns > 0 ? `<span style="font-size:0.66rem; color:#dc2626; font-weight:700;">⚠️ ${warns} adv.</span>` : ''}
             </td>
             ${renderScoreInput(i, 'redaccion', 10, d)}
             ${renderScoreInput(i, 'investigacion', 10, d)}
@@ -3229,6 +3268,10 @@
             ${renderScoreInput(i, 'soluciones', 6, d)}
             ${renderScoreInput(i, 'liderazgo', 8, d)}
             ${renderScoreInput(i, 'equipo', 10, d)}
+            <td style="text-align:center; background:#fffbeb;">
+              ${levelBadge}
+              <input type="text" class="table-input" style="font-size:0.73rem; padding:0.25rem 0.4rem; background:white;" ${disabledAttr} placeholder="Nota cualitativa..." value="${d.participationNote || ''}" oninput="updateParticipationNote(${i}, this.value)" />
+            </td>
             <td style="text-align:center; background:#e6f5ff;">
               <strong id="rowTotal_${i}" style="font-size:1.05rem; color:var(--prussian);">${subs.total}</strong>
             </td>
@@ -3238,7 +3281,7 @@
     }
 
     // =========================================================
-    // RANKING, DIPLOMAS, VALIDACIÓN Y CIERRE DE ACTA
+    // RANKING CON DESEMPATE INTELIGENTE Y DIPLOMAS
     // =========================================================
     function updateDelegateMention(idx, val) {
       if (appData.isLocked) return;
@@ -3261,10 +3304,7 @@
     }
 
     function renderRanking() {
-      const ranked = appData.delegates
-        .map((d, origIdx) => ({ ...d, origIdx, subs: getSubtotals(d) }))
-        .sort((a, b) => b.subs.total - a.subs.total);
-
+      const ranked = getSortedRankedDelegates();
       const disabledAttr = appData.isLocked ? 'disabled' : '';
 
       document.getElementById('rankingTbody').innerHTML = ranked.map((d, pos) => {
@@ -3281,7 +3321,10 @@
           <tr class="${rowClass}">
             <td><strong>${pos + 1}</strong></td>
             <td>${d.name || `Delegado/a #${d.origIdx + 1}`}</td>
-            <td><strong>${d.country || 'Sin país asignado'}</strong></td>
+            <td>
+              <strong>${d.country || 'Sin país asignado'}</strong>
+              ${d.participationNote ? `<div style="font-size:0.69rem; color:#92400e; font-weight:600;">📝 ${d.participationNote}</div>` : ''}
+            </td>
             <td>
               <span style="font-weight:700; color:${isAbsent ? '#dc2626' : 'var(--prussian)'};">${statusLabel}</span>
               <div style="font-size:0.7rem; color:var(--text-muted);">🗣️ ${d.speechesCount || 0} int. • ⚠️ ${d.warningsCount || 0} adv.</div>
@@ -3362,7 +3405,8 @@
             manualDirectors: appData.manualDirectors,
             speakerQueue: appData.speakerQueue,
             speechSessionEnded: appData.speechSessionEnded,
-            isLocked: Boolean(appData.isLocked)
+            isLocked: Boolean(appData.isLocked),
+            sessionLogs: appData.sessionLogs
           })
         });
 
@@ -3400,10 +3444,7 @@
     }
 
     function enviarWhatsApp() {
-      const ranked = [...appData.delegates]
-        .map(d => ({ ...d, subs: getSubtotals(d) }))
-        .sort((a, b) => b.subs.total - a.subs.total)
-        .slice(0, 10);
+      const ranked = getSortedRankedDelegates().slice(0, 10);
 
       let msg = `*ACTA OFICIAL — MONUPE II (Distrito 01-03)*\n*Sala:* ${roomId}\n*Comisión:* ${appData.meta.comision}\n\n*Resultados Top Delegaciones:*\n`;
       ranked.forEach((d, i) => {
