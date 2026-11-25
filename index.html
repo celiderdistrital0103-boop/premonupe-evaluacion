@@ -894,6 +894,19 @@
       gap: 0.75rem;
     }
 
+    .pending-user-card {
+      background: white;
+      border: 1px solid #fcd34d;
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      margin-bottom: 0.45rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
     /* ================= MODALES ================= */
     .modal-box {
       display: none;
@@ -1383,34 +1396,34 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: LOGIN, REGISTRO Y ARCHIVO DISTRITAL CELIDER 01-03                  -->
+  <!-- MODAL: LOGIN, SOLICITUD DE CUENTA Y ARCHIVO DISTRITAL CELIDER 01-03        -->
   <!-- ========================================================================= -->
   <div class="modal-box" id="celiderPortalModal">
     <div class="modal-content xl">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:0.8rem; border-bottom:1px solid var(--border-soft); padding-bottom:0.6rem;">
         <div>
           <h3 style="color:var(--prussian);">🏛 Portal Distrital CELIDER 01-03 — Archivo Oficial de Modelos Evaluados</h3>
-          <span style="font-size:0.76rem; color:var(--text-muted);" id="celiderLoggedHeader">Inicia sesión o crea tu cuenta personal del equipo distrital</span>
+          <span style="font-size:0.76rem; color:var(--text-muted);" id="celiderLoggedHeader">Inicia sesión o solicita tu cuenta del equipo distrital</span>
         </div>
         <div style="display:flex; gap:0.45rem; align-items:center;">
-          <button class="btn btn-frosted" id="btnCeliderChangePassToggle" style="display:none;" onclick="toggleChangePassBox()">🔑 Cambiar Contraseña</button>
+          <button class="btn btn-frosted" id="btnCeliderChangePassToggle" style="display:none;" onclick="toggleChangePassBox()">🔑 Cambiar Usuario / Contraseña</button>
           <button class="btn btn-danger" id="btnCeliderLogout" style="display:none;" onclick="logoutCelider()">Cerrar Sesión</button>
           <button class="btn btn-prussian" onclick="closeModal('celiderPortalModal')">✕ Cerrar</button>
         </div>
       </div>
 
-      <!-- VISTA 1: FORMULARIO DE LOGIN / CREAR CUENTA -->
+      <!-- VISTA 1: FORMULARIO DE LOGIN / SOLICITAR CUENTA -->
       <div id="celiderAuthView" style="max-width:480px; margin:0.5rem auto;">
         <div class="auth-tabs">
           <button class="auth-tab-btn active" id="tabBtnLoginCelider" onclick="switchCeliderAuthTab('login')">🔐 Iniciar Sesión</button>
-          <button class="auth-tab-btn" id="tabBtnRegCelider" onclick="switchCeliderAuthTab('register')">✨ Crear Mi Cuenta</button>
+          <button class="auth-tab-btn" id="tabBtnRegCelider" onclick="switchCeliderAuthTab('register')">✨ Solicitar Cuenta</button>
         </div>
 
         <!-- LOGIN -->
         <div id="formCeliderLogin">
           <div class="field-group">
             <label>Usuario CELIDER</label>
-            <input type="text" id="celLoginUser" class="field-input" placeholder="Ej. alejandro" />
+            <input type="text" id="celLoginUser" class="field-input" placeholder="Ej. AlejandroSipiran" />
           </div>
           <div class="field-group">
             <label>Contraseña</label>
@@ -1419,40 +1432,53 @@
           <button class="btn btn-prussian" style="width:100%; padding:0.65rem; margin-top:0.35rem;" id="btnSubmitCelLogin" onclick="submitCeliderLogin()">Entrar al Archivo Distrital</button>
         </div>
 
-        <!-- REGISTRO DE NUEVA CUENTA -->
+        <!-- SOLICITUD DE CUENTA (REQUIERE APROBACIÓN) -->
         <div id="formCeliderRegister" style="display:none;">
+          <p style="font-size:0.78rem; color:#92400e; background:#fffbeb; border:1px solid #fcd34d; padding:0.55rem 0.75rem; border-radius:7px; margin-bottom:0.75rem;">
+            🛡️ Las cuentas nuevas quedan pendientes hasta que la Presidencia Distrital de CELIDER 01-03 las apruebe.
+          </p>
           <div class="field-group">
             <label>Nombre Completo *</label>
-            <input type="text" id="celRegName" class="field-input" placeholder="Ej. María Fernanda Pérez" />
+            <input type="text" id="celRegName" class="field-input" placeholder="Ej. Camila Andrea Gómez" />
           </div>
           <div class="field-group">
             <label>Cargo en CELIDER 01-03 *</label>
-            <input type="text" id="celRegCargo" class="field-input" placeholder="Ej. Coordinación Académica / Directiva Distrital" />
+            <input type="text" id="celRegCargo" class="field-input" placeholder="Ej. Secretaría Académica Distrital" />
           </div>
           <div class="form-grid-2">
             <div class="field-group">
-              <label>Usuario Único (sin espacios) *</label>
-              <input type="text" id="celRegUser" class="field-input" placeholder="Ej. mariafp" />
+              <label>Usuario Deseado (sin espacios) *</label>
+              <input type="text" id="celRegUser" class="field-input" placeholder="Ej. camilagomez" />
             </div>
             <div class="field-group">
               <label>Contraseña Personal *</label>
               <input type="password" id="celRegPass" class="field-input" placeholder="Mínimo 4 caracteres" />
             </div>
           </div>
-          <button class="btn btn-azure" style="width:100%; padding:0.65rem; margin-top:0.35rem;" id="btnSubmitCelReg" onclick="submitCeliderRegister()">Crear Cuenta y Entrar</button>
+          <button class="btn btn-azure" style="width:100%; padding:0.65rem; margin-top:0.35rem;" id="btnSubmitCelReg" onclick="submitCeliderRegister()">Enviar Solicitud de Cuenta</button>
         </div>
       </div>
 
       <!-- VISTA 2: PANEL DE MODELOS EVALUADOS (SOLO LOGUEADOS) -->
       <div id="celiderDashboardView" style="display:none;">
-        <!-- CAJA DE CAMBIO DE CONTRASEÑA -->
-        <div id="celiderChangePassBox" style="display:none; background:#fffbeb; border:1.5px solid #f59e0b; border-radius:10px; padding:0.85rem 1rem; margin-bottom:0.9rem;">
-          <strong style="font-size:0.82rem; color:#92400e; display:block; margin-bottom:0.5rem;">🔑 Cambiar Contraseña de mi Cuenta (<span id="cpUserLabel"></span>)</strong>
-          <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:0.5rem; align-items:center;">
-            <input type="password" id="cpOldPass" class="field-input" placeholder="Contraseña actual" style="margin:0;" />
-            <input type="password" id="cpNewPass" class="field-input" placeholder="Nueva contraseña (mín. 4 car.)" style="margin:0;" />
-            <button class="btn btn-prussian" onclick="submitCeliderChangePass()">Guardar Nueva Clave</button>
+        <!-- CAJA DE CAMBIO DE USUARIO Y CONTRASEÑA -->
+        <div id="celiderChangePassBox" style="display:none; background:#fffbeb; border:1.5px solid #f59e0b; border-radius:10px; padding:0.9rem 1rem; margin-bottom:0.9rem;">
+          <strong style="font-size:0.82rem; color:#92400e; display:block; margin-bottom:0.5rem;">🔑 Actualizar Mi Usuario y Contraseña (Actual: <span id="cpUserLabel"></span>)</strong>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:0.5rem; align-items:center;">
+            <input type="password" id="cpOldPass" class="field-input" placeholder="Contraseña actual *" style="margin:0;" />
+            <input type="text" id="cpNewUser" class="field-input" placeholder="Nuevo usuario (opcional)" style="margin:0;" />
+            <input type="password" id="cpNewPass" class="field-input" placeholder="Nueva contraseña *" style="margin:0;" />
+            <button class="btn btn-prussian" onclick="submitCeliderChangeCredentials()">Guardar Cambios</button>
           </div>
+        </div>
+
+        <!-- SOLICITUDES DE CUENTAS PENDIENTES (SOLO VISIBLE PARA EL PRESIDENTE DISTRITAL) -->
+        <div id="pendingApprovalsSection" style="display:none; margin-bottom:1rem; background:#fffbeb; border:1.5px solid #f59e0b; border-radius:10px; padding:0.85rem 1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <strong style="font-size:0.84rem; color:#92400e;">🛡️ Solicitudes de Cuentas Pendientes de Aprobación (<span id="pendingUsersCount">0</span>)</strong>
+            <button class="btn btn-frosted" style="padding:0.25rem 0.55rem; font-size:0.72rem;" onclick="loadPendingCeliderUsers()">🔄 Refrescar</button>
+          </div>
+          <div id="pendingUsersList"></div>
         </div>
 
         <!-- LISTA DE MODELOS EVALUADOS -->
@@ -1599,7 +1625,7 @@
     </div>
   </div>
 
-  <!-- MODAL 0: GUÍA RÁPIDA MAGEAC -->
+  <!-- MODAL 0: GUÍA RÁPIDA MAGEAC (PUNTOS, MOCIONES COMPLETAS Y GUIONES DE MESA) -->
   <div class="modal-box" id="mageacGuideModal">
     <div class="modal-content wide">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem;">
@@ -1656,33 +1682,63 @@
           <tbody>
             <tr>
               <td><strong>1°</strong></td>
-              <td><strong>Moción para Suspender la Sesión</strong> (Receso / Almuerzo)</td>
+              <td><strong>Moción para Levantar / Suspender la Sesión</strong> (Receso / Almuerzo / Cierre del día)</td>
               <td>Mayoría Simple</td>
               <td>Ninguno (Votación directa)</td>
             </tr>
             <tr>
               <td><strong>2°</strong></td>
-              <td><strong>Moción para Cerrar el Debate</strong> (Pasar a votación de resoluciones)</td>
+              <td><strong>Moción para Cerrar el Debate</strong> (Pasar inmediatamente a votación de resoluciones)</td>
               <td>Mayoría Calificada (2/3)</td>
               <td>2 en contra (o 1 a favor / 1 en contra)</td>
             </tr>
             <tr>
               <td><strong>3°</strong></td>
-              <td><strong>Moción para Consulta Oficiosa Moderada</strong> (Especificar tiempo total y por orador)</td>
+              <td><strong>Moción para Aplazar el Debate</strong> (Posponer temporalmente el tópico en discusión)</td>
               <td>Mayoría Simple</td>
-              <td>Ninguno (Votación directa)</td>
+              <td>1 a favor / 1 en contra</td>
             </tr>
             <tr>
               <td><strong>4°</strong></td>
-              <td><strong>Moción para Consulta Oficiosa Simple</strong> (Debate informal / redacción, máx. 15–20 min)</td>
+              <td><strong>Moción para Consulta Oficiosa Moderada</strong> (Especificar tiempo total, por orador y subtema)</td>
               <td>Mayoría Simple</td>
               <td>Ninguno (Votación directa)</td>
             </tr>
             <tr>
               <td><strong>5°</strong></td>
+              <td><strong>Moción para Consulta Oficiosa Simple</strong> (Debate informal / redacción en bloque, máx. 15–20 min)</td>
+              <td>Mayoría Simple</td>
+              <td>Ninguno (Votación directa)</td>
+            </tr>
+            <tr>
+              <td><strong>6°</strong></td>
+              <td><strong>Moción para Extender el Tiempo de Consulta Oficiosa</strong> (Ampliar caucus en curso)</td>
+              <td>Mayoría Simple</td>
+              <td>Ninguno (Votación directa)</td>
+            </tr>
+            <tr>
+              <td><strong>7°</strong></td>
+              <td><strong>Moción para Abrir la Sesión / Abrir el Debate</strong> (Dar inicio formal a la agenda)</td>
+              <td>Mayoría Simple</td>
+              <td>Ninguno (Votación directa)</td>
+            </tr>
+            <tr>
+              <td><strong>8°</strong></td>
               <td><strong>Moción para Abrir Lista de Oradores / Fijar Tiempo de Discurso</strong></td>
               <td>Mayoría Simple</td>
               <td>Ninguno (Votación directa)</td>
+            </tr>
+            <tr>
+              <td><strong>9°</strong></td>
+              <td><strong>Moción para Presentar / Introducir Anteproyecto de Resolución o Enmienda</strong></td>
+              <td>Mayoría Simple</td>
+              <td>Ninguno (Votación directa)</td>
+            </tr>
+            <tr>
+              <td><strong>10°</strong></td>
+              <td><strong>Moción de División de la Cuestión / Votación Nominal</strong> (Votar cláusulas por separado)</td>
+              <td>Mayoría Simple</td>
+              <td>1 a favor / 1 en contra</td>
             </tr>
           </tbody>
         </table>
@@ -1694,8 +1750,8 @@
         "Delegaciones presentes, buenos días. Siendo las [hora], declaramos abierta la sesión de [Comisión]. Secretaría procederá con el pase de lista. Al escuchar el nombre de su país, favor levantar su placard y responder 'Presente' o 'Presente y Votando'."
       </div>
       <div class="script-card">
-        <strong>Apertura del Debate y Lista de Oradores</strong>
-        "Habiendo quórum para sesionar, el piso está abierto. ¿Existe alguna moción en la sala? (...) Se ha presentado una moción para abrir la Lista de Oradores con un tiempo de [1:30] por delegación. Aquellas delegaciones a favor, favor levantar su placard."
+        <strong>Moción de Apertura del Debate y Lista de Oradores</strong>
+        "Habiendo quórum para sesionar, el piso está abierto. ¿Existe alguna moción en la sala? (...) La delegación de [País] presenta una moción para abrir la sesión y la Lista de Oradores con un tiempo de [1:30] por delegación. Aquellas delegaciones a favor, favor levantar su placard."
       </div>
       <div class="script-card">
         <strong>Moderación de Puntos y Mociones</strong>
@@ -1704,7 +1760,7 @@
     </div>
   </div>
 
-  <!-- MODAL 1: INICIO DE SESIÓN DE INTEGRANTE CON PC -->
+  <!-- MODAL 1: INICIO DE SESIÓN DE INTEGRANTE CON PC (PLACEHOLDER ALEATORIO) -->
   <div class="modal-box" id="loginModal">
     <div class="modal-content">
       <h3 style="color:var(--prussian); margin-bottom:0.35rem;">🪪 Registro de Integrante de Mesa Directiva</h3>
@@ -1715,11 +1771,11 @@
       <div class="form-grid-2">
         <div class="field-group">
           <label>Nombres *</label>
-          <input type="text" id="volNombres" class="field-input" placeholder="Ej. Carlos Alberto" />
+          <input type="text" id="volNombres" class="field-input" placeholder="Ej. Mariana Isabel" />
         </div>
         <div class="field-group">
           <label>Apellidos *</label>
-          <input type="text" id="volApellidos" class="field-input" placeholder="Ej. Méndez Rosario" />
+          <input type="text" id="volApellidos" class="field-input" placeholder="Ej. Valdez Peña" />
         </div>
       </div>
 
@@ -1924,7 +1980,7 @@
     // =========================================================
     // ESTADO PERSISTENTE EN LOCALSTORAGE + NUBE EN TIEMPO REAL
     // =========================================================
-    function getStorageKey() { return `monupe_v12_permanent_${roomId}`; }
+    function getStorageKey() { return `monupe_v13_permanent_${roomId}`; }
 
     function createEmptyDelegate(idx) {
       return {
@@ -1981,10 +2037,11 @@
     });
 
     // =========================================================
-    // PORTAL DE CUENTAS CELIDER 01-03 Y ARCHIVO DISTRITAL
+    // PORTAL DE CUENTAS CELIDER 01-03 (CON APROBACIÓN Y CAMBIO DE USUARIO/CLAVE)
     // =========================================================
     let celiderAccount = JSON.parse(localStorage.getItem('celider_district_account')) || null;
     let masterArchiveCache = [];
+    let pendingUsersCache = [];
     let selectedArchiveModel = null;
     let pendingUnlockAfterCeliderLogin = false;
 
@@ -2028,15 +2085,20 @@
         document.getElementById('cpUserLabel').textContent = celiderAccount.username;
         closeArchiveDetail();
         loadMasterArchive();
+        if (celiderAccount.isAdmin) {
+          loadPendingCeliderUsers();
+        } else {
+          document.getElementById('pendingApprovalsSection').style.display = 'none';
+        }
       } else {
         document.getElementById('celiderLoggedHeader').textContent = pendingUnlockAfterCeliderLogin
-          ? 'Inicia sesión con tu cuenta CELIDER para desbloquear y editar el acta'
-          : 'Inicia sesión o crea tu cuenta personal del equipo distrital';
+          ? 'Inicia sesión con tu cuenta aprobada de CELIDER para desbloquear y editar el acta'
+          : 'Inicia sesión o solicita tu cuenta del equipo distrital';
       }
     }
 
     async function submitCeliderLogin() {
-      const user = document.getElementById('celLoginUser').value.trim().toLowerCase();
+      const user = document.getElementById('celLoginUser').value.trim();
       const pass = document.getElementById('celLoginPass').value.trim();
       if (!user || !pass) return alert('Ingresa tu usuario y contraseña.');
 
@@ -2071,7 +2133,7 @@
     async function submitCeliderRegister() {
       const name = document.getElementById('celRegName').value.trim();
       const cargo = document.getElementById('celRegCargo').value.trim() || 'Directiva Distrital CELIDER 01-03';
-      const user = document.getElementById('celRegUser').value.trim().toLowerCase().replace(/\s+/g, '');
+      const user = document.getElementById('celRegUser').value.trim().replace(/\s+/g, '');
       const pass = document.getElementById('celRegPass').value.trim();
 
       if (!name || !user || !pass) return alert('Completa todos los campos.');
@@ -2079,29 +2141,25 @@
 
       const btn = document.getElementById('btnSubmitCelReg');
       btn.disabled = true;
-      btn.textContent = 'Creando cuenta...';
+      btn.textContent = 'Enviando solicitud...';
       try {
         const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=register&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&name=${encodeURIComponent(name)}&cargo=${encodeURIComponent(cargo)}&t=${Date.now()}`);
         const data = await res.json();
-        if (data && data.ok && data.user) {
-          celiderAccount = data.user;
-          localStorage.setItem('celider_district_account', JSON.stringify(celiderAccount));
-          alert(`¡Cuenta creada con éxito! Bienvenido/a, ${celiderAccount.fullName}.`);
-          if (pendingUnlockAfterCeliderLogin) {
-            pendingUnlockAfterCeliderLogin = false;
-            closeModal('celiderPortalModal');
-            requestUnlockActa();
-          } else {
-            updateCeliderPortalView();
-          }
+        if (data && data.ok) {
+          alert(data.message || '✅ Solicitud enviada. Tu cuenta quedará activa en cuanto la Presidencia Distrital de CELIDER 01-03 la apruebe.');
+          document.getElementById('celRegName').value = '';
+          document.getElementById('celRegCargo').value = '';
+          document.getElementById('celRegUser').value = '';
+          document.getElementById('celRegPass').value = '';
+          switchCeliderAuthTab('login');
         } else {
-          alert(data.error || 'No se pudo crear la cuenta.');
+          alert(data.error || 'No se pudo enviar la solicitud.');
         }
       } catch (e) {
         alert('Error de conexión con el servidor CELIDER.');
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Crear Cuenta y Entrar';
+        btn.textContent = 'Enviar Solicitud de Cuenta';
       }
     }
 
@@ -2110,26 +2168,71 @@
       box.style.display = box.style.display === 'none' ? 'block' : 'none';
     }
 
-    async function submitCeliderChangePass() {
+    async function submitCeliderChangeCredentials() {
       if (!celiderAccount) return;
       const oldPass = document.getElementById('cpOldPass').value.trim();
+      const newUser = document.getElementById('cpNewUser').value.trim().replace(/\s+/g, '');
       const newPass = document.getElementById('cpNewPass').value.trim();
-      if (!oldPass || !newPass) return alert('Escribe tu contraseña actual y la nueva.');
+      if (!oldPass || !newPass) return alert('Escribe tu contraseña actual y la nueva contraseña.');
 
       try {
-        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=change_pass&user=${encodeURIComponent(celiderAccount.username)}&pass=${encodeURIComponent(oldPass)}&newPass=${encodeURIComponent(newPass)}&t=${Date.now()}`);
+        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=change_credentials&user=${encodeURIComponent(celiderAccount.username)}&pass=${encodeURIComponent(oldPass)}&newUser=${encodeURIComponent(newUser)}&newPass=${encodeURIComponent(newPass)}&t=${Date.now()}`);
         const data = await res.json();
-        if (data && data.ok) {
-          alert('✅ Tu contraseña se actualizó y guardó correctamente.');
+        if (data && data.ok && data.user) {
+          celiderAccount = data.user;
+          localStorage.setItem('celider_district_account', JSON.stringify(celiderAccount));
+          alert(`✅ ¡Listo! Tus credenciales se guardaron correctamente.\nNuevo usuario: ${celiderAccount.username}`);
           document.getElementById('cpOldPass').value = '';
+          document.getElementById('cpNewUser').value = '';
           document.getElementById('cpNewPass').value = '';
           document.getElementById('celiderChangePassBox').style.display = 'none';
+          updateCeliderPortalView();
         } else {
-          alert(data.error || 'No se pudo cambiar la contraseña.');
+          alert(data.error || 'No se pudieron actualizar las credenciales.');
         }
       } catch (e) {
-        alert('Error de conexión al cambiar la contraseña.');
+        alert('Error de conexión al actualizar credenciales.');
       }
+    }
+
+    async function loadPendingCeliderUsers() {
+      if (!celiderAccount || !celiderAccount.isAdmin) return;
+      try {
+        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=list_pending&user=${encodeURIComponent(celiderAccount.username)}&t=${Date.now()}`);
+        const data = await res.json();
+        pendingUsersCache = (data && Array.isArray(data.pending)) ? data.pending : [];
+        const section = document.getElementById('pendingApprovalsSection');
+        if (pendingUsersCache.length === 0) {
+          section.style.display = 'none';
+          return;
+        }
+        section.style.display = 'block';
+        document.getElementById('pendingUsersCount').textContent = pendingUsersCache.length;
+        document.getElementById('pendingUsersList').innerHTML = pendingUsersCache.map(u => `
+          <div class="pending-user-card">
+            <div>
+              <strong style="color:var(--prussian); font-size:0.86rem;">${u.fullName}</strong>
+              <span style="font-size:0.76rem; color:var(--dusk);"> (@${u.username}) • ${u.cargo}</span>
+            </div>
+            <div style="display:flex; gap:0.4rem;">
+              <button class="btn btn-green" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'approve')">✅ Aprobar</button>
+              <button class="btn btn-danger" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'reject')">🗑 Rechazar</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {}
+    }
+
+    async function decidePendingUser(targetUser, decision) {
+      if (!celiderAccount || !celiderAccount.isAdmin) return;
+      try {
+        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=${decision}&user=${encodeURIComponent(celiderAccount.username)}&targetUser=${encodeURIComponent(targetUser)}&t=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.ok) {
+          showLiveToast(decision === 'approve' ? `✅ Cuenta @${targetUser} aprobada` : `🗑 Solicitud rechazada`);
+          loadPendingCeliderUsers();
+        }
+      } catch (e) {}
     }
 
     function logoutCelider() {
@@ -2167,7 +2270,7 @@
         return;
       }
 
-      container.innerHTML = filtered.map((item, idx) => {
+      container.innerHTML = filtered.map((item) => {
         const m = item.meta || {};
         const dateStr = item.archivedAt ? new Date(item.archivedAt).toLocaleString() : '';
         const totalDels = (item.delegates || []).length;
