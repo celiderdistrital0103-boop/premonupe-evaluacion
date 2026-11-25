@@ -455,6 +455,8 @@
     .btn-azure:hover { background: #006ad1; }
     .btn-aqua { background: var(--aqua); color: var(--prussian); }
     .btn-frosted { background: var(--frosted); color: var(--prussian); }
+    .btn-gold { background: #f59e0b; color: #001833; font-weight: 800; }
+    .btn-gold:hover { background: #d97706; color: white; }
     .btn-outline-light { background: rgba(255,255,255,0.08); color: var(--frosted); border: 1px solid rgba(167,235,255,0.35); }
     .btn-outline-light:hover { background: rgba(255,255,255,0.16); }
     .btn-danger { background: var(--absent-red); color: white; }
@@ -720,16 +722,8 @@
       padding: 0.18rem 0.35rem;
     }
 
-    .mini-counter-box.warn-active {
-      background: #fef3c7;
-      border-color: #f59e0b;
-    }
-
-    .mini-counter-box.warn-danger {
-      background: #fee2e2;
-      border-color: #dc2626;
-      color: #991b1b;
-    }
+    .mini-counter-box.warn-active { background: #fef3c7; border-color: #f59e0b; }
+    .mini-counter-box.warn-danger { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
 
     .mini-step-btn {
       width: 22px;
@@ -746,17 +740,8 @@
       justify-content: center;
     }
 
-    .mini-step-btn.minus {
-      background: #e2e8f0;
-      color: var(--prussian);
-    }
-
-    .mini-step-val {
-      min-width: 20px;
-      text-align: center;
-      font-weight: 800;
-      font-size: 0.82rem;
-    }
+    .mini-step-btn.minus { background: #e2e8f0; color: var(--prussian); }
+    .mini-step-val { min-width: 20px; text-align: center; font-weight: 800; font-size: 0.82rem; }
 
     .speaker-check-box {
       display: inline-flex;
@@ -774,23 +759,10 @@
       user-select: none;
     }
 
-    .speaker-check-box.in-queue {
-      background: var(--prussian);
-      color: var(--aqua);
-      border-color: var(--aqua);
-    }
+    .speaker-check-box.in-queue { background: var(--prussian); color: var(--aqua); border-color: var(--aqua); }
+    .speaker-check-box input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--azure); cursor: pointer; }
 
-    .speaker-check-box input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: var(--azure);
-      cursor: pointer;
-    }
-
-    .score-cell-wrap {
-      position: relative;
-      display: inline-block;
-    }
+    .score-cell-wrap { position: relative; display: inline-block; }
 
     .score-cell-input {
       width: 52px;
@@ -806,11 +778,7 @@
       transition: border-color 0.2s;
     }
 
-    .score-cell-input:focus {
-      outline: none;
-      border-color: var(--azure);
-      background: white;
-    }
+    .score-cell-input:focus { outline: none; border-color: var(--azure); background: white; }
 
     .canva-cursor-tag {
       position: absolute;
@@ -827,28 +795,13 @@
       z-index: 10;
     }
 
-    .attendance-group {
-      display: inline-flex;
-      border-radius: 7px;
-      overflow: hidden;
-      border: 1px solid var(--border-soft);
-    }
-
-    .att-btn {
-      padding: 0.34rem 0.58rem;
-      font-size: 0.74rem;
-      font-weight: 700;
-      border: none;
-      background: white;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-
+    .attendance-group { display: inline-flex; border-radius: 7px; overflow: hidden; border: 1px solid var(--border-soft); }
+    .att-btn { padding: 0.34rem 0.58rem; font-size: 0.74rem; font-weight: 700; border: none; background: white; color: var(--text-muted); cursor: pointer; }
     .att-btn.active-pv { background: var(--present-voting); color: white; }
     .att-btn.active-p { background: var(--azure); color: white; }
     .att-btn.active-a { background: var(--absent-red); color: white; }
 
-    /* ================= CHAT FLOTANTE CON CHIPS RÁPIDOS Y URGENTES ================= */
+    /* ================= CHAT FLOTANTE ================= */
     .chat-fab {
       position: fixed;
       bottom: 1.25rem;
@@ -867,14 +820,7 @@
       gap: 0.45rem;
     }
 
-    .chat-badge-count {
-      background: var(--absent-red);
-      color: white;
-      font-size: 0.7rem;
-      padding: 0.1rem 0.45rem;
-      border-radius: 999px;
-      display: none;
-    }
+    .chat-badge-count { background: var(--absent-red); color: white; font-size: 0.7rem; padding: 0.1rem 0.45rem; border-radius: 999px; display: none; }
 
     .chat-drawer {
       position: fixed;
@@ -890,127 +836,62 @@
       overflow: hidden;
       z-index: 850;
     }
-
     .chat-drawer.open { display: flex; }
 
-    .chat-header {
-      background: var(--prussian);
-      color: white;
-      padding: 0.75rem 1rem;
-      font-weight: 800;
-      font-size: 0.85rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .chat-messages {
-      height: 240px;
-      overflow-y: auto;
-      padding: 0.8rem;
-      background: #f4faff;
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-    }
-
-    .chat-bubble {
-      background: white;
-      border-radius: 9px;
-      padding: 0.5rem 0.7rem;
-      border-left: 4px solid var(--azure);
-      font-size: 0.8rem;
-      word-break: break-word;
-    }
-
-    .chat-bubble.urgent {
-      background: #fff1f2;
-      border-left: 5px solid #dc2626;
-      border-top: 1px solid #fecdd3;
-      border-right: 1px solid #fecdd3;
-      border-bottom: 1px solid #fecdd3;
-    }
-
-    .chat-bubble-author {
-      font-weight: 800;
-      font-size: 0.72rem;
-      margin-bottom: 0.15rem;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .chat-quick-chips {
-      display: flex;
-      gap: 0.3rem;
-      flex-wrap: wrap;
-      padding: 0.45rem 0.6rem 0.2rem;
-      background: #f8fafc;
-      border-top: 1px solid var(--border-soft);
-    }
-
-    .quick-chip-btn {
-      background: #e0f2fe;
-      color: var(--prussian);
-      border: 1px solid #bae6fd;
-      border-radius: 999px;
-      padding: 0.18rem 0.52rem;
-      font-size: 0.68rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .quick-chip-btn:hover {
-      background: var(--azure);
-      color: white;
-    }
-
-    .chat-input-row {
-      display: flex;
-      gap: 0.35rem;
-      padding: 0.5rem 0.6rem;
-      background: white;
-      align-items: center;
-    }
+    .chat-header { background: var(--prussian); color: white; padding: 0.75rem 1rem; font-weight: 800; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
+    .chat-messages { height: 240px; overflow-y: auto; padding: 0.8rem; background: #f4faff; display: flex; flex-direction: column; gap: 0.55rem; }
+    .chat-bubble { background: white; border-radius: 9px; padding: 0.5rem 0.7rem; border-left: 4px solid var(--azure); font-size: 0.8rem; word-break: break-word; }
+    .chat-bubble.urgent { background: #fff1f2; border-left: 5px solid #dc2626; border-top: 1px solid #fecdd3; border-right: 1px solid #fecdd3; border-bottom: 1px solid #fecdd3; }
+    .chat-bubble-author { font-weight: 800; font-size: 0.72rem; margin-bottom: 0.15rem; display: flex; justify-content: space-between; }
+    .chat-quick-chips { display: flex; gap: 0.3rem; flex-wrap: wrap; padding: 0.45rem 0.6rem 0.2rem; background: #f8fafc; border-top: 1px solid var(--border-soft); }
+    .quick-chip-btn { background: #e0f2fe; color: var(--prussian); border: 1px solid #bae6fd; border-radius: 999px; padding: 0.18rem 0.52rem; font-size: 0.68rem; font-weight: 700; cursor: pointer; }
+    .quick-chip-btn:hover { background: var(--azure); color: white; }
+    .chat-input-row { display: flex; gap: 0.35rem; padding: 0.5rem 0.6rem; background: white; align-items: center; }
 
     /* ================= GESTOR DE VOTACIONES EN VIVO ================= */
-    .vote-counter-card {
-      background: #f4faff;
-      border: 1.5px solid var(--border-soft);
-      border-radius: 10px;
-      padding: 0.85rem;
-      text-align: center;
-    }
-
+    .vote-counter-card { background: #f4faff; border: 1.5px solid var(--border-soft); border-radius: 10px; padding: 0.85rem; text-align: center; }
     .vote-counter-card.favor { border-color: #16a34a; background: #f0fdf4; }
     .vote-counter-card.contra { border-color: #dc2626; background: #fef2f2; }
     .vote-counter-card.abst { border-color: #007FF1; background: #eff6ff; }
+    .vote-big-num { font-size: 2.1rem; font-weight: 900; margin: 0.25rem 0; }
+    .vote-result-banner { margin-top: 0.9rem; padding: 0.85rem; border-radius: 10px; text-align: center; font-weight: 900; font-size: 1rem; letter-spacing: 0.5px; }
+    .vote-result-banner.approved { background: #dcfce7; color: #166534; border: 2px solid #16a34a; }
+    .vote-result-banner.rejected { background: #fee2e2; color: #991b1b; border: 2px solid #dc2626; }
 
-    .vote-big-num {
-      font-size: 2.1rem;
-      font-weight: 900;
-      margin: 0.25rem 0;
+    /* ================= ARCHIVO DISTRITAL CELIDER ================= */
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      background: #f1f5f9;
+      padding: 0.35rem;
+      border-radius: 9px;
     }
+    .auth-tab-btn {
+      border: none;
+      background: transparent;
+      padding: 0.5rem;
+      border-radius: 7px;
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .auth-tab-btn.active { background: var(--prussian); color: white; }
 
-    .vote-result-banner {
-      margin-top: 0.9rem;
-      padding: 0.85rem;
+    .archive-model-card {
+      background: #f8fbff;
+      border: 1.5px solid var(--border-soft);
+      border-left: 5px solid var(--azure);
       border-radius: 10px;
-      text-align: center;
-      font-weight: 900;
-      font-size: 1rem;
-      letter-spacing: 0.5px;
-    }
-
-    .vote-result-banner.approved {
-      background: #dcfce7;
-      color: #166534;
-      border: 2px solid #16a34a;
-    }
-
-    .vote-result-banner.rejected {
-      background: #fee2e2;
-      color: #991b1b;
-      border: 2px solid #dc2626;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.65rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
     }
 
     /* ================= MODALES ================= */
@@ -1024,7 +905,6 @@
       align-items: center;
       padding: 1rem;
     }
-
     .modal-box.open { display: flex; }
 
     .modal-content {
@@ -1034,53 +914,17 @@
       width: 100%;
       padding: 1.6rem;
       border-top: 5px solid var(--azure);
-      max-height: 88vh;
+      max-height: 90vh;
       overflow-y: auto;
     }
-
     .modal-content.wide { max-width: 840px; }
+    .modal-content.xl { max-width: 1120px; }
 
-    .guide-section-title {
-      font-size: 0.86rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--prussian);
-      background: var(--frosted);
-      padding: 0.45rem 0.75rem;
-      border-radius: 7px;
-      margin: 0.95rem 0 0.55rem;
-    }
+    .guide-section-title { font-size: 0.86rem; font-weight: 800; text-transform: uppercase; color: var(--prussian); background: var(--frosted); padding: 0.45rem 0.75rem; border-radius: 7px; margin: 0.95rem 0 0.55rem; }
+    .script-card { background: #f4faff; border-left: 4px solid var(--azure); padding: 0.6rem 0.8rem; border-radius: 7px; margin-bottom: 0.55rem; font-size: 0.81rem; }
+    .script-card strong { display: block; color: var(--dusk); margin-bottom: 0.2rem; font-size: 0.76rem; text-transform: uppercase; }
 
-    .script-card {
-      background: #f4faff;
-      border-left: 4px solid var(--azure);
-      padding: 0.6rem 0.8rem;
-      border-radius: 7px;
-      margin-bottom: 0.55rem;
-      font-size: 0.81rem;
-    }
-
-    .script-card strong {
-      display: block;
-      color: var(--dusk);
-      margin-bottom: 0.2rem;
-      font-size: 0.76rem;
-      text-transform: uppercase;
-    }
-
-    .room-code-big {
-      background: var(--prussian);
-      color: var(--aqua);
-      font-size: 1.65rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      text-align: center;
-      padding: 0.65rem;
-      border-radius: 10px;
-      margin: 0.55rem 0;
-      border: 2px solid var(--azure);
-      user-select: all;
-    }
+    .room-code-big { background: var(--prussian); color: var(--aqua); font-size: 1.65rem; font-weight: 900; letter-spacing: 3px; text-align: center; padding: 0.65rem; border-radius: 10px; margin: 0.55rem 0; border: 2px solid var(--azure); user-select: all; }
 
     .fullscreen-overlay {
       display: none;
@@ -1103,7 +947,7 @@
 </head>
 <body>
 
-  <!-- BARRA SUPERIOR CON HERRAMIENTAS DE MESA -->
+  <!-- BARRA SUPERIOR CON HERRAMIENTAS DE MESA Y PORTAL CELIDER -->
   <div class="top-utility-bar">
     <div class="status-indicators">
       <span class="room-pill" id="roomCodeBadge" onclick="openRoomHub()">SALA: MON-0000</span>
@@ -1114,6 +958,7 @@
       <span class="live-toast" id="liveUpdateToast">🔔 Nuevo integrante conectado</span>
     </div>
     <div class="utility-actions">
+      <button class="btn btn-gold" onclick="openCeliderPortal()">🔐 Archivo Distrital CELIDER</button>
       <button class="btn btn-aqua" onclick="openVotingModal()">🗳 Votación</button>
       <button class="btn btn-frosted" onclick="openModal('mageacGuideModal')">📖 Guía MAGEAC</button>
       <button class="btn btn-outline-light" onclick="openLogModal()">📜 Bitácora</button>
@@ -1236,14 +1081,14 @@
   <!-- CONTENIDO PRINCIPAL -->
   <main class="main-container">
     <div class="locked-banner" id="lockedActaBanner">
-      <span>🔒 ACTA DE EVALUACIÓN CERRADA OFICIALMENTE — Las notas y menciones están protegidas contra cambios accidentales.</span>
-      <button class="btn btn-prussian" style="padding:0.3rem 0.7rem; font-size:0.75rem;" onclick="toggleLockActa(false)">🔓 Reabrir Edición</button>
+      <span>🔒 EVALUACIÓN FINALIZADA Y ARCHIVADA EN CELIDER 01-03 — Las notas están bloqueadas. Solo un miembro logueado de CELIDER puede reabrirla.</span>
+      <button class="btn btn-prussian" style="padding:0.3rem 0.7rem; font-size:0.75rem;" onclick="requestUnlockActa()">🔓 Reabrir con Cuenta CELIDER</button>
     </div>
 
     <nav class="tabs-bar">
       <button class="tab-btn active" onclick="switchTab(0)">📋 1. Mesa, Pase de Lista y Oradores</button>
       <button class="tab-btn" onclick="switchTab(1)">⭐ 2. Evaluación Manual Oficial (100 pts)</button>
-      <button class="tab-btn" onclick="switchTab(2)">🏆 3. Ranking, Diplomas y Pase MONUPE II</button>
+      <button class="tab-btn" onclick="switchTab(2)">🏆 3. Ranking, Diplomas y Finalizar</button>
       <button class="tab-btn" onclick="switchTab(3)">📗 4. Google Sheets Oficial y WhatsApp</button>
     </nav>
 
@@ -1430,19 +1275,19 @@
       </div>
     </section>
 
-    <!-- ================= PESTAÑA 3: RANKING, DIPLOMAS Y CIERRE OFICIAL ================= -->
+    <!-- ================= PESTAÑA 3: RANKING, DIPLOMAS Y FINALIZAR EVALUACIÓN ================= -->
     <section class="tab-panel" id="tab2">
       <div class="panel-card">
         <div class="panel-header">
           <div>
-            <span class="panel-title">🏆 Ranking Oficial en Vivo (Con Desempate), Diplomas y Pase MONUPE II</span>
+            <span class="panel-title">🏆 Ranking Oficial en Vivo (Con Desempate), Diplomas y Cierre Distrital</span>
             <p style="font-size:0.76rem; color:var(--text-muted); margin-top:0.15rem;">
-              En caso de empate en puntos totales, desempata por mayor puntaje en <strong>Conocimiento (28)</strong> y mayor participación.
+              Al terminar la evaluación, pulsa <strong>🏁 Finalizar Evaluación y Subir</strong> para enviarla al Archivo Distrital CELIDER 01-03.
             </p>
           </div>
           <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
             <button class="btn btn-aqua" onclick="openBatchDiplomasWindow()">🎓 Imprimir Todos los Premiados</button>
-            <button class="btn btn-prussian" id="btnToggleLockActa" onclick="toggleLockActa()">🔒 Cerrar Evaluación</button>
+            <button class="btn btn-green" id="btnFinalizeArchive" onclick="finalizeAndUploadArchive()">🏁 Finalizar Evaluación y Subir</button>
           </div>
         </div>
 
@@ -1510,7 +1355,7 @@
     </section>
   </main>
 
-  <!-- BOTÓN FLOTANTE Y CHAT CON MENSAJES RÁPIDOS Y URGENTES -->
+  <!-- BOTÓN FLOTANTE Y CHAT -->
   <button class="chat-fab" onclick="toggleChatDrawer()">
     💬 Chat de Mesa Directiva
     <span class="chat-badge-count" id="chatUnreadBadge">0</span>
@@ -1534,6 +1379,129 @@
       </label>
       <input type="text" id="chatInputField" class="field-input" placeholder="Mensaje o enlace de Docs..." style="margin:0; padding:0.42rem 0.55rem;" onkeydown="if(event.key==='Enter') sendChatMessage()" />
       <button class="btn btn-azure" style="padding:0.42rem 0.65rem;" onclick="sendChatMessage()">Enviar</button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: LOGIN, REGISTRO Y ARCHIVO DISTRITAL CELIDER 01-03                  -->
+  <!-- ========================================================================= -->
+  <div class="modal-box" id="celiderPortalModal">
+    <div class="modal-content xl">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:0.8rem; border-bottom:1px solid var(--border-soft); padding-bottom:0.6rem;">
+        <div>
+          <h3 style="color:var(--prussian);">🏛 Portal Distrital CELIDER 01-03 — Archivo Oficial de Modelos Evaluados</h3>
+          <span style="font-size:0.76rem; color:var(--text-muted);" id="celiderLoggedHeader">Inicia sesión o crea tu cuenta personal del equipo distrital</span>
+        </div>
+        <div style="display:flex; gap:0.45rem; align-items:center;">
+          <button class="btn btn-frosted" id="btnCeliderChangePassToggle" style="display:none;" onclick="toggleChangePassBox()">🔑 Cambiar Contraseña</button>
+          <button class="btn btn-danger" id="btnCeliderLogout" style="display:none;" onclick="logoutCelider()">Cerrar Sesión</button>
+          <button class="btn btn-prussian" onclick="closeModal('celiderPortalModal')">✕ Cerrar</button>
+        </div>
+      </div>
+
+      <!-- VISTA 1: FORMULARIO DE LOGIN / CREAR CUENTA -->
+      <div id="celiderAuthView" style="max-width:480px; margin:0.5rem auto;">
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tabBtnLoginCelider" onclick="switchCeliderAuthTab('login')">🔐 Iniciar Sesión</button>
+          <button class="auth-tab-btn" id="tabBtnRegCelider" onclick="switchCeliderAuthTab('register')">✨ Crear Mi Cuenta</button>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="formCeliderLogin">
+          <div class="field-group">
+            <label>Usuario CELIDER</label>
+            <input type="text" id="celLoginUser" class="field-input" placeholder="Ej. alejandro" />
+          </div>
+          <div class="field-group">
+            <label>Contraseña</label>
+            <input type="password" id="celLoginPass" class="field-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') submitCeliderLogin()" />
+          </div>
+          <button class="btn btn-prussian" style="width:100%; padding:0.65rem; margin-top:0.35rem;" id="btnSubmitCelLogin" onclick="submitCeliderLogin()">Entrar al Archivo Distrital</button>
+        </div>
+
+        <!-- REGISTRO DE NUEVA CUENTA -->
+        <div id="formCeliderRegister" style="display:none;">
+          <div class="field-group">
+            <label>Nombre Completo *</label>
+            <input type="text" id="celRegName" class="field-input" placeholder="Ej. María Fernanda Pérez" />
+          </div>
+          <div class="field-group">
+            <label>Cargo en CELIDER 01-03 *</label>
+            <input type="text" id="celRegCargo" class="field-input" placeholder="Ej. Coordinación Académica / Directiva Distrital" />
+          </div>
+          <div class="form-grid-2">
+            <div class="field-group">
+              <label>Usuario Único (sin espacios) *</label>
+              <input type="text" id="celRegUser" class="field-input" placeholder="Ej. mariafp" />
+            </div>
+            <div class="field-group">
+              <label>Contraseña Personal *</label>
+              <input type="password" id="celRegPass" class="field-input" placeholder="Mínimo 4 caracteres" />
+            </div>
+          </div>
+          <button class="btn btn-azure" style="width:100%; padding:0.65rem; margin-top:0.35rem;" id="btnSubmitCelReg" onclick="submitCeliderRegister()">Crear Cuenta y Entrar</button>
+        </div>
+      </div>
+
+      <!-- VISTA 2: PANEL DE MODELOS EVALUADOS (SOLO LOGUEADOS) -->
+      <div id="celiderDashboardView" style="display:none;">
+        <!-- CAJA DE CAMBIO DE CONTRASEÑA -->
+        <div id="celiderChangePassBox" style="display:none; background:#fffbeb; border:1.5px solid #f59e0b; border-radius:10px; padding:0.85rem 1rem; margin-bottom:0.9rem;">
+          <strong style="font-size:0.82rem; color:#92400e; display:block; margin-bottom:0.5rem;">🔑 Cambiar Contraseña de mi Cuenta (<span id="cpUserLabel"></span>)</strong>
+          <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:0.5rem; align-items:center;">
+            <input type="password" id="cpOldPass" class="field-input" placeholder="Contraseña actual" style="margin:0;" />
+            <input type="password" id="cpNewPass" class="field-input" placeholder="Nueva contraseña (mín. 4 car.)" style="margin:0;" />
+            <button class="btn btn-prussian" onclick="submitCeliderChangePass()">Guardar Nueva Clave</button>
+          </div>
+        </div>
+
+        <!-- LISTA DE MODELOS EVALUADOS -->
+        <div id="archiveListSection">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-bottom:0.8rem;">
+            <input type="text" id="archiveSearchInput" class="field-input" style="max-width:380px; margin:0;" placeholder="🔍 Buscar por centro educativo, comisión o sala..." oninput="renderArchiveCards()" />
+            <button class="btn btn-azure" onclick="loadMasterArchive()">🔄 Actualizar Lista</button>
+          </div>
+          <div id="archiveCardsContainer"></div>
+        </div>
+
+        <!-- VISOR DETALLADO DE RÚBRICA DE UN MODELO EVALUADO -->
+        <div id="archiveDetailSection" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.85rem; background:#eef7fc; padding:0.75rem 1rem; border-radius:10px;">
+            <div>
+              <button class="btn btn-prussian" style="padding:0.32rem 0.65rem; font-size:0.75rem; margin-bottom:0.35rem;" onclick="closeArchiveDetail()">← Volver a Todos los Modelos</button>
+              <h4 id="detailModelTitle" style="color:var(--prussian); font-size:1rem;"></h4>
+              <div id="detailModelMeta" style="font-size:0.78rem; color:var(--text-muted);"></div>
+            </div>
+            <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+              <a id="detailSheetLink" href="#" target="_blank" class="btn btn-green" style="text-decoration:none;">📗 Abrir Google Sheet</a>
+              <button class="btn btn-azure" onclick="loadArchiveIntoConsole()">📂 Cargar en Consola Principal</button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Delegado/a</th>
+                  <th>País</th>
+                  <th>Asistencia</th>
+                  <th title="Redacción / Investigación / Representación">Conoc. (28)<br><small>Red/Inv/Rep</small></th>
+                  <th title="Oratoria / Argumentación / Discurso">Comun. (22)<br><small>Ora/Arg/Dis</small></th>
+                  <th title="Construcción Consenso / Resolución Conflictos">Negoc. (16)<br><small>Con/Res</small></th>
+                  <th title="Pensamiento Crítico / Construcción Soluciones">Anál. (16)<br><small>Cri/Sol</small></th>
+                  <th title="Liderazgo / Trabajo en Equipo">Interp. (18)<br><small>Lid/Equ</small></th>
+                  <th>TOTAL (100)</th>
+                  <th>Mención</th>
+                  <th>Pase MONUPE II</th>
+                  <th>Obs. / Interv.</th>
+                </tr>
+              </thead>
+              <tbody id="archiveDetailTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1631,7 +1599,7 @@
     </div>
   </div>
 
-  <!-- MODAL 0: GUÍA RÁPIDA MAGEAC (PUNTOS, MOCIONES Y GUIONES DE MESA) -->
+  <!-- MODAL 0: GUÍA RÁPIDA MAGEAC -->
   <div class="modal-box" id="mageacGuideModal">
     <div class="modal-content wide">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem;">
@@ -1956,7 +1924,7 @@
     // =========================================================
     // ESTADO PERSISTENTE EN LOCALSTORAGE + NUBE EN TIEMPO REAL
     // =========================================================
-    function getStorageKey() { return `monupe_v11_permanent_${roomId}`; }
+    function getStorageKey() { return `monupe_v12_permanent_${roomId}`; }
 
     function createEmptyDelegate(idx) {
       return {
@@ -2011,6 +1979,343 @@
       if (typeof d.warningsCount !== 'number') d.warningsCount = 0;
       if (typeof d.participationNote !== 'string') d.participationNote = '';
     });
+
+    // =========================================================
+    // PORTAL DE CUENTAS CELIDER 01-03 Y ARCHIVO DISTRITAL
+    // =========================================================
+    let celiderAccount = JSON.parse(localStorage.getItem('celider_district_account')) || null;
+    let masterArchiveCache = [];
+    let selectedArchiveModel = null;
+    let pendingUnlockAfterCeliderLogin = false;
+
+    function openCeliderPortal() {
+      pendingUnlockAfterCeliderLogin = false;
+      updateCeliderPortalView();
+      openModal('celiderPortalModal');
+    }
+
+    function requestUnlockActa() {
+      if (celiderAccount) {
+        appData.isLocked = false;
+        appendSessionLog(`🔓 Acta reabierta para edición por ${celiderAccount.fullName} (CELIDER)`, true);
+        updateLockUI();
+        renderMatrixEval();
+        renderRanking();
+        showLiveToast('🔓 Edición del acta reabierta por CELIDER');
+        return;
+      }
+      pendingUnlockAfterCeliderLogin = true;
+      updateCeliderPortalView();
+      openModal('celiderPortalModal');
+    }
+
+    function switchCeliderAuthTab(tab) {
+      document.getElementById('tabBtnLoginCelider').classList.toggle('active', tab === 'login');
+      document.getElementById('tabBtnRegCelider').classList.toggle('active', tab === 'register');
+      document.getElementById('formCeliderLogin').style.display = tab === 'login' ? 'block' : 'none';
+      document.getElementById('formCeliderRegister').style.display = tab === 'register' ? 'block' : 'none';
+    }
+
+    function updateCeliderPortalView() {
+      const isLogged = Boolean(celiderAccount);
+      document.getElementById('celiderAuthView').style.display = isLogged ? 'none' : 'block';
+      document.getElementById('celiderDashboardView').style.display = isLogged ? 'block' : 'none';
+      document.getElementById('btnCeliderChangePassToggle').style.display = isLogged ? 'inline-flex' : 'none';
+      document.getElementById('btnCeliderLogout').style.display = isLogged ? 'inline-flex' : 'none';
+
+      if (isLogged) {
+        document.getElementById('celiderLoggedHeader').textContent = `Sesión activa: ${celiderAccount.fullName} — ${celiderAccount.cargo} (@${celiderAccount.username})`;
+        document.getElementById('cpUserLabel').textContent = celiderAccount.username;
+        closeArchiveDetail();
+        loadMasterArchive();
+      } else {
+        document.getElementById('celiderLoggedHeader').textContent = pendingUnlockAfterCeliderLogin
+          ? 'Inicia sesión con tu cuenta CELIDER para desbloquear y editar el acta'
+          : 'Inicia sesión o crea tu cuenta personal del equipo distrital';
+      }
+    }
+
+    async function submitCeliderLogin() {
+      const user = document.getElementById('celLoginUser').value.trim().toLowerCase();
+      const pass = document.getElementById('celLoginPass').value.trim();
+      if (!user || !pass) return alert('Ingresa tu usuario y contraseña.');
+
+      const btn = document.getElementById('btnSubmitCelLogin');
+      btn.disabled = true;
+      btn.textContent = 'Verificando...';
+      try {
+        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=login&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&t=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.ok && data.user) {
+          celiderAccount = data.user;
+          localStorage.setItem('celider_district_account', JSON.stringify(celiderAccount));
+          document.getElementById('celLoginPass').value = '';
+          if (pendingUnlockAfterCeliderLogin) {
+            pendingUnlockAfterCeliderLogin = false;
+            closeModal('celiderPortalModal');
+            requestUnlockActa();
+          } else {
+            updateCeliderPortalView();
+          }
+        } else {
+          alert(data.error || 'Credenciales incorrectas.');
+        }
+      } catch (e) {
+        alert('Error de conexión con el servidor CELIDER.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Entrar al Archivo Distrital';
+      }
+    }
+
+    async function submitCeliderRegister() {
+      const name = document.getElementById('celRegName').value.trim();
+      const cargo = document.getElementById('celRegCargo').value.trim() || 'Directiva Distrital CELIDER 01-03';
+      const user = document.getElementById('celRegUser').value.trim().toLowerCase().replace(/\s+/g, '');
+      const pass = document.getElementById('celRegPass').value.trim();
+
+      if (!name || !user || !pass) return alert('Completa todos los campos.');
+      if (pass.length < 4) return alert('La contraseña debe tener al menos 4 caracteres.');
+
+      const btn = document.getElementById('btnSubmitCelReg');
+      btn.disabled = true;
+      btn.textContent = 'Creando cuenta...';
+      try {
+        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=register&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&name=${encodeURIComponent(name)}&cargo=${encodeURIComponent(cargo)}&t=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.ok && data.user) {
+          celiderAccount = data.user;
+          localStorage.setItem('celider_district_account', JSON.stringify(celiderAccount));
+          alert(`¡Cuenta creada con éxito! Bienvenido/a, ${celiderAccount.fullName}.`);
+          if (pendingUnlockAfterCeliderLogin) {
+            pendingUnlockAfterCeliderLogin = false;
+            closeModal('celiderPortalModal');
+            requestUnlockActa();
+          } else {
+            updateCeliderPortalView();
+          }
+        } else {
+          alert(data.error || 'No se pudo crear la cuenta.');
+        }
+      } catch (e) {
+        alert('Error de conexión con el servidor CELIDER.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Crear Cuenta y Entrar';
+      }
+    }
+
+    function toggleChangePassBox() {
+      const box = document.getElementById('celiderChangePassBox');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function submitCeliderChangePass() {
+      if (!celiderAccount) return;
+      const oldPass = document.getElementById('cpOldPass').value.trim();
+      const newPass = document.getElementById('cpNewPass').value.trim();
+      if (!oldPass || !newPass) return alert('Escribe tu contraseña actual y la nueva.');
+
+      try {
+        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=change_pass&user=${encodeURIComponent(celiderAccount.username)}&pass=${encodeURIComponent(oldPass)}&newPass=${encodeURIComponent(newPass)}&t=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.ok) {
+          alert('✅ Tu contraseña se actualizó y guardó correctamente.');
+          document.getElementById('cpOldPass').value = '';
+          document.getElementById('cpNewPass').value = '';
+          document.getElementById('celiderChangePassBox').style.display = 'none';
+        } else {
+          alert(data.error || 'No se pudo cambiar la contraseña.');
+        }
+      } catch (e) {
+        alert('Error de conexión al cambiar la contraseña.');
+      }
+    }
+
+    function logoutCelider() {
+      celiderAccount = null;
+      localStorage.removeItem('celider_district_account');
+      updateCeliderPortalView();
+    }
+
+    async function loadMasterArchive() {
+      const container = document.getElementById('archiveCardsContainer');
+      container.innerHTML = `<div style="padding:1rem; text-align:center; color:var(--text-muted);">⏳ Cargando modelos evaluados desde la nube...</div>`;
+      try {
+        const res = await fetch(`${CLOUD_RELAY}?action=get_archive&t=${Date.now()}`);
+        const data = await res.json();
+        masterArchiveCache = (data && Array.isArray(data.archive)) ? data.archive : [];
+        renderArchiveCards();
+      } catch (e) {
+        container.innerHTML = `<div style="padding:1rem; color:#dc2626;">Error al cargar el archivo distrital.</div>`;
+      }
+    }
+
+    function renderArchiveCards() {
+      const container = document.getElementById('archiveCardsContainer');
+      const query = (document.getElementById('archiveSearchInput').value || '').toLowerCase().trim();
+      const filtered = masterArchiveCache.filter(item => {
+        const m = item.meta || {};
+        const haystack = `${item.roomId} ${m.centro || ''} ${m.comision || ''} ${m.presidente || ''}`.toLowerCase();
+        return haystack.includes(query);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="padding:1.2rem; text-align:center; background:#f8fafc; border-radius:9px; color:var(--text-muted);">
+          No hay modelos finalizados en el archivo distrital todavía (o ningún resultado coincide con tu búsqueda).
+        </div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map((item, idx) => {
+        const m = item.meta || {};
+        const dateStr = item.archivedAt ? new Date(item.archivedAt).toLocaleString() : '';
+        const totalDels = (item.delegates || []).length;
+        const passedCount = (item.delegates || []).filter(d => d.paseMonupe === 'SÍ - PASE A MONUPE II').length;
+        return `
+          <div class="archive-model-card">
+            <div>
+              <div style="font-size:0.72rem; font-weight:800; color:var(--azure); text-transform:uppercase;">SALA ${item.roomId} • ${dateStr}</div>
+              <div style="font-size:0.96rem; font-weight:800; color:var(--prussian); margin:0.15rem 0;">${m.centro || 'Centro Educativo Sin Especificar'}</div>
+              <div style="font-size:0.8rem; color:var(--dusk); font-weight:600;">${m.comision || ''}</div>
+              <div style="font-size:0.74rem; color:var(--text-muted); margin-top:0.2rem;">
+                Mesa: ${m.presidente || 'N/A'} • ${totalDels} delegados • <strong>${passedCount} clasificados a MONUPE II</strong>
+              </div>
+            </div>
+            <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+              <button class="btn btn-prussian" onclick="openArchiveDetail('${item.roomId}')">👁 Revisar Rúbrica Completa</button>
+              ${item.sheetUrl ? `<a href="${item.sheetUrl}" target="_blank" class="btn btn-green" style="text-decoration:none;">📗 Google Sheet</a>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openArchiveDetail(targetRoomId) {
+      const model = masterArchiveCache.find(item => item.roomId === targetRoomId);
+      if (!model) return;
+      selectedArchiveModel = model;
+      const m = model.meta || {};
+      document.getElementById('archiveListSection').style.display = 'none';
+      document.getElementById('archiveDetailSection').style.display = 'block';
+      document.getElementById('detailModelTitle').textContent = `${m.centro || 'Centro Educativo'} — ${m.comision || ''}`;
+      document.getElementById('detailModelMeta').textContent = `Sala ${model.roomId} • Presidencia: ${m.presidente || ''} | Vicepresidencia: ${m.vicepresidente || ''} | Secretaría: ${m.relator || ''}`;
+
+      const sheetBtn = document.getElementById('detailSheetLink');
+      if (model.sheetUrl) {
+        sheetBtn.style.display = 'inline-flex';
+        sheetBtn.href = model.sheetUrl;
+      } else {
+        sheetBtn.style.display = 'none';
+      }
+
+      const ranked = (model.delegates || [])
+        .map(d => ({ ...d, subs: getSubtotals(d) }))
+        .sort((a, b) => b.subs.total - a.subs.total);
+
+      document.getElementById('archiveDetailTbody').innerHTML = ranked.map((d, pos) => {
+        const r = d.rubric || {};
+        const mention = d.mention === 'Otra (Personalizada)' ? (d.customMention || 'Mención Especial') : (d.mention || 'Ninguna');
+        return `
+          <tr>
+            <td><strong>${pos + 1}</strong></td>
+            <td>${d.name || '—'}</td>
+            <td><strong>${d.country || '—'}</strong></td>
+            <td>${d.status || 'PV'}</td>
+            <td style="text-align:center;"><strong>${d.subs.conocimiento}</strong><br><small style="color:var(--text-muted);">${r.redaccion||0}/${r.investigacion||0}/${r.representacion||0}</small></td>
+            <td style="text-align:center;"><strong>${d.subs.comunicacion}</strong><br><small style="color:var(--text-muted);">${r.oratoria||0}/${r.argumentacion||0}/${r.discurso||0}</small></td>
+            <td style="text-align:center;"><strong>${d.subs.negociacion}</strong><br><small style="color:var(--text-muted);">${r.consenso||0}/${r.conflictos||0}</small></td>
+            <td style="text-align:center;"><strong>${d.subs.analisis}</strong><br><small style="color:var(--text-muted);">${r.critico||0}/${r.soluciones||0}</small></td>
+            <td style="text-align:center;"><strong>${d.subs.interpers}</strong><br><small style="color:var(--text-muted);">${r.liderazgo||0}/${r.equipo||0}</small></td>
+            <td style="text-align:center; background:#e6f5ff;"><strong style="color:var(--prussian); font-size:1rem;">${d.subs.total}</strong></td>
+            <td>${mention}</td>
+            <td><strong>${d.paseMonupe || 'No'}</strong></td>
+            <td><small>🗣️ ${d.speechesCount||0} | ⚠️ ${d.warningsCount||0}</small><br><small style="color:#92400e;">${d.participationNote || ''}</small></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function closeArchiveDetail() {
+      document.getElementById('archiveDetailSection').style.display = 'none';
+      document.getElementById('archiveListSection').style.display = 'block';
+    }
+
+    function loadArchiveIntoConsole() {
+      if (!selectedArchiveModel) return;
+      roomId = selectedArchiveModel.roomId;
+      localStorage.setItem('monupe_last_room', roomId);
+      window.history.replaceState({}, '', `${window.location.pathname}?sala=${encodeURIComponent(roomId)}`);
+      appData = {
+        ...appData,
+        roomId: roomId,
+        isLocked: true,
+        meta: selectedArchiveModel.meta || appData.meta,
+        delegates: selectedArchiveModel.delegates || [],
+        sessionLogs: selectedArchiveModel.sessionLogs || []
+      };
+      updateRoomBadges();
+      updateLockUI();
+      loadMetaUI();
+      renderRollCall();
+      renderSpeakerQueueUI();
+      renderMatrixEval();
+      renderRanking();
+      if (selectedArchiveModel.sheetUrl) showGeneratedSheetResult(selectedArchiveModel.sheetUrl);
+      closeModal('celiderPortalModal');
+      showLiveToast(`📂 Modelo de Sala ${roomId} cargado en consola`);
+    }
+
+    // =========================================================
+    // FINALIZAR EVALUACIÓN Y SUBIR AL ARCHIVO DISTRITAL CELIDER
+    // =========================================================
+    async function finalizeAndUploadArchive() {
+      if (!confirm('¿Confirmas que la Mesa Directiva ha concluido la evaluación?\n\nEsto bloqueará la edición de notas y subirá el acta completa al Archivo Distrital CELIDER 01-03.')) {
+        return;
+      }
+
+      const btn = document.getElementById('btnFinalizeArchive');
+      btn.disabled = true;
+      btn.textContent = '⏳ Finalizando y subiendo...';
+      setSyncIndicator(false, 'Subiendo al Archivo Distrital...');
+
+      try {
+        appData.isLocked = true;
+        appendSessionLog('🏁 Evaluación finalizada y enviada al Archivo Distrital CELIDER 01-03', false);
+        saveState(false);
+        updateLockUI();
+        renderMatrixEval();
+        renderRanking();
+
+        const duracion = document.getElementById('sessionDigits').textContent || '00:00:00';
+        const res = await fetch(CLOUD_RELAY, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'finalize_archive',
+            roomId: roomId,
+            finalizedBy: currentMember ? currentMember.fullName : (appData.meta.presidente || 'Mesa Directiva'),
+            duracion: duracion,
+            meta: appData.meta,
+            delegates: appData.delegates,
+            sessionLogs: appData.sessionLogs
+          })
+        });
+        const data = await res.json();
+        if (data && data.ok) {
+          if (data.sheetUrl) showGeneratedSheetResult(data.sheetUrl);
+          setSyncIndicator(true, 'Sincronizado en vivo');
+          alert('✅ ¡Evaluación finalizada! El acta y todas las rúbricas ya están disponibles en el Archivo Distrital CELIDER.');
+        } else {
+          alert('Se cerró localmente, pero hubo un problema al subir al archivo. Verifica tu conexión.');
+        }
+      } catch (err) {
+        alert('Error al conectar con el Archivo Distrital: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🏁 Finalizar Evaluación y Subir';
+      }
+    }
 
     // =========================================================
     // ATAJO DE TECLADO: BARRA ESPACIADORA PARA CRONÓMETRO DE DISCURSO
@@ -2189,31 +2494,10 @@
           <title>${title}</title>
           <style>
             @page { size: landscape; margin: 0; }
-            body {
-              margin: 0;
-              background: #eef7fc;
-              font-family: 'Segoe UI', system-ui, sans-serif;
-            }
-            .cert-page {
-              width: 100%;
-              min-height: 100vh;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              padding: 24px;
-              page-break-after: always;
-            }
+            body { margin: 0; background: #eef7fc; font-family: 'Segoe UI', system-ui, sans-serif; }
+            .cert-page { width: 100%; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 24px; page-break-after: always; }
             .cert-page:last-child { page-break-after: auto; }
-            .cert-frame {
-              width: 1020px;
-              background: #ffffff;
-              border: 12px solid #002247;
-              outline: 4px solid #00CBFF;
-              outline-offset: -20px;
-              padding: 46px 64px;
-              text-align: center;
-              color: #002247;
-            }
+            .cert-frame { width: 1020px; background: #ffffff; border: 12px solid #002247; outline: 4px solid #00CBFF; outline-offset: -20px; padding: 46px 64px; text-align: center; color: #002247; }
             .header-inst { font-size: 13px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #005288; }
             .main-title { font-size: 38px; font-weight: 900; letter-spacing: 3px; color: #002247; margin: 10px 0 6px; text-transform: uppercase; }
             .sub-badge { display: inline-block; background: #007FF1; color: #ffffff; font-weight: 800; font-size: 14px; padding: 5px 18px; border-radius: 999px; letter-spacing: 1px; margin-bottom: 22px; }
@@ -2225,11 +2509,7 @@
             .sig-box strong { display: block; font-size: 14px; color: #002247; }
             .sig-box span { color: #005288; font-weight: 600; }
             .print-bar { position: fixed; top: 14px; right: 14px; z-index: 100; }
-            @media print {
-              body { background: white; }
-              .cert-page { padding: 0; }
-              .print-bar { display: none; }
-            }
+            @media print { body { background: white; } .cert-page { padding: 0; } .print-bar { display: none; } }
           </style>
         </head>
         <body>
@@ -2266,25 +2546,14 @@
     function updateLockUI() {
       const locked = Boolean(appData.isLocked);
       document.getElementById('lockedActaBanner').style.display = locked ? 'flex' : 'none';
-      const btn = document.getElementById('btnToggleLockActa');
+      const btn = document.getElementById('btnFinalizeArchive');
       if (btn) {
-        btn.textContent = locked ? '🔓 Reabrir Evaluación' : '🔒 Cerrar Evaluación';
-        btn.className = locked ? 'btn btn-green' : 'btn btn-prussian';
+        btn.textContent = locked ? '✅ Evaluación Finalizada y Subida' : '🏁 Finalizar Evaluación y Subir';
       }
     }
 
-    function toggleLockActa(forceState) {
-      appData.isLocked = typeof forceState === 'boolean' ? forceState : !appData.isLocked;
-      appendSessionLog(appData.isLocked ? '🔒 Acta de evaluación cerrada oficialmente por la Mesa' : '🔓 Edición del acta reabierta');
-      saveState(true);
-      updateLockUI();
-      renderMatrixEval();
-      renderRanking();
-      showLiveToast(appData.isLocked ? '🔒 Acta cerrada oficialmente' : '🔓 Edición reabierta');
-    }
-
     // =========================================================
-    // AUTOCOMPLETADO DE MESA DIRECTIVA AL INGRESAR O AGREGAR
+    // AUTOCOMPLETADO DE MESA DIRECTIVA
     // =========================================================
     function assignMemberToMesaMeta(memberObj) {
       if (!memberObj || !memberObj.fullName) return;
@@ -2730,7 +2999,7 @@
     }
 
     // =========================================================
-    // CHAT EN TIEMPO REAL CON CHIPS RÁPIDOS, URGENTES Y LINKS
+    // CHAT EN TIEMPO REAL
     // =========================================================
     function formatChatLinks(text) {
       const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
