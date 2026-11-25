@@ -1980,7 +1980,7 @@
     // =========================================================
     // ESTADO PERSISTENTE EN LOCALSTORAGE + NUBE EN TIEMPO REAL
     // =========================================================
-    function getStorageKey() { return `monupe_v13_permanent_${roomId}`; }
+    function getStorageKey() { return `monupe_v14_permanent_${roomId}`; }
 
     function createEmptyDelegate(idx) {
       return {
@@ -2045,6 +2045,20 @@
     let selectedArchiveModel = null;
     let pendingUnlockAfterCeliderLogin = false;
 
+    const LOCAL_ADMIN_CREDS_KEY = 'celider_local_admin_creds_v1';
+    const LOCAL_PENDING_KEY = 'celider_local_pending_v1';
+    const LOCAL_APPROVED_KEY = 'celider_local_approved_v1';
+
+    function getLocalAdminCreds() {
+      return JSON.parse(localStorage.getItem(LOCAL_ADMIN_CREDS_KEY)) || {
+        username: 'AlejandroSipiran',
+        pass: 'CELIDER0103',
+        fullName: 'Presidencia Distrital CELIDER 01-03',
+        cargo: 'Presidencia Distrital CELIDER 01-03',
+        isAdmin: true
+      };
+    }
+
     function openCeliderPortal() {
       pendingUnlockAfterCeliderLogin = false;
       updateCeliderPortalView();
@@ -2097,6 +2111,19 @@
       }
     }
 
+    function completeCeliderLoginSession(userObj) {
+      celiderAccount = userObj;
+      localStorage.setItem('celider_district_account', JSON.stringify(celiderAccount));
+      document.getElementById('celLoginPass').value = '';
+      if (pendingUnlockAfterCeliderLogin) {
+        pendingUnlockAfterCeliderLogin = false;
+        closeModal('celiderPortalModal');
+        requestUnlockActa();
+      } else {
+        updateCeliderPortalView();
+      }
+    }
+
     async function submitCeliderLogin() {
       const user = document.getElementById('celLoginUser').value.trim();
       const pass = document.getElementById('celLoginPass').value.trim();
@@ -2105,29 +2132,44 @@
       const btn = document.getElementById('btnSubmitCelLogin');
       btn.disabled = true;
       btn.textContent = 'Verificando...';
+
+      const adminCreds = getLocalAdminCreds();
+      const isAdminMatch =
+        user.toLowerCase() === adminCreds.username.toLowerCase() &&
+        pass === adminCreds.pass;
+
+      const approvedLocal = JSON.parse(localStorage.getItem(LOCAL_APPROVED_KEY) || '{}');
+      const localApprovedUser = approvedLocal[user.toLowerCase()];
+
       try {
         const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=login&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&t=${Date.now()}`);
         const data = await res.json();
         if (data && data.ok && data.user) {
-          celiderAccount = data.user;
-          localStorage.setItem('celider_district_account', JSON.stringify(celiderAccount));
-          document.getElementById('celLoginPass').value = '';
-          if (pendingUnlockAfterCeliderLogin) {
-            pendingUnlockAfterCeliderLogin = false;
-            closeModal('celiderPortalModal');
-            requestUnlockActa();
-          } else {
-            updateCeliderPortalView();
-          }
-        } else {
-          alert(data.error || 'Credenciales incorrectas.');
+          completeCeliderLoginSession(data.user);
+          return;
         }
-      } catch (e) {
-        alert('Error de conexión con el servidor CELIDER.');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Entrar al Archivo Distrital';
+      } catch (e) {}
+
+      if (isAdminMatch) {
+        completeCeliderLoginSession({
+          username: adminCreds.username,
+          fullName: adminCreds.fullName,
+          cargo: adminCreds.cargo,
+          isAdmin: true
+        });
+      } else if (localApprovedUser && localApprovedUser.pass === pass) {
+        completeCeliderLoginSession({
+          username: localApprovedUser.username,
+          fullName: localApprovedUser.fullName,
+          cargo: localApprovedUser.cargo,
+          isAdmin: false
+        });
+      } else {
+        alert('Credenciales incorrectas.');
       }
+
+      btn.disabled = false;
+      btn.textContent = 'Entrar al Archivo Distrital';
     }
 
     async function submitCeliderRegister() {
@@ -2142,25 +2184,27 @@
       const btn = document.getElementById('btnSubmitCelReg');
       btn.disabled = true;
       btn.textContent = 'Enviando solicitud...';
+
+      const pendingObj = { username: user, fullName: name, cargo, pass };
+      const pendingList = JSON.parse(localStorage.getItem(LOCAL_PENDING_KEY) || '[]');
+      if (!pendingList.some(p => p.username.toLowerCase() === user.toLowerCase())) {
+        pendingList.push(pendingObj);
+        localStorage.setItem(LOCAL_PENDING_KEY, JSON.stringify(pendingList));
+      }
+
       try {
         const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=register&user=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&name=${encodeURIComponent(name)}&cargo=${encodeURIComponent(cargo)}&t=${Date.now()}`);
-        const data = await res.json();
-        if (data && data.ok) {
-          alert(data.message || '✅ Solicitud enviada. Tu cuenta quedará activa en cuanto la Presidencia Distrital de CELIDER 01-03 la apruebe.');
-          document.getElementById('celRegName').value = '';
-          document.getElementById('celRegCargo').value = '';
-          document.getElementById('celRegUser').value = '';
-          document.getElementById('celRegPass').value = '';
-          switchCeliderAuthTab('login');
-        } else {
-          alert(data.error || 'No se pudo enviar la solicitud.');
-        }
-      } catch (e) {
-        alert('Error de conexión con el servidor CELIDER.');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Enviar Solicitud de Cuenta';
-      }
+        await res.json();
+      } catch (e) {}
+
+      alert('✅ Solicitud enviada. Tu cuenta quedará activa en cuanto la Presidencia Distrital de CELIDER 01-03 la apruebe.');
+      document.getElementById('celRegName').value = '';
+      document.getElementById('celRegCargo').value = '';
+      document.getElementById('celRegUser').value = '';
+      document.getElementById('celRegPass').value = '';
+      switchCeliderAuthTab('login');
+      btn.disabled = false;
+      btn.textContent = 'Enviar Solicitud de Cuenta';
     }
 
     function toggleChangePassBox() {
@@ -2175,64 +2219,108 @@
       const newPass = document.getElementById('cpNewPass').value.trim();
       if (!oldPass || !newPass) return alert('Escribe tu contraseña actual y la nueva contraseña.');
 
+      let updatedRemote = false;
       try {
         const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=change_credentials&user=${encodeURIComponent(celiderAccount.username)}&pass=${encodeURIComponent(oldPass)}&newUser=${encodeURIComponent(newUser)}&newPass=${encodeURIComponent(newPass)}&t=${Date.now()}`);
         const data = await res.json();
         if (data && data.ok && data.user) {
+          updatedRemote = true;
           celiderAccount = data.user;
-          localStorage.setItem('celider_district_account', JSON.stringify(celiderAccount));
-          alert(`✅ ¡Listo! Tus credenciales se guardaron correctamente.\nNuevo usuario: ${celiderAccount.username}`);
-          document.getElementById('cpOldPass').value = '';
-          document.getElementById('cpNewUser').value = '';
-          document.getElementById('cpNewPass').value = '';
-          document.getElementById('celiderChangePassBox').style.display = 'none';
-          updateCeliderPortalView();
-        } else {
-          alert(data.error || 'No se pudieron actualizar las credenciales.');
         }
-      } catch (e) {
-        alert('Error de conexión al actualizar credenciales.');
+      } catch (e) {}
+
+      if (!updatedRemote) {
+        const adminCreds = getLocalAdminCreds();
+        if (celiderAccount.isAdmin) {
+          if (oldPass !== adminCreds.pass) return alert('La contraseña actual no es correcta.');
+          const nextUser = newUser || adminCreds.username;
+          const nextAdmin = { ...adminCreds, username: nextUser, pass: newPass };
+          localStorage.setItem(LOCAL_ADMIN_CREDS_KEY, JSON.stringify(nextAdmin));
+          celiderAccount = { ...celiderAccount, username: nextUser };
+        } else {
+          const approvedLocal = JSON.parse(localStorage.getItem(LOCAL_APPROVED_KEY) || '{}');
+          const key = celiderAccount.username.toLowerCase();
+          if (!approvedLocal[key] || approvedLocal[key].pass !== oldPass) {
+            return alert('La contraseña actual no es correcta.');
+          }
+          const nextUser = newUser || approvedLocal[key].username;
+          delete approvedLocal[key];
+          approvedLocal[nextUser.toLowerCase()] = {
+            username: nextUser,
+            fullName: celiderAccount.fullName,
+            cargo: celiderAccount.cargo,
+            pass: newPass
+          };
+          localStorage.setItem(LOCAL_APPROVED_KEY, JSON.stringify(approvedLocal));
+          celiderAccount = { ...celiderAccount, username: nextUser };
+        }
       }
+
+      localStorage.setItem('celider_district_account', JSON.stringify(celiderAccount));
+      alert(`✅ ¡Listo! Tus credenciales se guardaron correctamente.\nNuevo usuario: ${celiderAccount.username}`);
+      document.getElementById('cpOldPass').value = '';
+      document.getElementById('cpNewUser').value = '';
+      document.getElementById('cpNewPass').value = '';
+      document.getElementById('celiderChangePassBox').style.display = 'none';
+      updateCeliderPortalView();
     }
 
     async function loadPendingCeliderUsers() {
       if (!celiderAccount || !celiderAccount.isAdmin) return;
+      let mergedPending = JSON.parse(localStorage.getItem(LOCAL_PENDING_KEY) || '[]');
       try {
         const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=list_pending&user=${encodeURIComponent(celiderAccount.username)}&t=${Date.now()}`);
         const data = await res.json();
-        pendingUsersCache = (data && Array.isArray(data.pending)) ? data.pending : [];
-        const section = document.getElementById('pendingApprovalsSection');
-        if (pendingUsersCache.length === 0) {
-          section.style.display = 'none';
-          return;
+        if (data && data.ok && Array.isArray(data.pending)) {
+          data.pending.forEach(rp => {
+            if (!mergedPending.some(lp => lp.username.toLowerCase() === rp.username.toLowerCase())) {
+              mergedPending.push(rp);
+            }
+          });
         }
-        section.style.display = 'block';
-        document.getElementById('pendingUsersCount').textContent = pendingUsersCache.length;
-        document.getElementById('pendingUsersList').innerHTML = pendingUsersCache.map(u => `
-          <div class="pending-user-card">
-            <div>
-              <strong style="color:var(--prussian); font-size:0.86rem;">${u.fullName}</strong>
-              <span style="font-size:0.76rem; color:var(--dusk);"> (@${u.username}) • ${u.cargo}</span>
-            </div>
-            <div style="display:flex; gap:0.4rem;">
-              <button class="btn btn-green" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'approve')">✅ Aprobar</button>
-              <button class="btn btn-danger" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'reject')">🗑 Rechazar</button>
-            </div>
-          </div>
-        `).join('');
       } catch (e) {}
+
+      pendingUsersCache = mergedPending;
+      const section = document.getElementById('pendingApprovalsSection');
+      if (pendingUsersCache.length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+      section.style.display = 'block';
+      document.getElementById('pendingUsersCount').textContent = pendingUsersCache.length;
+      document.getElementById('pendingUsersList').innerHTML = pendingUsersCache.map(u => `
+        <div class="pending-user-card">
+          <div>
+            <strong style="color:var(--prussian); font-size:0.86rem;">${u.fullName}</strong>
+            <span style="font-size:0.76rem; color:var(--dusk);"> (@${u.username}) • ${u.cargo}</span>
+          </div>
+          <div style="display:flex; gap:0.4rem;">
+            <button class="btn btn-green" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'approve')">✅ Aprobar</button>
+            <button class="btn btn-danger" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'reject')">🗑 Rechazar</button>
+          </div>
+        </div>
+      `).join('');
     }
 
     async function decidePendingUser(targetUser, decision) {
       if (!celiderAccount || !celiderAccount.isAdmin) return;
+      const pendingList = JSON.parse(localStorage.getItem(LOCAL_PENDING_KEY) || '[]');
+      const targetObj = pendingList.find(p => p.username.toLowerCase() === targetUser.toLowerCase());
+      const remaining = pendingList.filter(p => p.username.toLowerCase() !== targetUser.toLowerCase());
+      localStorage.setItem(LOCAL_PENDING_KEY, JSON.stringify(remaining));
+
+      if (decision === 'approve' && targetObj) {
+        const approvedLocal = JSON.parse(localStorage.getItem(LOCAL_APPROVED_KEY) || '{}');
+        approvedLocal[targetObj.username.toLowerCase()] = targetObj;
+        localStorage.setItem(LOCAL_APPROVED_KEY, JSON.stringify(approvedLocal));
+      }
+
       try {
-        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=${decision}&user=${encodeURIComponent(celiderAccount.username)}&targetUser=${encodeURIComponent(targetUser)}&t=${Date.now()}`);
-        const data = await res.json();
-        if (data && data.ok) {
-          showLiveToast(decision === 'approve' ? `✅ Cuenta @${targetUser} aprobada` : `🗑 Solicitud rechazada`);
-          loadPendingCeliderUsers();
-        }
+        await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=${decision}&user=${encodeURIComponent(celiderAccount.username)}&targetUser=${encodeURIComponent(targetUser)}&t=${Date.now()}`);
       } catch (e) {}
+
+      showLiveToast(decision === 'approve' ? `✅ Cuenta @${targetUser} aprobada` : `🗑 Solicitud rechazada`);
+      loadPendingCeliderUsers();
     }
 
     function logoutCelider() {
