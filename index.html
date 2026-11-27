@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -881,6 +880,35 @@
     }
     .auth-tab-btn.active { background: var(--prussian); color: white; }
 
+    .portal-subtabs {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .portal-subtab-btn {
+      border: 1px solid var(--border-soft);
+      background: #f4faff;
+      color: var(--dusk);
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .portal-subtab-btn.active {
+      background: var(--prussian);
+      color: white;
+      border-color: var(--prussian);
+    }
+
     .archive-model-card {
       background: #f8fbff;
       border: 1.5px solid var(--border-soft);
@@ -895,9 +923,9 @@
       gap: 0.75rem;
     }
 
-    .pending-user-card {
+    .pending-user-card, .active-user-card {
       background: white;
-      border: 1px solid #fcd34d;
+      border: 1px solid var(--border-soft);
       border-radius: 8px;
       padding: 0.55rem 0.75rem;
       margin-bottom: 0.45rem;
@@ -906,6 +934,21 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 0.5rem;
+    }
+
+    .pending-user-card { border-color: #fcd34d; }
+
+    .celider-team-chat-box {
+      height: 270px;
+      overflow-y: auto;
+      background: #f4faff;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      margin-bottom: 0.7rem;
     }
 
     /* ================= MODALES ================= */
@@ -988,6 +1031,10 @@
       <button class="btn btn-outline-light" onclick="openLoginModal()">👤 Mi Perfil</button>
       <button class="btn btn-azure" onclick="openRoomHub()">🔗 Sala</button>
       <button class="btn btn-outline-light" onclick="exportarJSON()">⬇ JSON</button>
+      <label class="btn btn-outline-light" style="cursor:pointer;">
+        ⬆ Subir JSON
+        <input type="file" accept=".json,application/json" style="display:none;" onchange="importarJSON(event)" />
+      </label>
     </div>
   </div>
 
@@ -1415,7 +1462,7 @@
           <h3 style="color:var(--prussian);">🏛 Portal Distrital CELIDER 01-03 — Archivo Oficial de Modelos Evaluados</h3>
           <span style="font-size:0.76rem; color:var(--text-muted);" id="celiderLoggedHeader">Inicia sesión o solicita tu cuenta del equipo distrital</span>
         </div>
-        <div style="display:flex; gap:0.45rem; align-items:center;">
+        <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap;">
           <button class="btn btn-frosted" id="btnCeliderChangePassToggle" style="display:none;" onclick="toggleChangePassBox()">🔑 Cambiar Usuario / Contraseña</button>
           <button class="btn btn-danger" id="btnCeliderLogout" style="display:none;" onclick="logoutCelider()">Cerrar Sesión</button>
           <button class="btn btn-prussian" onclick="closeModal('celiderPortalModal')">✕ Cerrar</button>
@@ -1469,7 +1516,7 @@
         </div>
       </div>
 
-      <!-- VISTA 2: PANEL DE MODELOS EVALUADOS (SOLO LOGUEADOS) -->
+      <!-- VISTA 2: PANEL INTERNO (SOLO LOGUEADOS) -->
       <div id="celiderDashboardView" style="display:none;">
         <!-- CAJA DE CAMBIO DE USUARIO Y CONTRASEÑA -->
         <div id="celiderChangePassBox" style="display:none; background:#fffbeb; border:1.5px solid #f59e0b; border-radius:10px; padding:0.9rem 1rem; margin-bottom:0.9rem;">
@@ -1482,59 +1529,93 @@
           </div>
         </div>
 
-        <!-- SOLICITUDES DE CUENTAS PENDIENTES (SOLO VISIBLE PARA EL PRESIDENTE DISTRITAL) -->
-        <div id="pendingApprovalsSection" style="display:none; margin-bottom:1rem; background:#fffbeb; border:1.5px solid #f59e0b; border-radius:10px; padding:0.85rem 1rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <strong style="font-size:0.84rem; color:#92400e;">🛡️ Solicitudes de Cuentas Pendientes de Aprobación (<span id="pendingUsersCount">0</span>)</strong>
-            <button class="btn btn-frosted" style="padding:0.25rem 0.55rem; font-size:0.72rem;" onclick="loadPendingCeliderUsers()">🔄 Refrescar</button>
-          </div>
-          <div id="pendingUsersList"></div>
+        <!-- SUBPESTAÑAS DEL PANEL CELIDER -->
+        <div class="portal-subtabs">
+          <button class="portal-subtab-btn active" id="subtabBtnModels" onclick="switchPortalSubtab('models')">📂 Modelos Evaluados y Rúbricas</button>
+          <button class="portal-subtab-btn" id="subtabBtnTeam" onclick="switchPortalSubtab('team')">
+            👥 Cuentas y Solicitudes
+            <span class="chat-badge-count" id="teamPendingBadge" style="display:inline-block;">0</span>
+          </button>
+          <button class="portal-subtab-btn" id="subtabBtnChat" onclick="switchPortalSubtab('chat')">💬 Chat Equipo CELIDER 01-03</button>
         </div>
 
-        <!-- LISTA DE MODELOS EVALUADOS -->
-        <div id="archiveListSection">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-bottom:0.8rem;">
-            <input type="text" id="archiveSearchInput" class="field-input" style="max-width:380px; margin:0;" placeholder="🔍 Buscar por centro educativo, comisión o sala..." oninput="renderArchiveCards()" />
-            <button class="btn btn-azure" onclick="loadMasterArchive()">🔄 Actualizar Lista</button>
+        <!-- SUBPESTAÑA A: MODELOS EVALUADOS Y RÚBRICAS -->
+        <div id="portalSubtabModels">
+          <div id="archiveListSection">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-bottom:0.8rem;">
+              <input type="text" id="archiveSearchInput" class="field-input" style="max-width:380px; margin:0;" placeholder="🔍 Buscar por centro educativo, comisión o sala..." oninput="renderArchiveCards()" />
+              <button class="btn btn-azure" onclick="loadMasterArchive()">🔄 Actualizar Lista</button>
+            </div>
+            <div id="archiveCardsContainer"></div>
           </div>
-          <div id="archiveCardsContainer"></div>
+
+          <div id="archiveDetailSection" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.85rem; background:#eef7fc; padding:0.75rem 1rem; border-radius:10px;">
+              <div>
+                <button class="btn btn-prussian" style="padding:0.32rem 0.65rem; font-size:0.75rem; margin-bottom:0.35rem;" onclick="closeArchiveDetail()">← Volver a Todos los Modelos</button>
+                <h4 id="detailModelTitle" style="color:var(--prussian); font-size:1rem;"></h4>
+                <div id="detailModelMeta" style="font-size:0.78rem; color:var(--text-muted);"></div>
+              </div>
+              <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
+                <a id="detailSheetLink" href="#" target="_blank" class="btn btn-green" style="text-decoration:none;">📗 Abrir Google Sheet</a>
+                <button class="btn btn-azure" onclick="loadArchiveIntoConsole()">📂 Cargar en Consola Principal</button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Delegado/a</th>
+                    <th>País</th>
+                    <th>Asistencia</th>
+                    <th title="Redacción / Investigación / Representación">Conoc. (28)<br><small>Red/Inv/Rep</small></th>
+                    <th title="Oratoria / Argumentación / Discurso">Comun. (22)<br><small>Ora/Arg/Dis</small></th>
+                    <th title="Construcción Consenso / Resolución Conflictos">Negoc. (16)<br><small>Con/Res</small></th>
+                    <th title="Pensamiento Crítico / Construcción Soluciones">Anál. (16)<br><small>Cri/Sol</small></th>
+                    <th title="Liderazgo / Trabajo en Equipo">Interp. (18)<br><small>Lid/Equ</small></th>
+                    <th>TOTAL (100)</th>
+                    <th>Mención</th>
+                    <th>Pase MONUPE II</th>
+                    <th>Obs. / Interv.</th>
+                  </tr>
+                </thead>
+                <tbody id="archiveDetailTbody"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
-        <!-- VISOR DETALLADO DE RÚBRICA DE UN MODELO EVALUADO -->
-        <div id="archiveDetailSection" style="display:none;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.85rem; background:#eef7fc; padding:0.75rem 1rem; border-radius:10px;">
-            <div>
-              <button class="btn btn-prussian" style="padding:0.32rem 0.65rem; font-size:0.75rem; margin-bottom:0.35rem;" onclick="closeArchiveDetail()">← Volver a Todos los Modelos</button>
-              <h4 id="detailModelTitle" style="color:var(--prussian); font-size:1rem;"></h4>
-              <div id="detailModelMeta" style="font-size:0.78rem; color:var(--text-muted);"></div>
+        <!-- SUBPESTAÑA B: SOLICITUDES PENDIENTES Y CUENTAS ACTIVAS -->
+        <div id="portalSubtabTeam" style="display:none;">
+          <div id="pendingApprovalsSection" style="display:none; margin-bottom:1rem; background:#fffbeb; border:1.5px solid #f59e0b; border-radius:10px; padding:0.85rem 1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <strong style="font-size:0.84rem; color:#92400e;">🛡️ Solicitudes de Cuentas Pendientes de Aprobación (<span id="pendingUsersCount">0</span>)</strong>
+              <button class="btn btn-frosted" style="padding:0.25rem 0.55rem; font-size:0.72rem;" onclick="loadCeliderUsersDirectory()">🔄 Refrescar</button>
             </div>
-            <div style="display:flex; gap:0.45rem; flex-wrap:wrap;">
-              <a id="detailSheetLink" href="#" target="_blank" class="btn btn-green" style="text-decoration:none;">📗 Abrir Google Sheet</a>
-              <button class="btn btn-azure" onclick="loadArchiveIntoConsole()">📂 Cargar en Consola Principal</button>
-            </div>
+            <div id="pendingUsersList"></div>
           </div>
 
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Delegado/a</th>
-                  <th>País</th>
-                  <th>Asistencia</th>
-                  <th title="Redacción / Investigación / Representación">Conoc. (28)<br><small>Red/Inv/Rep</small></th>
-                  <th title="Oratoria / Argumentación / Discurso">Comun. (22)<br><small>Ora/Arg/Dis</small></th>
-                  <th title="Construcción Consenso / Resolución Conflictos">Negoc. (16)<br><small>Con/Res</small></th>
-                  <th title="Pensamiento Crítico / Construcción Soluciones">Anál. (16)<br><small>Cri/Sol</small></th>
-                  <th title="Liderazgo / Trabajo en Equipo">Interp. (18)<br><small>Lid/Equ</small></th>
-                  <th>TOTAL (100)</th>
-                  <th>Mención</th>
-                  <th>Pase MONUPE II</th>
-                  <th>Obs. / Interv.</th>
-                </tr>
-              </thead>
-              <tbody id="archiveDetailTbody"></tbody>
-            </table>
+          <div style="background:#f8fbff; border:1px solid var(--border-soft); border-radius:10px; padding:0.9rem 1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; flex-wrap:wrap; gap:0.4rem;">
+              <strong style="font-size:0.86rem; color:var(--prussian);">👥 Miembros con Cuenta en CELIDER 01-03</strong>
+              <button class="btn btn-frosted" style="padding:0.25rem 0.55rem; font-size:0.72rem;" onclick="loadCeliderUsersDirectory()">🔄 Actualizar Lista</button>
+            </div>
+            <div id="activeCeliderUsersList"></div>
+          </div>
+        </div>
+
+        <!-- SUBPESTAÑA C: CHAT EXCLUSIVO DEL EQUIPO CELIDER 01-03 -->
+        <div id="portalSubtabChat" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.4rem;">
+            <strong style="font-size:0.86rem; color:var(--prussian);">💬 Canal Privado de Coordinación — Equipo CELIDER 01-03</strong>
+            <button class="btn btn-frosted" style="padding:0.25rem 0.55rem; font-size:0.72rem;" onclick="loadCeliderTeamChat()">🔄 Actualizar Mensajes</button>
+          </div>
+          <div class="celider-team-chat-box" id="celiderTeamChatBox"></div>
+          <div style="display:flex; gap:0.45rem;">
+            <input type="text" id="celiderTeamChatInput" class="field-input" placeholder="Escribe un mensaje para el equipo distrital CELIDER 01-03..." style="margin:0;" onkeydown="if(event.key==='Enter') sendCeliderTeamChat()" />
+            <button class="btn btn-azure" onclick="sendCeliderTeamChat()">Enviar</button>
           </div>
         </div>
       </div>
@@ -2047,17 +2128,20 @@
     });
 
     // =========================================================
-    // PORTAL DE CUENTAS CELIDER 01-03 (CON APROBACIÓN Y CAMBIO DE USUARIO/CLAVE)
+    // PORTAL DE CUENTAS CELIDER 01-03
     // =========================================================
     let celiderAccount = JSON.parse(localStorage.getItem('celider_district_account')) || null;
     let masterArchiveCache = [];
     let pendingUsersCache = [];
+    let activeUsersCache = [];
+    let celiderTeamChatCache = [];
     let selectedArchiveModel = null;
     let pendingUnlockAfterCeliderLogin = false;
 
     const LOCAL_ADMIN_CREDS_KEY = 'celider_local_admin_creds_v1';
     const LOCAL_PENDING_KEY = 'celider_local_pending_v1';
     const LOCAL_APPROVED_KEY = 'celider_local_approved_v1';
+    const LOCAL_TEAM_CHAT_KEY = 'celider_local_team_chat_v1';
 
     function getLocalAdminCreds() {
       return JSON.parse(localStorage.getItem(LOCAL_ADMIN_CREDS_KEY)) || {
@@ -2098,6 +2182,20 @@
       document.getElementById('formCeliderRegister').style.display = tab === 'register' ? 'block' : 'none';
     }
 
+    function switchPortalSubtab(sub) {
+      document.getElementById('subtabBtnModels').classList.toggle('active', sub === 'models');
+      document.getElementById('subtabBtnTeam').classList.toggle('active', sub === 'team');
+      document.getElementById('subtabBtnChat').classList.toggle('active', sub === 'chat');
+
+      document.getElementById('portalSubtabModels').style.display = sub === 'models' ? 'block' : 'none';
+      document.getElementById('portalSubtabTeam').style.display = sub === 'team' ? 'block' : 'none';
+      document.getElementById('portalSubtabChat').style.display = sub === 'chat' ? 'block' : 'none';
+
+      if (sub === 'models') loadMasterArchive();
+      if (sub === 'team') loadCeliderUsersDirectory();
+      if (sub === 'chat') loadCeliderTeamChat();
+    }
+
     function updateCeliderPortalView() {
       const isLogged = Boolean(celiderAccount);
       document.getElementById('celiderAuthView').style.display = isLogged ? 'none' : 'block';
@@ -2109,12 +2207,8 @@
         document.getElementById('celiderLoggedHeader').textContent = `Sesión activa: ${celiderAccount.fullName} — ${celiderAccount.cargo} (@${celiderAccount.username})`;
         document.getElementById('cpUserLabel').textContent = celiderAccount.username;
         closeArchiveDetail();
-        loadMasterArchive();
-        if (celiderAccount.isAdmin) {
-          loadPendingCeliderUsers();
-        } else {
-          document.getElementById('pendingApprovalsSection').style.display = 'none';
-        }
+        switchPortalSubtab('models');
+        loadCeliderUsersDirectory();
       } else {
         document.getElementById('celiderLoggedHeader').textContent = pendingUnlockAfterCeliderLogin
           ? 'Inicia sesión con tu cuenta aprobada de CELIDER para desbloquear y editar el acta'
@@ -2278,41 +2372,73 @@
       updateCeliderPortalView();
     }
 
-    async function loadPendingCeliderUsers() {
-      if (!celiderAccount || !celiderAccount.isAdmin) return;
+    async function loadCeliderUsersDirectory() {
+      if (!celiderAccount) return;
       let mergedPending = JSON.parse(localStorage.getItem(LOCAL_PENDING_KEY) || '[]');
+      const approvedLocalObj = JSON.parse(localStorage.getItem(LOCAL_APPROVED_KEY) || '{}');
+      const adminCreds = getLocalAdminCreds();
+      let mergedActive = [
+        { username: adminCreds.username, fullName: adminCreds.fullName, cargo: adminCreds.cargo, isAdmin: true },
+        ...Object.values(approvedLocalObj).map(u => ({ ...u, isAdmin: false }))
+      ];
+
       try {
-        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=list_pending&user=${encodeURIComponent(celiderAccount.username)}&t=${Date.now()}`);
+        const res = await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=list_users&user=${encodeURIComponent(celiderAccount.username)}&t=${Date.now()}`);
         const data = await res.json();
-        if (data && data.ok && Array.isArray(data.pending)) {
-          data.pending.forEach(rp => {
-            if (!mergedPending.some(lp => lp.username.toLowerCase() === rp.username.toLowerCase())) {
-              mergedPending.push(rp);
-            }
-          });
+        if (data && data.ok) {
+          if (Array.isArray(data.pending)) {
+            data.pending.forEach(rp => {
+              if (!mergedPending.some(lp => lp.username.toLowerCase() === rp.username.toLowerCase())) {
+                mergedPending.push(rp);
+              }
+            });
+          }
+          if (Array.isArray(data.active) && data.active.length > 0) {
+            mergedActive = data.active;
+          }
         }
       } catch (e) {}
 
       pendingUsersCache = mergedPending;
+      activeUsersCache = mergedActive;
+      document.getElementById('teamPendingBadge').textContent = pendingUsersCache.length;
+
       const section = document.getElementById('pendingApprovalsSection');
-      if (pendingUsersCache.length === 0) {
+      if (!celiderAccount.isAdmin || pendingUsersCache.length === 0) {
         section.style.display = 'none';
-        return;
+      } else {
+        section.style.display = 'block';
+        document.getElementById('pendingUsersCount').textContent = pendingUsersCache.length;
+        document.getElementById('pendingUsersList').innerHTML = pendingUsersCache.map(u => `
+          <div class="pending-user-card">
+            <div>
+              <strong style="color:var(--prussian); font-size:0.86rem;">${u.fullName}</strong>
+              <span style="font-size:0.76rem; color:var(--dusk);"> (@${u.username}) • ${u.cargo}</span>
+            </div>
+            <div style="display:flex; gap:0.4rem;">
+              <button class="btn btn-green" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'approve')">✅ Aprobar</button>
+              <button class="btn btn-danger" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'reject')">🗑 Rechazar</button>
+            </div>
+          </div>
+        `).join('');
       }
-      section.style.display = 'block';
-      document.getElementById('pendingUsersCount').textContent = pendingUsersCache.length;
-      document.getElementById('pendingUsersList').innerHTML = pendingUsersCache.map(u => `
-        <div class="pending-user-card">
-          <div>
-            <strong style="color:var(--prussian); font-size:0.86rem;">${u.fullName}</strong>
-            <span style="font-size:0.76rem; color:var(--dusk);"> (@${u.username}) • ${u.cargo}</span>
+
+      const activeBox = document.getElementById('activeCeliderUsersList');
+      activeBox.innerHTML = activeUsersCache.map(u => {
+        const canDelete = Boolean(celiderAccount.isAdmin) && !u.isAdmin && u.username.toLowerCase() !== celiderAccount.username.toLowerCase();
+        return `
+          <div class="active-user-card">
+            <div>
+              <strong style="color:var(--prussian); font-size:0.86rem;">${u.fullName}</strong>
+              <span style="font-size:0.76rem; color:var(--dusk);"> (@${u.username}) • ${u.cargo}</span>
+              ${u.isAdmin ? `<span class="district-tag" style="margin-left:0.4rem; font-size:0.68rem;">Presidencia / Admin</span>` : ''}
+            </div>
+            <div>
+              ${canDelete ? `<button class="btn btn-danger" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="deleteActiveCeliderUser('${u.username}')">🗑 Eliminar Cuenta</button>` : ''}
+            </div>
           </div>
-          <div style="display:flex; gap:0.4rem;">
-            <button class="btn btn-green" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'approve')">✅ Aprobar</button>
-            <button class="btn btn-danger" style="padding:0.3rem 0.65rem; font-size:0.74rem;" onclick="decidePendingUser('${u.username}', 'reject')">🗑 Rechazar</button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     async function decidePendingUser(targetUser, decision) {
@@ -2333,7 +2459,90 @@
       } catch (e) {}
 
       showLiveToast(decision === 'approve' ? `✅ Cuenta @${targetUser} aprobada` : `🗑 Solicitud rechazada`);
-      loadPendingCeliderUsers();
+      loadCeliderUsersDirectory();
+    }
+
+    async function deleteActiveCeliderUser(targetUser) {
+      if (!celiderAccount || !celiderAccount.isAdmin) return;
+      if (!confirm(`¿Seguro que deseas eliminar la cuenta @${targetUser}? Perderá el acceso al Portal Distrital.`)) return;
+
+      const approvedLocal = JSON.parse(localStorage.getItem(LOCAL_APPROVED_KEY) || '{}');
+      delete approvedLocal[targetUser.toLowerCase()];
+      localStorage.setItem(LOCAL_APPROVED_KEY, JSON.stringify(approvedLocal));
+
+      try {
+        await fetch(`${CLOUD_RELAY}?action=celider_auth&mode=delete_user&user=${encodeURIComponent(celiderAccount.username)}&targetUser=${encodeURIComponent(targetUser)}&t=${Date.now()}`);
+      } catch (e) {}
+
+      showLiveToast(`🗑 Cuenta @${targetUser} eliminada`);
+      loadCeliderUsersDirectory();
+    }
+
+    // =========================================================
+    // CHAT INTERNO EXCLUSIVO DEL EQUIPO CELIDER 01-03
+    // =========================================================
+    async function loadCeliderTeamChat() {
+      if (!celiderAccount) return;
+      let localMsgs = JSON.parse(localStorage.getItem(LOCAL_TEAM_CHAT_KEY) || '[]');
+      try {
+        const res = await fetch(`${CLOUD_RELAY}?action=celider_team_chat&mode=list&t=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.ok && Array.isArray(data.messages)) {
+          localMsgs = data.messages;
+          localStorage.setItem(LOCAL_TEAM_CHAT_KEY, JSON.stringify(localMsgs));
+        }
+      } catch (e) {}
+      celiderTeamChatCache = localMsgs;
+      renderCeliderTeamChat();
+    }
+
+    function renderCeliderTeamChat() {
+      const box = document.getElementById('celiderTeamChatBox');
+      if (!box) return;
+      if (celiderTeamChatCache.length === 0) {
+        box.innerHTML = `<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:1rem;">Aún no hay mensajes en el chat del equipo distrital CELIDER 01-03.</div>`;
+        return;
+      }
+      box.innerHTML = celiderTeamChatCache.map(m => `
+        <div class="chat-bubble" style="border-left-color:var(--prussian);">
+          <div class="chat-bubble-author" style="color:var(--prussian);">
+            <span>${m.author} • <small style="color:var(--azure);">${m.cargo || 'CELIDER 01-03'}</small></span>
+            <span style="color:#64748b; font-weight:600;">${m.time || ''}</span>
+          </div>
+          <div style="color:#002247;">${formatChatLinks(m.text)}</div>
+        </div>
+      `).join('');
+      box.scrollTop = box.scrollHeight;
+    }
+
+    async function sendCeliderTeamChat() {
+      if (!celiderAccount) return;
+      const input = document.getElementById('celiderTeamChatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const msg = {
+        id: 'cmsg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
+        author: celiderAccount.fullName,
+        cargo: celiderAccount.cargo,
+        text: text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      input.value = '';
+      celiderTeamChatCache.push(msg);
+      localStorage.setItem(LOCAL_TEAM_CHAT_KEY, JSON.stringify(celiderTeamChatCache));
+      renderCeliderTeamChat();
+
+      try {
+        const res = await fetch(`${CLOUD_RELAY}?action=celider_team_chat&mode=send&payload=${encodeURIComponent(JSON.stringify(msg))}&t=${Date.now()}`);
+        const data = await res.json();
+        if (data && data.ok && Array.isArray(data.messages)) {
+          celiderTeamChatCache = data.messages;
+          localStorage.setItem(LOCAL_TEAM_CHAT_KEY, JSON.stringify(celiderTeamChatCache));
+          renderCeliderTeamChat();
+        }
+      } catch (e) {}
     }
 
     function logoutCelider() {
@@ -3203,7 +3412,7 @@
     }
 
     // =========================================================
-    // CHAT EN TIEMPO REAL
+    // CHAT EN TIEMPO REAL DE SALA
     // =========================================================
     function formatChatLinks(text) {
       const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -3836,7 +4045,7 @@
     }
 
     // =========================================================
-    // EXPORTACIÓN DIRECTA A GOOGLE SHEETS Y WHATSAPP
+    // EXPORTACIÓN DIRECTA A GOOGLE SHEETS, WHATSAPP Y RESPALDO JSON
     // =========================================================
     function getFinalMentionLabel(d) {
       if (d.mention === 'Otra (Personalizada)') return d.customMention || 'Mención Especial';
@@ -3935,6 +4144,55 @@
       a.href = URL.createObjectURL(blob);
       a.download = `Respaldo_Permanente_${roomId}.json`;
       a.click();
+    }
+
+    function importarJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!imported || !Array.isArray(imported.delegates)) {
+            alert('El archivo seleccionado no es un respaldo JSON válido de MONUPE II.');
+            return;
+          }
+          if (!confirm(`¿Deseas restaurar este respaldo (${imported.delegates.length} delegados) en la sala actual ${roomId}?`)) {
+            event.target.value = '';
+            return;
+          }
+          appData = {
+            ...appData,
+            ...imported,
+            roomId: roomId,
+            updatedAt: Date.now()
+          };
+          if (!Array.isArray(appData.manualDirectors)) appData.manualDirectors = [];
+          if (!Array.isArray(appData.speakerQueue)) appData.speakerQueue = [];
+          if (!Array.isArray(appData.sessionLogs)) appData.sessionLogs = [];
+          appData.delegates.forEach(d => {
+            if (typeof d.speechesCount !== 'number') d.speechesCount = 0;
+            if (typeof d.warningsCount !== 'number') d.warningsCount = 0;
+            if (typeof d.participationNote !== 'string') d.participationNote = '';
+          });
+
+          appendSessionLog('⬆ Respaldo JSON restaurado en la consola', false);
+          saveState(true);
+          loadMetaUI();
+          updateLockUI();
+          renderRollCall();
+          renderSpeakerQueueUI();
+          renderMatrixEval();
+          renderRanking();
+          renderConnectedDirectors();
+          showLiveToast('✅ Respaldo JSON restaurado correctamente');
+        } catch (err) {
+          alert('No se pudo leer el archivo JSON: ' + err.message);
+        } finally {
+          event.target.value = '';
+        }
+      };
+      reader.readAsText(file);
     }
 
     function openModal(id) { document.getElementById(id).classList.add('open'); }
